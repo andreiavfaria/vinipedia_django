@@ -2,6 +2,7 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 
 # Create your models here.
+from django.urls import reverse
 
 
 class Country(models.Model):
@@ -28,6 +29,10 @@ class Region(models.Model):
     def __str__(self):
         return self.name
 
+    def get_absolute_url(self):
+        return reverse('wines:region_detail',
+                       args=[self.id])
+
 
 class Producer(models.Model):
     name = models.CharField(max_length=100, unique=True)
@@ -45,6 +50,10 @@ class Producer(models.Model):
 
     def __str__(self):
         return self.name
+
+    def get_absolute_url(self):
+        return reverse('wines:producer_detail',
+                       args=[self.id])
 
 
 class ProducerRegion(models.Model):
@@ -98,6 +107,10 @@ class Grape(models.Model):
     def __str__(self):
         return self.name
 
+    def get_absolute_url(self):
+        return reverse('wines:grape_detail',
+                       args=[self.id])
+
 
 class Wine(models.Model):
     name = models.CharField(max_length=100)
@@ -129,6 +142,10 @@ class Wine(models.Model):
 
     def __str__(self):
         return self.name
+
+    def get_absolute_url(self):
+        return reverse('wines:wine_detail',
+                       args=[self.id])
 
 
 class WineGrape(models.Model):
@@ -162,6 +179,10 @@ class Vintage(models.Model):
 
     def __str__(self):
         return f"{self.wine} ({self.year})"
+
+    def get_absolute_url(self):
+        return reverse('wines:vintage_detail',
+                       args=[self.id])
 
 
 class GrapeAlias(models.Model):

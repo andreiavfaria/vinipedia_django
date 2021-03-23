@@ -1,0 +1,64 @@
+{% load wine_tags %}
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <title>{% block title %}{% endblock %}</title>
+  <!-- Bootstrap CSS -->
+  <!--
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+  -->
+  <link href="{% static 'css/wines.css' %}" rel="stylesheet">
+</head>
+<body>
+  <div id="content">
+    {% block content %}
+    {% endblock %}
+  </div>
+  <div id="sidebar">
+    <!-- General info -->
+    <h2>
+      <a href="/">Vinipedia</a>
+    </h2>
+    <p>All about the Portuguese wine industry since 1893.</p>
+    <p>There are {% total_wines_registered %} wines (and {% total_vintages_registered %} different vintages) in the DB.</p>
+    <p>There are {% total_grapes_registered %} grape varieties in the DB.</p>
+    <p>There are {% total_producers_registered %} producers in the DB.</p>
+    <!-- User status -->
+
+
+
+    <!-- Links for navigation (meant to be included in the navbar) -->
+    <div class="container-vertical">
+      <h3>General navigation links</h3>
+      <a href="/">Home</a>
+      <a href="{% url 'wines:wine_list' %}">Wines</a>
+      <a href="{% url 'wines:grape_list' %}">Grapes</a>
+      <a href="{% url 'wines:producer_list' %}">Producers</a>
+      <h3>Additional navigation links</h3>
+
+    </div>
+
+    <!-- Info regarding the latest DB activity on the website -->
+    <h3>Latest Wines/Grapes/Producers added</h3>
+
+    <h3>Find a wine:</h3>
+    <div class="container adjust_margin">{% show_wines_search_form %}</div>
+    <h3>Find a grape:</h3>
+    <div class="container adjust_margin">{% show_grapes_search_form %}</div>
+    <h3>Find a producer:</h3>
+    <div class="container adjust_margin">{% show_producers_search_form %}</div>
+  </div>
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<!--
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+-->
+</body>
+</html>

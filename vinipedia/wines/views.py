@@ -2,39 +2,49 @@ from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.shortcuts import render, get_object_or_404
 
 # Create your views here.
-from .models import Wine
+from .models import Wine, Grape, Producer, Region, Vintage
+from .utils import paginator_helper
 
 
 def wine_list(request):
-    """ Returns a page with the list of inserted movies. """
     object_list = Wine.objects.all()
-    paginator = Paginator(object_list, 5) # 10 movies in each page
-    page = request.GET.get('page')
-    try:
-        wines = paginator.page(page)
-    except PageNotAnInteger:
-        # If page is not an integer deliver the first page
-        wines = paginator.page(1)
-    except EmptyPage:
-        # If page is out of range deliver last page of results
-        wines = paginator.page(paginator.num_pages)
+    paginator = Paginator(object_list, 10)
+    wines = paginator_helper(request, paginator)
     return render(request,
-                  'wines/movie/list.html',
+                  'wines/wine/list.html',
                   {'wines': wines})
 
 
 def wine_detail(request, id):
-    """ Returns a page with the details for a specific movie. """
     wine = get_object_or_404(Wine, id=id)
-    vintages = wine.vintages.all()
     return render(request,
-                  'movies/movie/detail.html',
-                  {'movie': wine,
-                   'vintages': vintages})
+                  'wines/wine/detail.html',
+                  {'wine': wine})
+
+
+def vintage_list(request):
+    object_list = Vintage.objects.all()
+    paginator = Paginator(object_list, 10)
+    vintages = paginator_helper(request, paginator)
+    return render(request,
+                  'wines/vintage/list.html',
+                  {'vintages': vintages})
+
+
+def vintage_detail(request, id):
+    vintage = get_object_or_404(Vintage, id=id)
+    return render(request,
+                  'wines/vintage/detail.html',
+                  {'vintage': vintage})
 
 
 def grape_list(request):
-    pass
+    object_list = Grape.objects.all()
+    paginator = Paginator(object_list, 10)
+    grapes = paginator_helper(request, paginator)
+    return render(request,
+                  'wines/grape/list.html',
+                  {'grapes': grapes})
 
 
 def grape_detail(request, id):
@@ -42,7 +52,12 @@ def grape_detail(request, id):
 
 
 def producer_list(request):
-    pass
+    object_list = Producer.objects.all()
+    paginator = Paginator(object_list, 10)
+    producers = paginator_helper(request, paginator)
+    return render(request,
+                  'wines/producer/list.html',
+                  {'producers': producers})
 
 
 def producer_detail(request, id):
@@ -50,7 +65,12 @@ def producer_detail(request, id):
 
 
 def region_list(request):
-    pass
+    object_list = Region.objects.all()
+    paginator = Paginator(object_list, 10)
+    regions = paginator_helper(request, paginator)
+    return render(request,
+                  'wines/region/list.html',
+                  {'regions': regions})
 
 
 def region_detail(request, id):

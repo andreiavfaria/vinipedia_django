@@ -1,0 +1,24 @@
+{% extends "wines/base.html" %}
+
+{% block title %}Wine list{% endblock %}
+
+{% block content %}
+<h1>Wine list</h1>
+{% for wine in wines %}
+<div>
+  <a href="{{ wine.get_absolute_url }}">
+    {{ wine.name }}
+  </a>
+  <a href="{{ wine.producer.get_absolute_url }}">
+    {{ wine.producer }}
+  </a>
+</div>
+{% empty %}
+<p>
+  There are no wines in the DB yet.
+</p>
+{% endfor %}
+{% if wines %}
+    {% include "pagination.html" with page=wines %}
+{% endif %}
+{% endblock %}

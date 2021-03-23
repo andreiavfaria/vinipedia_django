@@ -1,0 +1,203 @@
+body {
+    margin:0;
+    padding:0;
+    font-family:helvetica, sans-serif;
+}
+
+a {
+    color:#00abff; /*#827878;*/
+    text-decoration:none;
+}
+
+h1 {
+    font-weight:normal;
+    border-bottom:1px solid #bbb;
+    padding:0 0 10px 0;
+}
+
+h2 {
+    font-weight:normal;
+    margin:30px 0 0;
+}
+
+#content {
+    float:left;
+    width:60%;
+    padding:0 0 0 30px;
+}
+
+#sidebar {
+    float:right;
+    width:30%;
+    padding:10px;
+    background:#efefef;
+    height:100%;
+}
+
+p.date {
+    color:#ccc;
+    font-family: georgia, serif;
+    font-size: 12px;
+    font-style: italic;
+}
+
+/* pagination */
+.pagination {
+    margin:40px 0;
+    font-weight:bold;
+}
+
+/* forms */
+label {
+    float:left;
+    clear:both;
+    color:#333;
+    margin-bottom:4px;
+}
+input, textarea {
+    clear:both;
+    float:left;
+    margin:0 0 10px;
+    background:#ededed;
+    border:0;
+    padding:6px 10px;
+    font-size:12px;
+}
+input[type=submit] {
+    font-weight:bold;
+    background:#00abff;
+    color:#fff;
+    padding:10px 20px;
+    font-size:14px;
+    text-transform:uppercase;
+}
+.errorlist {
+    color:#cc0033;
+    float:left;
+    clear:both;
+    padding-left:10px;
+}
+
+/* comments */
+.comment {
+    padding:10px;
+}
+.comment:nth-child(even) {
+    background:#efefef;
+}
+.comment .info {
+    font-weight:bold;
+    font-size:12px;
+    color:#666;
+}
+
+/* custom */
+#wine_details {
+    box-sizing: border-box;
+    padding:0 0 0 0;
+    background-color: #333;
+    color: rgba(255,255,255,0.8);
+}
+
+#wine_metascore {
+    float: right;
+    display: flex;
+    align-items: baseline;
+    padding: 0 1rem 0 2rem;
+    font-size: 2rem;
+    color: #fff;
+
+}
+
+#wine_metascore span {
+    float: right;
+    padding: 0 1rem 0 2rem;
+    font-size: 1rem;
+    color: rgba(255,255,255,0.8);
+}
+
+#content {
+    border-right: 2px solid #949393;
+    padding: 0 0 0 0;
+}
+
+#wine_details h1 {
+    color: #fff;
+}
+
+.grey {
+    color: rgba(255,255,255,0.8);
+}
+
+.small {
+    font-size: 1rem;
+}
+
+.actor {
+    display: flex;
+    flex-direction: column;
+}
+
+input, textarea {
+    clear: both;
+    float: left;
+    margin: 0 0 10px;
+    background: #ededed;
+    border: 1px solid #a09b9b;
+    padding: 6px 10px;
+    font-size: 1.2rem;
+    width: 10rem;
+}
+
+input[type=submit] {
+    font-weight: bold;
+    background: #00abff;
+    color: #fff;
+    padding: 12px 20px;
+    font-size: 0.55rem;
+    text-transform: uppercase;
+    width: 10rem;
+}
+
+.container {
+    display: flex;
+    width: 100%;
+}
+
+.container-vertical {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.adjust_margin {
+    margin-top: -2rem;
+    margin-bottom: -1rem;
+}
+
+form {
+    display: flex;
+}
+
+#last_seen,
+#what_to_watch,
+#top_rated,
+[id*="recently_visited_"] {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: space-evenly;
+}
+
+.wine_card,
+.person_card {
+    display: flex;
+    flex-direction: column;
+    height: 30%;
+    width: 20%;
+}
+
+.wine_card img,
+.person_card img {
+    width: 95%; /* should be consistent with the height of the parent container in order for the img to maintain the size ratio */
+}

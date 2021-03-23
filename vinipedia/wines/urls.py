@@ -35,7 +35,15 @@ urlpatterns = [
     # wines/vintages per year
     path('year/<int:year>', views.vintages_per_year, name='vintages_per_year'),
     # wine search
+    path('wines/search/', views.wine_search, name='wine_search'),
     # grape search (including alias)
+    path('grapes/search/', views.grape_search, name='grape_search'),
     # producer search
+    path('producers/search/', views.producer_search, name='producer_search'),
+
+    # vintages: provisional
+    path('vintages/', views.vintage_list, name='vintage_list'),
+    path('vintages/<int:id>', views.vintage_detail, name='vintage_detail'),
+    #
 
 ]
