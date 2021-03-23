@@ -43,13 +43,13 @@ def show_wines_search_form():
     return {"search_form": search_form}
 
 
-@register.inclusion_tag('wines/wine/search_bar.html')
+@register.inclusion_tag('wines/grape/search_bar.html')
 def show_grapes_search_form():
     search_form = SearchForm()
     return {"search_form": search_form}
 
 
-@register.inclusion_tag('wines/wine/search_bar.html')
+@register.inclusion_tag('wines/producer/search_bar.html')
 def show_producers_search_form():
     search_form = SearchForm()
     return {"search_form": search_form}
