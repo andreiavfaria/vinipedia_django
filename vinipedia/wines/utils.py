@@ -1,5 +1,6 @@
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 
+
 def paginator_helper(request, paginator):
     """ Abstracts the repeated paginator logic inside the views. """
     page = request.GET.get('page')

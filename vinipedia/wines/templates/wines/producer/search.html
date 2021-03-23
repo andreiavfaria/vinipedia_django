@@ -1,0 +1,18 @@
+{% extends "wines/producer/list.html" %}
+
+{% block title %}Search results for producers{% endblock %}
+
+{% block content %}
+  <h2>Search results:</h2>
+  {% for producer in results %}
+    <h2>
+      <a href="{{ producer.get_absolute_url }}">
+        {{ producer.name }}
+      </a>
+    </h2>
+  {% empty %}
+    <p>
+      No matching producers were found.
+    </p>
+  {% endfor %}
+{% endblock %}

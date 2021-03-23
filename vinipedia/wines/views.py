@@ -1,4 +1,5 @@
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+from django.db.models import Q
 from django.shortcuts import render, get_object_or_404
 
 # Create your views here.
@@ -48,7 +49,10 @@ def grape_list(request):
 
 
 def grape_detail(request, id):
-    pass
+    grape = get_object_or_404(Grape, id=id)
+    return render(request,
+                  'wines/grape/detail.html',
+                  {'grape': grape})
 
 
 def producer_list(request):
@@ -61,7 +65,10 @@ def producer_list(request):
 
 
 def producer_detail(request, id):
-    pass
+    producer = get_object_or_404(Producer, id=id)
+    return render(request,
+                  'wines/producer/detail.html',
+                  {'producer': producer})
 
 
 def region_list(request):
@@ -74,7 +81,10 @@ def region_list(request):
 
 
 def region_detail(request, id):
-    pass
+    region = get_object_or_404(Region, id=id)
+    return render(request,
+                  'wines/region/detail.html',
+                  {'region': region})
 
 
 def wines_per_region(request, id):
@@ -90,12 +100,36 @@ def vintages_per_year(request, year):
 
 
 def wine_search(request):
-    pass
+    search_string = request.GET.get("query")
+    if search_string:
+        results = Wine.objects.filter(Q(name__contains=search_string) | Q(description__contains=search_string))
+    else:
+        results = None
+
+    return render(request,
+                 'wines/wine/search.html',
+                 {'results': results})
 
 
 def grape_search(request):
-    pass
+    search_string = request.GET.get("query")
+    if search_string:
+        results = Grape.objects.filter(Q(name__contains=search_string) | Q(description__contains=search_string))
+    else:
+        results = None
+
+    return render(request,
+                 'wines/grape/search.html',
+                 {'results': results})
 
 
 def producer_search(request):
-    pass
+    search_string = request.GET.get("query")
+    if search_string:
+        results = Producer.objects.filter(Q(name__contains=search_string) | Q(description__contains=search_string))
+    else:
+        results = None
+
+    return render(request,
+                 'wines/producer/search.html',
+                 {'results': results})

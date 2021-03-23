@@ -1,0 +1,18 @@
+{% extends "wines/wine/list.html" %}
+
+{% block title %}Search results for wines{% endblock %}
+
+{% block content %}
+  <h2>Search results:</h2>
+  {% for wine in results %}
+    <h2>
+      <a href="{{ wine.get_absolute_url }}">
+        {{ wine.name }}
+      </a>
+    </h2>
+  {% empty %}
+    <p>
+      No matching wines were found.
+    </p>
+  {% endfor %}
+{% endblock %}
