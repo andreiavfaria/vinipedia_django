@@ -20,6 +20,8 @@
     {% endblock %}
   </div>
   <div id="sidebar">
+
+
     <!-- General info -->
     <h2>
       <a href="/">Vinipedia</a>
@@ -29,8 +31,25 @@
     <p>There are {% total_wines_registered %} wines (and {% total_vintages_registered %} different vintages) in the DB.</p>
     <p>There are {% total_grapes_registered %} grape varieties in the DB.</p>
     <p>There are {% total_producers_registered %} producers in the DB.</p>
-    <!-- User status -->
 
+
+    <!-- User status -->
+    {% if request.user.is_authenticated %}
+      <h3>
+        Welcome, {{request.user.username}}
+      </h3>
+      <div class="container-vertical">
+        <a href="{% url 'accounts:profile' profile_id=request.user.profile.id %}">My profile</a>
+        <a href="{% url 'accounts:edit' %}">Edit</a>
+        <a href="{% url 'accounts:logout' %}">Log out</a>
+      </div>
+      <!-- Generic info regarding the logged in user's activity -->
+
+
+    {% else %}
+      <a href="{% url 'accounts:login' %}">Log in</a>
+      <a href="{% url 'accounts:register' %}">Register</a>
+    {% endif %}
 
 
     <!-- Links for navigation (meant to be included in the navbar) -->
@@ -45,6 +64,7 @@
       <h3>Additional navigation links</h3>
 
     </div>
+
 
     <!-- Info regarding the latest DB activity on the website -->
     <h3>Latest Wines/Grapes/Producers added</h3>

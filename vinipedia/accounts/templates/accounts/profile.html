@@ -1,0 +1,29 @@
+{% extends "wines/base.html" %}
+{% load static %}
+
+{% block title %}Vinipedia - Profile - {{user.username}}{% endblock %}
+
+{% block content %}
+  <h1>User profile - {{user.username}}</h1>
+  <p>Username: {{user.username}}</p>
+  {% if user_profile.date_of_birth %}
+    <p>Date of birth: {{user_profile.date_of_birth}}</p>
+  {% else %}
+    <p>Date of birth: N/A</p>
+  {% endif %}
+  <img src="{% static profile_data.photo.url %}"
+       alt="user profile image" />
+  <p>Last login: {{user.last_login}}</p>
+  <p>Name: {{user.first_name}} {{user.last_name}}</p>
+  <p>Email: {{user.email}}</p>
+  {% if user.is_staff %}
+    <p>{{user.username}} is currently part of the website's staff.</p>
+  {% endif %}
+  {% if user.is_active %}
+    <p>Current status: Active</p>
+  {% else %}
+    <p>Current status: Inactive</p>
+  {% endif %}
+{% endblock %}
+
+
