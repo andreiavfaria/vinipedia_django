@@ -1,0 +1,21 @@
+{% extends "wines/base.html" %}
+
+{% block title %}Vinipedia - Regions{% endblock %}
+
+{% block content %}
+<h1>Region list</h1>
+{% for region in regions %}
+<div>
+  <a href="{{ region.get_absolute_url }}">
+    {{ region.name }}
+  </a>
+</div>
+{% empty %}
+<p>
+  There are no regions in the DB yet.
+</p>
+{% endfor %}
+{% if regions %}
+    {% include "pagination.html" with page=regions %}
+{% endif %}
+{% endblock %}

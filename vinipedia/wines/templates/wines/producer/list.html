@@ -1,0 +1,21 @@
+{% extends "wines/base.html" %}
+
+{% block title %}Vinipedia - Producers{% endblock %}
+
+{% block content %}
+<h1>Producer list</h1>
+{% for producer in producers %}
+<div>
+  <a href="{{ producer.get_absolute_url }}">
+    {{ producer.name }}
+  </a>
+</div>
+{% empty %}
+<p>
+  There are no producers in the DB yet.
+</p>
+{% endfor %}
+{% if producer %}
+    {% include "pagination.html" with page=producers %}
+{% endif %}
+{% endblock %}

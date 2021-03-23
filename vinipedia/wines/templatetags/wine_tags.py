@@ -54,3 +54,11 @@ def show_producers_search_form():
     search_form = SearchForm()
     return {"search_form": search_form}
 
+
+
+""" Other tags """
+
+
+@register.simple_tag
+def other_wine_vintages(wine, vintage):
+    return wine.vintages.all.exclude(vintage=vintage)

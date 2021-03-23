@@ -1,0 +1,44 @@
+{% extends "wines/base.html" %}
+{% load static %}
+{% block title %}Vinipedia - Producers - {{ producer.name }}{% endblock %}
+
+{% block content %}
+
+<!-- Name -->
+<div id="wine_details"><h1>{{ producer.name }}</h1></div>
+
+<!-- Description -->
+<h4>Description</h4>
+{% if producer.description %}
+<p>{{ producer.description }}</p>
+{% else %}
+<p>No description available</p>
+{% endif %}
+
+<!-- Origin -->
+<h4>Origin</h4>
+<p>
+    <a href="{{ producer.origin.get_absolute_url }}">{{ producer.origin|capfirst }}</a>
+</p>
+
+<!-- Presence -->
+<h4>Presence</h4>
+{% for region in producer.presence.all %}
+<p>
+    <a href="{{ region.get_absolute_url }}">{{ region|capfirst }}</a>
+</p>
+{% empty %}
+<p class="info">No regional presence information was registered for this producer.</p>
+{% endfor %}
+
+<!-- Wines -->
+<h4>Wines produced</h4>
+{% for wine in producer.wines.all %}
+<p>
+    <a href="{% url 'wines:wine_detail' wine.id %}">{{ wine.name|capfirst }}</a>
+</p>
+{% empty %}
+<p class="info">No wines were registered for this producer.</p>
+{% endfor %}
+
+{% endblock %}

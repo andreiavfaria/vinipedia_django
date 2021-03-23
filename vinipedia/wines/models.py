@@ -9,7 +9,7 @@ class Country(models.Model):
     name = models.CharField(max_length=50, unique=True)
 
     class Meta:
-        ordering = ('-name',)
+        ordering = ('name',)
 
     def __str__(self):
         return self.name
@@ -24,7 +24,7 @@ class Region(models.Model):
 
     class Meta:
         unique_together = (('name', 'country',),)
-        ordering = ('-name',)
+        ordering = ('name',)
 
     def __str__(self):
         return self.name
@@ -38,7 +38,7 @@ class Producer(models.Model):
     name = models.CharField(max_length=100, unique=True)
     origin = models.ForeignKey(Region,
                                on_delete=models.CASCADE,
-                               related_name='producers')
+                               related_name='local_producers')
     presence = models.ManyToManyField(Region,
                                       through='ProducerRegion',
                                       through_fields=('producer', 'region'))
@@ -46,7 +46,7 @@ class Producer(models.Model):
     # ^^^^ country (derived from region)
 
     class Meta:
-        ordering = ('-name',)
+        ordering = ('name',)
 
     def __str__(self):
         return self.name
@@ -65,14 +65,14 @@ class ProducerRegion(models.Model):
     """
     producer = models.ForeignKey(Producer,
                                  on_delete=models.CASCADE,
-                                 related_name='producers')
+                                 related_name='regions')
     region = models.ForeignKey(Region,
                                on_delete=models.CASCADE,
-                               related_name='regions')
+                               related_name='producers')
 
     class Meta:
         unique_together = (('producer', 'region',),)
-        ordering = ('-producer', '-region')
+        ordering = ('producer', 'region')
 
     def __str__(self):
         return f"{self.producer} ({self.region})"
@@ -84,14 +84,14 @@ class Grape(models.Model):
         ('red', 'Red'),
     )
     name = models.CharField(max_length=100, unique=True)
-    """ vivino """
     origin = models.ForeignKey(Region,
                                on_delete=models.CASCADE,
                                related_name='grapes',
                                null=True,
                                blank=True)
-    grape_type = models.CharField(max_length=5, choices=GRAPE_TYPE_CHOICES)
+    type = models.CharField(max_length=5, choices=GRAPE_TYPE_CHOICES)
     description = models.TextField(blank=True)
+    """ vivino """
     # body
     # colour
     # acidity
@@ -102,7 +102,7 @@ class Grape(models.Model):
     #                                  related_name='movies')
 
     class Meta:
-        ordering = ('-name',)
+        ordering = ('name',)
 
     def __str__(self):
         return self.name
@@ -122,7 +122,7 @@ class Wine(models.Model):
         related_name='wines'
     )
     # grape varieties / grapes : touriga nacional, tinta roriz, touriga francesa
-    grapes = models.ManyToManyField(Grape,
+    grape_varieties = models.ManyToManyField(Grape,
                                     through='WineGrape',
                                     through_fields=('wine', 'grape'))
     description = models.TextField(blank=True)
@@ -138,7 +138,7 @@ class Wine(models.Model):
 
     class Meta:
         unique_together = (('name', 'producer',),)
-        ordering = ('-name',)
+        ordering = ('name',)
 
     def __str__(self):
         return self.name
@@ -152,14 +152,14 @@ class WineGrape(models.Model):
     """ Intermediary table for the grape varieties that a wine is made of. """
     wine = models.ForeignKey(Wine,
                               on_delete=models.CASCADE,
-                              related_name='wines')
+                              related_name='grapes')
     grape = models.ForeignKey(Grape,
                               on_delete=models.CASCADE,
-                              related_name='grapes')
+                              related_name='wines')
 
     class Meta:
         unique_together = (('wine', 'grape',),)
-        ordering = ('-wine', '-grape')
+        ordering = ('wine', 'grape')
 
     def __str__(self):
         return f"{self.wine} ({self.grape})"
@@ -175,7 +175,7 @@ class Vintage(models.Model):
 
     class Meta:
         unique_together = (('wine', 'year',),)
-        ordering = ('-wine', '-year')
+        ordering = ('wine', 'year')
 
     def __str__(self):
         return f"{self.wine} ({self.year})"
@@ -193,7 +193,7 @@ class GrapeAlias(models.Model):
 
     class Meta:
         unique_together = (('name', 'grape',),)
-        ordering = ('-name',)
+        ordering = ('name',)
 
     def __str__(self):
         return f"{self.name} ({self.grape})"

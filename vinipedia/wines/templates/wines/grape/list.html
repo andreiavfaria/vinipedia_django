@@ -1,0 +1,21 @@
+{% extends "wines/base.html" %}
+
+{% block title %}Vinipedia - Grapes{% endblock %}
+
+{% block content %}
+<h1>Grape list</h1>
+{% for grape in grapes %}
+<div>
+  <a href="{{ grape.get_absolute_url }}">
+    {{ grape.name }}
+  </a>
+</div>
+{% empty %}
+<p>
+  There are no grapes in the DB yet.
+</p>
+{% endfor %}
+{% if grapes %}
+    {% include "pagination.html" with page=grapes %}
+{% endif %}
+{% endblock %}

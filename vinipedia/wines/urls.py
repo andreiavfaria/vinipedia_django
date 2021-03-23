@@ -21,24 +21,31 @@ from . import views
 app_name = "wines"
 
 urlpatterns = [
+    # landing page
+    path('', views.landing_page, name='landing_page'),
+    # wines
     path('wines/', views.wine_list, name='wine_list'),
     path('wines/<int:id>', views.wine_detail, name='wine_detail'),
+    # grapes
     path('grapes/', views.grape_list, name='grape_list'),
     path('grapes/<int:id>', views.grape_detail, name='grape_detail'),
-    # path('grapes/<str:type>', views.grapes_per_type, name='grapes_per_type'),
+    path('grapes/<str:type>', views.grapes_per_type, name='grapes_per_type'),
+    # producers
     path('producers/', views.producer_list, name='producer_list'),
     path('producers/<int:id>', views.producer_detail, name='producer_detail'),
+    # regions
     path('regions/', views.region_list, name='region_list'),
     path('regions/<int:id>', views.region_detail, name='region_detail'),
     # producers per region
+    path('regions/<int:id>/producers', views.producers_per_region, name='producers_per_region'),
     # wines per region
+    path('regions/<int:id>/wines', views.wines_per_region, name='wines_per_region'),
     # wines/vintages per year
     path('year/<int:year>', views.vintages_per_year, name='vintages_per_year'),
-    # wine search
+    # search
+    path('search/', views.sitewide_search, name='sitewide_search'),
     path('wines/search/', views.wine_search, name='wine_search'),
-    # grape search (including alias)
     path('grapes/search/', views.grape_search, name='grape_search'),
-    # producer search
     path('producers/search/', views.producer_search, name='producer_search'),
 
     # vintages: provisional

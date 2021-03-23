@@ -1,0 +1,52 @@
+{% extends "wines/base.html" %}
+{% load static %}
+{% block title %}Vinipedia - Grapes - {{ grape.name }}{% endblock %}
+
+{% block content %}
+
+<!-- Name -->
+<div id="wine_details"><h1>{{ grape.name }}</h1></div>
+
+<!-- Description -->
+<h4>Description</h4>
+{% if grape.description %}
+<p>{{ grape.description }}</p>
+{% else %}
+<p>No description available</p>
+{% endif %}
+
+<!-- Aliases -->
+<h4>Aliases</h4>
+{% for alias in grape.aliases.all %}
+<p>{{ alias.name }}</p>
+{% empty %}
+<p class="info">None</p>
+{% endfor %}
+
+<!-- Grape type -->
+<h4>Grape type</h4>
+<p>
+    <a href="{% url 'wines:grapes_per_type' grape.type %}">{{ grape.type|capfirst }}</a>
+</p>
+
+<!-- Origin -->
+<h4>Origin</h4>
+<p>
+{% if grape.origin %}
+    <a href="{{ grape.origin.get_absolute_url }}">{{ grape.origin|capfirst }}</a>
+{% else %}
+    Unknown
+{% endif %}
+</p>
+
+<!-- Wines -->
+<h4>Wines</h4>
+{% for wine_grape in grape.wines.all %}
+<p>
+    <a href="{% url 'wines:wine_detail' wine_grape.wine.id %}">{{ wine_grape.wine.name|capfirst }}</a>
+</p>
+{% empty %}
+<p class="info">No wine was registered as including this grape in its composition.</p>
+{% endfor %}
+
+{% endblock %}

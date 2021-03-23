@@ -1,0 +1,51 @@
+{% extends "wines/base.html" %}
+{% load static %}
+{% block title %}Vinipedia - Vintages - {{ vintage.wine.name }}{% endblock %}
+
+{% block content %}
+
+<!-- Name -->
+<div id="wine_details"><h1>{{ vintage.wine.name }} ({{ vintage.year }})</h1></div>
+
+<!-- Description -->
+<h4>Wine description</h4>
+{% if vintage.wine.description %}
+<p>{{ vintage.wine.description }}</p>
+{% else %}
+<p>No description available</p>
+{% endif %}
+
+<!-- Year -->
+<h4>Year</h4>
+<p>{{ vintage.year }}</p>
+
+<!-- Producer -->
+<h4>Produced by</h4>
+<p>
+    <a href="{{ vintage.wine.producer.get_absolute_url }}">{{ vintage.wine.producer|capfirst }}</a>
+</p>
+
+<!-- Grape varieties -->
+<h4>Grape varieties</h4>
+{% for grape in vintage.wine.grape_varieties.all %}
+<p>
+    <a href="{% url 'wines:grape_detail' grape.id %}">{{ grape.name|capfirst }}</a>
+</p>
+{% empty %}
+<p class="info">No grape information was registered for this wine.</p>
+{% endfor %}
+
+<!-- Other available vintages -->
+<h4>Other available vintages</h4>
+{% if vintage.wine.vintages.all|length > 1 %}
+    {% for wine_vintage in vintage.wine.vintages.all %}
+        {% if wine_vintage != vintage %}
+        <p>
+            <a href="{% url 'wines:vintage_detail' wine_vintage.id %}">{{ wine_vintage.year }}</a>
+        </p>
+        {% endif %}
+    {% endfor %}
+{% else %}
+<p class="info">No other vintages were registered for this wine.</p>
+{% endif %}
+{% endblock %}

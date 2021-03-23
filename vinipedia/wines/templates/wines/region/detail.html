@@ -1,0 +1,48 @@
+{% extends "wines/base.html" %}
+{% load static %}
+{% block title %}Vinipedia - Regions - {{ wine.name }}{% endblock %}
+
+{% block content %}
+
+<!-- Name -->
+<div id="wine_details"><h1>{{ region.name }}</h1></div>
+
+<!-- Description -->
+<h4>Description</h4>
+{% if region.description %}
+<p>{{ region.description }}</p>
+{% else %}
+<p>No description available</p>
+{% endif %}
+
+<!-- Local producers -->
+<h4>Local producers</h4>
+{% for producer in region.local_producers.all %}
+<p>
+    <a href="{{ producer.get_absolute_url }}">{{ producer|capfirst }}</a>
+</p>
+{% empty %}
+<p class="info">No local producers were registered for this region.</p>
+{% endfor %}
+
+<!-- Other producers operating in the region -->
+<h4>Other producers operating in the region</h4>
+{% for region_producer in region.producers.all %}
+<p>
+    <a href="{{ region_producer.producer.get_absolute_url }}">{{ region_producer.producer|capfirst }}</a>
+</p>
+{% empty %}
+<p class="info">No additional producers were registered for this region.</p>
+{% endfor %}
+
+<!-- Local grape varieties -->
+<h4>Local grape varieties</h4>
+{% for grape in region.grapes.all %}
+<p>
+    <a href="{% url 'wines:grape_detail' grape.id %}">{{ grape.name|capfirst }}</a>
+</p>
+{% empty %}
+<p class="info">No grapes were registered as being native from this region.</p>
+{% endfor %}
+
+{% endblock %}

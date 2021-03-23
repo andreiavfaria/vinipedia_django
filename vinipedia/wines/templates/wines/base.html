@@ -25,6 +25,7 @@
       <a href="/">Vinipedia</a>
     </h2>
     <p>All about the Portuguese wine industry since 1893.</p>
+    <h4>Database status</h4>
     <p>There are {% total_wines_registered %} wines (and {% total_vintages_registered %} different vintages) in the DB.</p>
     <p>There are {% total_grapes_registered %} grape varieties in the DB.</p>
     <p>There are {% total_producers_registered %} producers in the DB.</p>
@@ -37,8 +38,10 @@
       <h3>General navigation links</h3>
       <a href="/">Home</a>
       <a href="{% url 'wines:wine_list' %}">Wines</a>
+      <a href="{% url 'wines:vintage_list' %}">Vintages</a>
       <a href="{% url 'wines:grape_list' %}">Grapes</a>
       <a href="{% url 'wines:producer_list' %}">Producers</a>
+      <a href="{% url 'wines:region_list' %}">Regions</a>
       <h3>Additional navigation links</h3>
 
     </div>
