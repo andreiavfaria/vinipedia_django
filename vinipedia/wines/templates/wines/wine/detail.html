@@ -35,7 +35,11 @@
 <h4>Available vintages</h4>
 {% for vintage in wine.vintages.all %}
 <p>
+{% if vintage.year != None %}
     <a href="{% url 'wines:vintage_detail' vintage.id %}">{{ vintage.year }}</a>
+{% else %}
+    <a href="{% url 'wines:vintage_detail' vintage.id %}">N.V.</a>
+{% endif %}
 </p>
 {% empty %}
 <p class="info">No vintages were registered for this wine.</p>

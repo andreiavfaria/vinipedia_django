@@ -5,7 +5,13 @@
 {% block content %}
 
 <!-- Name -->
-<div id="wine_details"><h1>{{ vintage.wine.name }} ({{ vintage.year }})</h1></div>
+<div id="wine_details">
+{% if vintage.year != None %}
+    <h1>{{ vintage.wine.name }} ({{ vintage.year }})</h1>
+{% else %}
+    <h1>{{ vintage.wine.name }} (N.V.)</h1>
+{% endif %}
+</div>
 
 <!-- Description -->
 <h4>Wine description</h4>

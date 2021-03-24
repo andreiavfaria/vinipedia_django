@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 
@@ -95,11 +96,6 @@ class Grape(models.Model):
     # body
     # colour
     # acidity
-    # description
-
-    # type = models.ForeignKey(Director,
-    #                                  on_delete=models.CASCADE,
-    #                                  related_name='movies')
 
     class Meta:
         ordering = ('name',)
@@ -169,7 +165,10 @@ class Vintage(models.Model):
     wine = models.ForeignKey(Wine,
                              on_delete=models.CASCADE,
                              related_name='vintages')
-    year = models.SmallIntegerField(validators=[MinValueValidator(1700),
+    # null=True+blank=True allows the representation of N.V. (no vintage) wines
+    year = models.SmallIntegerField(null=True,
+                                    blank=True,
+                                    validators=[MinValueValidator(1700),
                                                 MaxValueValidator(2050)])
     description = models.TextField(blank=True)
 
@@ -197,6 +196,47 @@ class GrapeAlias(models.Model):
 
     def __str__(self):
         return f"{self.name} ({self.grape})"
+
+
+class Review(models.Model):
+    """ Model for wine reviews. """
+    validators = [MinValueValidator(0), MaxValueValidator(10)]
+
+    wine = models.ForeignKey(
+        Wine,
+        on_delete=models.CASCADE,
+        related_name='reviews'
+    )
+    vintage = models.ForeignKey(
+        Vintage,
+        on_delete=models.CASCADE,
+        related_name='reviews',
+        null=True
+    )
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='reviews'
+    )
+    text = models.TextField()
+    score = models.PositiveSmallIntegerField(default=5,validators=validators)
+    sweetness = models.PositiveSmallIntegerField(default=5,validators=validators)
+    body = models.PositiveSmallIntegerField(default=5,validators=validators)
+    acidity = models.PositiveSmallIntegerField(default=5,validators=validators)
+    published_on = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+    active = models.BooleanField(default=True)
+
+    class Meta:
+        unique_together = (('wine', 'vintage', 'user',),)
+        ordering = ('published_on',)
+
+    def __str__(self):
+        return f"{self.wine} review #{self.id}"
+
+    def get_absolute_url(self):
+        return reverse('wines:review_list',
+                       args=[self.wine])
 
 
 """ 

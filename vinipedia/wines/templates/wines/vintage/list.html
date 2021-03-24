@@ -7,7 +7,11 @@
 {% for vintage in vintages %}
 <div>
   <a href="{{ vintage.get_absolute_url }}">
-    {{ vintage.wine.name }} ({{ vintage.year }})
+    {% if vintage.year != None %}
+        {{ vintage.wine.name }} ({{ vintage.year }})
+    {% else %}
+        {{ vintage.wine.name }} (N.V.)
+    {% endif %}
   </a>
 </div>
 {% empty %}
