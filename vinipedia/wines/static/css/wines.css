@@ -106,7 +106,6 @@ input[type=submit] {
     padding: 0 1rem 0 2rem;
     font-size: 2rem;
     color: #fff;
-
 }
 
 #wine_metascore span {
@@ -116,10 +115,12 @@ input[type=submit] {
     color: rgba(255,255,255,0.8);
 }
 
+/*
 #content {
     border-right: 2px solid #949393;
     padding: 0 0 0 0;
 }
+*/
 
 #wine_details h1 {
     color: #fff;

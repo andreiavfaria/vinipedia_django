@@ -1,0 +1,51 @@
+{% extends "wines/base.html" %}
+
+
+{% block title %}Search results{% endblock %}
+
+{% block content %}
+<!-- Wines -->
+<h2>Wines</h2>
+{% for wine in wines %}
+  <div>
+    <a href="{{ wine.get_absolute_url }}">
+      {{ wine.name }}
+    </a>
+  </div>
+{% empty %}
+  <p>
+    No matching wines were found.
+  </p>
+{% endfor %}
+
+
+<!-- Grapes -->
+<h2>Grapes</h2>
+{% for grape in grapes %}
+  <div>
+    <a href="{{ grape.get_absolute_url }}">
+      {{ grape.name }}
+    </a>
+  </div>
+{% empty %}
+  <p>
+    No matching grapes were found.
+  </p>
+{% endfor %}
+
+
+<!-- Producers -->
+<h2>Producers</h2>
+{% for producer in producers %}
+<div>
+  <a href="{{ producer.get_absolute_url }}">
+    {{ producer.name }}
+  </a>
+</div>
+{% empty %}
+<p>
+  No matching producers were found.
+</p>
+{% endfor %}
+
+{% endblock %}

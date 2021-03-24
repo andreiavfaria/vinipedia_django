@@ -202,7 +202,21 @@ def producer_search(request):
 
 
 def sitewide_search(request):
-    pass
+    search_string = request.GET.get("query")
+    if search_string:
+        wines = Wine.objects.filter(Q(name__contains=search_string))
+        grapes = Grape.objects.filter(Q(name__contains=search_string))
+        producers = Producer.objects.filter(Q(name__contains=search_string))
+    else:
+        wines = None
+        grapes = None
+        producers = None
+
+    return render(request,
+                  'wines/global_search.html',
+                  {'wines': wines,
+                   'grapes': grapes,
+                   'producers': producers})
 
 
 def landing_page(request):

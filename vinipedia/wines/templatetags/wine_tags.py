@@ -37,6 +37,12 @@ def total_producers_registered():
 """ Search bar inclusion tags """
 
 
+@register.inclusion_tag('wines/search_bar.html')
+def show_sitewide_search_form():
+    search_form = SearchForm()
+    return {"search_form": search_form}
+
+
 @register.inclusion_tag('wines/wine/search_bar.html')
 def show_wines_search_form():
     search_form = SearchForm()
