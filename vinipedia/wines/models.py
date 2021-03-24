@@ -109,18 +109,26 @@ class Grape(models.Model):
 
 
 class Wine(models.Model):
+    WINE_TYPE_CHOICES = (
+        ('white', 'White'),
+        ('red', 'Red'),
+        ('rosé', 'Rosé'),
+        ('sparkling', 'Sparkling'),
+        # ('fortified', 'Fortified'),
+        ('port', 'Port'),
+        ('madeira', 'Madeira'),
+        ('moscatel', 'Moscatel'),
+    )
     name = models.CharField(max_length=100)
-    """ vivino """
-    # producer / winery : taylor's
     producer = models.ForeignKey(
         Producer,
         on_delete=models.CASCADE,
         related_name='wines'
     )
-    # grape varieties / grapes : touriga nacional, tinta roriz, touriga francesa
     grape_varieties = models.ManyToManyField(Grape,
                                     through='WineGrape',
                                     through_fields=('wine', 'grape'))
+    type = models.CharField(max_length=9, choices=WINE_TYPE_CHOICES)
     description = models.TextField(blank=True)
     # style : tawny port
     # alcohol content : 20%
@@ -133,11 +141,11 @@ class Wine(models.Model):
     # inserted_on
 
     class Meta:
-        unique_together = (('name', 'producer',),)
+        unique_together = (('name', 'producer', 'type',),)
         ordering = ('name',)
 
     def __str__(self):
-        return self.name
+        return f"{self.name} ({self.type})"
 
     def get_absolute_url(self):
         return reverse('wines:wine_detail',
@@ -211,7 +219,8 @@ class Review(models.Model):
         Vintage,
         on_delete=models.CASCADE,
         related_name='reviews',
-        null=True
+        null=True,
+        blank=True
     )
     user = models.ForeignKey(
         User,
@@ -228,7 +237,17 @@ class Review(models.Model):
     active = models.BooleanField(default=True)
 
     class Meta:
-        unique_together = (('wine', 'vintage', 'user',),)
+        # A second constraint is needed since the first constraint isn't
+        # enforced when vintage=None (i.e. a user would be able to write
+        # multiple reviews for the same wine as long as those reviews didn't
+        # refer a specific vintage
+        constraints = [
+            models.UniqueConstraint(fields=['wine', 'vintage', 'user'],
+                                    name='wine_vintage_user_constraint'),
+            models.UniqueConstraint(fields=['wine', 'user'],
+                                    condition=models.Q(vintage=None),
+                                    name='wine_user_vintagenull_constraint'),
+        ]
         ordering = ('published_on',)
 
     def __str__(self):

@@ -21,6 +21,12 @@
 <p>No description available</p>
 {% endif %}
 
+<!-- Wine -->
+<h4>Wine</h4>
+<p>
+    <a href="{{ vintage.wine.get_absolute_url }}">{{ vintage.wine.name|capfirst }}</a>
+</p>
+
 <!-- Year -->
 <h4>Year</h4>
 <p>{{ vintage.year }}</p>
@@ -29,6 +35,12 @@
 <h4>Produced by</h4>
 <p>
     <a href="{{ vintage.wine.producer.get_absolute_url }}">{{ vintage.wine.producer|capfirst }}</a>
+</p>
+
+<!-- Type -->
+<h4>Type</h4>
+<p>
+    <a href="{% url 'wines:wines_per_type' vintage.wine.type %}">{{ vintage.wine.type|capfirst }}</a>
 </p>
 
 <!-- Grape varieties -->
@@ -54,4 +66,44 @@
 {% else %}
 <p class="info">No other vintages were registered for this wine.</p>
 {% endif %}
+
+<!-- Existing reviews -->
+<h4>Reviews</h4>
+{% with vintage.reviews.count as total_reviews %}
+<p>
+  {{ total_reviews }} review{{ total_reviews|pluralize }}
+</p>
+{% endwith %}
+{% for review in vintage.reviews.all %}
+  <div class="review">
+    <p class="info">
+      <h3>
+      Review {{ forloop.counter }} by {{ review.user }}
+      </h3>
+    </p>
+    <p>Date: {{ review.published_on }}</p>
+    <p>{{ review.text|linebreaks }}</p>
+    <p class="score">Score: {{ review.score }}*</p>
+    <p class="score">Body: {{ review.body }}*</p>
+    <p class="score">Sweetness: {{ review.sweetness }}*</p>
+    <p class="score">Acidity: {{ review.acidity }}*</p>
+  </div>
+{% empty %}
+    <p class="info">There are no reviews yet.</p>
+{% endfor %}
+
+<!-- Review form -->
+{% if new_review %}
+    <h2>Your review has been added.</h2>
+{% else %}
+    <h2>Add a review</h2>
+    <form method="POST">
+      {% csrf_token %}
+      {{ review_form.as_p }}
+      <p>
+        <input type="submit" value="Add review">
+      </p>
+    </form>
+{% endif %}
+
 {% endblock %}

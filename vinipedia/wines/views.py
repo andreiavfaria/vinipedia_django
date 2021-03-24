@@ -3,6 +3,7 @@ from django.db.models import Q
 from django.shortcuts import render, get_object_or_404, redirect
 
 # Create your views here.
+from .forms import ReviewForm
 from .models import Wine, Grape, Producer, Region, Vintage
 from .utils import paginator_helper
 
@@ -18,9 +19,33 @@ def wine_list(request):
 
 def wine_detail(request, id):
     wine = get_object_or_404(Wine, id=id)
+    # review handling
+    new_review = None
+    if request.method == 'POST':
+        review_form = ReviewForm(data=request.POST)
+        if review_form.is_valid():
+            new_review = review_form.save(commit=False)
+            new_review.wine = wine
+            new_review.vintage = None
+            new_review.user_id = request.user.id
+            new_review.save()
+            return redirect(wine)
+    elif request.method == 'GET':
+        review_form = ReviewForm()
+
     return render(request,
                   'wines/wine/detail.html',
-                  {'wine': wine})
+                  {'wine': wine,
+                   'review_form': review_form})
+
+
+def wines_per_type(request, type):
+    object_list = Wine.objects.filter(type=type)
+    paginator = Paginator(object_list, 10)
+    wines = paginator_helper(request, paginator)
+    return render(request,
+                  'wines/wine/list.html',
+                  {'wines': wines})
 
 
 def wines_per_region(request, id):
@@ -45,9 +70,23 @@ def vintage_list(request):
 
 def vintage_detail(request, id):
     vintage = get_object_or_404(Vintage, id=id)
+    # review handling
+    new_review = None
+    if request.method == 'POST':
+        review_form = ReviewForm(data=request.POST)
+        if review_form.is_valid():
+            new_review = review_form.save(commit=False)
+            new_review.wine = vintage.wine
+            new_review.vintage = vintage
+            new_review.user_id = request.user.id
+            new_review.save()
+            return redirect(vintage)
+    elif request.method == 'GET':
+        review_form = ReviewForm()
     return render(request,
                   'wines/vintage/detail.html',
-                  {'vintage': vintage})
+                  {'vintage': vintage,
+                   'review_form': review_form})
 
 
 def vintages_per_year(request, year):

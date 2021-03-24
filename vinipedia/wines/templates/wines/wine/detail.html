@@ -21,6 +21,12 @@
     <a href="{{ wine.producer.get_absolute_url }}">{{ wine.producer|capfirst }}</a>
 </p>
 
+<!-- Type -->
+<h4>Type</h4>
+<p>
+    <a href="{% url 'wines:wines_per_type' wine.type %}">{{ wine.type|capfirst }}</a>
+</p>
+
 <!-- Grape varieties -->
 <h4>Grape varieties</h4>
 {% for grape in wine.grape_varieties.all %}
@@ -44,5 +50,45 @@
 {% empty %}
 <p class="info">No vintages were registered for this wine.</p>
 {% endfor %}
+
+<!-- Existing reviews -->
+{% with wine.reviews.count as total_reviews %}
+<h4>Reviews ({{ total_reviews }})</h4>
+{% endwith %}
+{% for review in wine.reviews.all %}
+  <hr>
+  <div class="review">
+    <p class="info">
+      <h5>
+      Review by {{ review.user }}
+      </h5>
+    </p>
+    {% if review.vintage != None %}
+    <h5>Vintage: {{ review.vintage.year }}</h5>
+    {% endif %}
+    <p>Date: {{ review.published_on }}</p>
+    <p>{{ review.text|linebreaks }}</p>
+    <p class="score">Score: {{ review.score }}*</p>
+    <p class="score">Body: {{ review.body }}*</p>
+    <p class="score">Sweetness: {{ review.sweetness }}*</p>
+    <p class="score">Acidity: {{ review.acidity }}*</p>
+  </div>
+{% empty %}
+    <p class="info">There are no reviews yet.</p>
+{% endfor %}
+
+<!-- Review form -->
+{% if new_review %}
+    <h2>Your review has been added.</h2>
+{% else %}
+    <h2>Add a review</h2>
+    <form method="POST">
+      {% csrf_token %}
+      {{ review_form.as_p }}
+      <p>
+        <input type="submit" value="Add review">
+      </p>
+    </form>
+{% endif %}
 
 {% endblock %}

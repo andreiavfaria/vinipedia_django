@@ -39,6 +39,9 @@
         Welcome, {{request.user.username}}
       </h3>
       <div class="container-vertical">
+        {% if request.user.is_superuser %}
+        <a href="{% url 'admin:index' %}">Admin dashboard</a>
+        {% endif %}
         <a href="{% url 'accounts:profile' profile_id=request.user.profile.id %}">My profile</a>
         <a href="{% url 'accounts:edit' %}">Edit</a>
         <a href="{% url 'accounts:logout' %}">Log out</a>

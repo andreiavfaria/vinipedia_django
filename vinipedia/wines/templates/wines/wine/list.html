@@ -7,7 +7,7 @@
 {% for wine in wines %}
 <div>
   <a href="{{ wine.get_absolute_url }}">
-    {{ wine.name }}
+    {{ wine.name }} /
   </a>
   <a href="{{ wine.producer.get_absolute_url }}">
     {{ wine.producer }}

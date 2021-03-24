@@ -1,11 +1,17 @@
 from django import forms
 
+from .models import Review
 
-# class ReviewForm(forms.ModelForm):
-#
-#     class Meta:
-#         model = Review
-#         fields = ('score', 'body')
+
+class ReviewForm(forms.ModelForm):
+
+    class Meta:
+        model = Review
+        fields = ('score',
+                  'body',
+                  'sweetness',
+                  'acidity',
+                  'text')
 
 
 class SearchForm(forms.Form):

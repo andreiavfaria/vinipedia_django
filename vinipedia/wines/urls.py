@@ -26,6 +26,7 @@ urlpatterns = [
     # wines
     path('wines/', views.wine_list, name='wine_list'),
     path('wines/<int:id>', views.wine_detail, name='wine_detail'),
+    path('wines/<str:type>', views.wines_per_type, name='wines_per_type'),
     # grapes
     path('grapes/', views.grape_list, name='grape_list'),
     path('grapes/<int:id>', views.grape_detail, name='grape_detail'),
