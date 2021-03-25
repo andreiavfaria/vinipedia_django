@@ -120,7 +120,7 @@ class GrapeAliasSerializer(serializers.HyperlinkedModelSerializer):
         )
 
 
-class ReviewSerializer(serializers.HyperlinkedModelSerializer):
+class ReviewSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Review

@@ -63,13 +63,13 @@ def region_grapes(request, pk):
 class ProducerRegionList(generics.ListCreateAPIView):
     queryset = ProducerRegion.objects.all()
     serializer_class = ProducerRegionSerializer
-    name = 'producer-region-list'
+    name = 'producerregion-list'
 
 
 class ProducerRegionDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = ProducerRegion.objects.all()
     serializer_class = ProducerRegionSerializer
-    name = 'producer-region-detail'
+    name = 'producerregion-detail'
 
 
 class ProducerList(generics.ListCreateAPIView):
@@ -109,13 +109,13 @@ def grape_wines(request, pk):
 class WineGrapeList(generics.ListCreateAPIView):
     queryset = WineGrape.objects.all()
     serializer_class = WineGrapeSerializer
-    name = 'wine-grape-list'
+    name = 'winegrape-list'
 
 
 class WineGrapeDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = WineGrape.objects.all()
     serializer_class = WineGrapeSerializer
-    name = 'wine-grape-detail'
+    name = 'winegrape-detail'
 
 
 class WineList(generics.ListCreateAPIView):
@@ -160,13 +160,13 @@ def vintage_reviews(request, pk):
 class GrapeAliasList(generics.ListCreateAPIView):
     queryset = GrapeAlias.objects.all()
     serializer_class = GrapeAliasSerializer
-    name = 'grape-alias-list'
+    name = 'grapealias-list'
 
 
 class GrapeAliasDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = GrapeAlias.objects.all()
     serializer_class = GrapeAliasSerializer
-    name = 'grape-alias-detail'
+    name = 'grapealias-detail'
 
 
 class ReviewList(generics.ListCreateAPIView):
@@ -186,8 +186,7 @@ class ApiRoot(generics.GenericAPIView):
 
     def get(self, request, *args, **kwargs):
         return Response({
-            'countries': reverse(CountryList.name,
-            request=request),
+            'countries': reverse(CountryList.name, request=request),
             'regions': reverse(RegionList.name, request=request),
             'producer-regions': reverse(ProducerRegionList.name, request=request),
             'producers': reverse(ProducerList.name, request=request),
