@@ -10,7 +10,9 @@ from rest_framework.reverse import reverse
 from wines.models import Country, Region, ProducerRegion, Producer, Grape, WineGrape, Wine, Vintage, GrapeAlias, Review
 
 from .serializers import CountrySerializer, RegionSerializer, ProducerRegionSerializer, ProducerSerializer, GrapeSerializer, WineGrapeSerializer, WineSerializer, VintageSerializer, \
-    GrapeAliasSerializer, ReviewSerializer
+    GrapeAliasSerializer, ReviewSerializer, VintageReviewSerializer, WineReviewSerializer, NewProducerSerializer, NewProducerRegionSerializer, NewGrapeSerializer, ProducerShortSerializer, \
+    NewWineSerializer, NewWineGrapeSerializer, NewVintageSerializer, NewGrapeAliasSerializer, NewWineReviewSerializer, NewVintageReviewSerializer, RegionShortSerializer, WineShortSerializer, \
+    GrapeShortSerializer, VintageShortSerializer
 
 
 class CountryList(generics.ListCreateAPIView):
@@ -28,8 +30,8 @@ class CountryDetail(generics.RetrieveUpdateDestroyAPIView):
 @api_view(['GET'])
 def country_regions(request, pk):
     country = get_object_or_404(Country, pk=pk)
-    reviews = Review.objects.filter(country=country)
-    serializer = ReviewSerializer(reviews, many=True, context={'request': request})
+    regions = Region.objects.filter(country=country)
+    serializer = RegionShortSerializer(regions, many=True, context={'request': request})
     return Response(serializer.data)
 
 
@@ -45,93 +47,142 @@ class RegionDetail(generics.RetrieveUpdateDestroyAPIView):
     name = 'region-detail'
 
 
+""" ***BUGGED***
+    
+    Needs to be fixed!
+    
+    Requires adding an origin field to the Wine model, along with a check 
+    constraint that ensures its origin matches one of the regions where the 
+    its producer operates.  
+"""
 @api_view(['GET'])
 def region_wines(request, pk):
-    pass
+    region = get_object_or_404(Region, pk=pk)
+    wines = Wine.objects.filter(producer__origin=region)
+    serializer = WineShortSerializer(wines, many=True, context={'request': request})
+    return Response(serializer.data)
 
 
 @api_view(['GET'])
 def region_producers(request, pk):
-    pass
+    region = get_object_or_404(Region, pk=pk)
+    producers = Producer.objects.filter(origin=region)
+    serializer = ProducerShortSerializer(producers, many=True, context={'request': request})
+    return Response(serializer.data)
 
 
 @api_view(['GET'])
 def region_grapes(request, pk):
-    pass
+    region = get_object_or_404(Region, pk=pk)
+    grapes = Grape.objects.filter(origin=region)
+    serializer = GrapeShortSerializer(grapes, many=True, context={'request': request})
+    return Response(serializer.data)
 
 
 class ProducerRegionList(generics.ListCreateAPIView):
     queryset = ProducerRegion.objects.all()
-    serializer_class = ProducerRegionSerializer
     name = 'producerregion-list'
+
+    def get_serializer_class(self):
+        if self.request.method == 'POST':
+            return NewProducerRegionSerializer
+        return ProducerRegionSerializer
 
 
 class ProducerRegionDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = ProducerRegion.objects.all()
-    serializer_class = ProducerRegionSerializer
     name = 'producerregion-detail'
+
+    def get_serializer_class(self):
+        if self.request.method == 'PUT':
+            return NewProducerRegionSerializer
+        return ProducerRegionSerializer
 
 
 class ProducerList(generics.ListCreateAPIView):
     queryset = Producer.objects.all()
-    serializer_class = ProducerSerializer
     name = 'producer-list'
+
+    def get_serializer_class(self):
+        if self.request.method == 'POST':
+            return NewProducerSerializer
+        return ProducerSerializer
 
 
 class ProducerDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Producer.objects.all()
-    serializer_class = ProducerSerializer
     name = 'producer-detail'
+
+    def get_serializer_class(self):
+        if self.request.method == 'PUT':
+            return NewProducerSerializer
+        return ProducerSerializer
 
 
 @api_view(['GET'])
 def producer_wines(request, pk):
-    pass
+    producer = get_object_or_404(Producer, pk=pk)
+    wines = Wine.objects.filter(producer=producer)
+    serializer = WineShortSerializer(wines, many=True, context={'request': request})
+    return Response(serializer.data)
 
 
 class GrapeList(generics.ListCreateAPIView):
     queryset = Grape.objects.all()
-    serializer_class = GrapeSerializer
     name = 'grape-list'
+
+    def get_serializer_class(self):
+        if self.request.method == 'POST':
+            return NewGrapeSerializer
+        return GrapeSerializer
 
 
 class GrapeDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Grape.objects.all()
-    serializer_class = GrapeSerializer
     name = 'grape-detail'
+
+    def get_serializer_class(self):
+        if self.request.method == 'PUT':
+            return NewGrapeSerializer
+        return GrapeSerializer
 
 
 @api_view(['GET'])
 def grape_wines(request, pk):
-    pass
+    grape = get_object_or_404(Grape, pk=pk)
+    wines = Wine.objects.filter(grape_varieties=grape)
+    serializer = WineShortSerializer(wines, many=True, context={'request': request})
+    return Response(serializer.data)
 
 
 class WineGrapeList(generics.ListCreateAPIView):
     queryset = WineGrape.objects.all()
-    serializer_class = WineGrapeSerializer
     name = 'winegrape-list'
+
+    def get_serializer_class(self):
+        if self.request.method == 'POST':
+            return NewWineGrapeSerializer
+        return WineGrapeSerializer
 
 
 class WineGrapeDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = WineGrape.objects.all()
-    serializer_class = WineGrapeSerializer
     name = 'winegrape-detail'
+
+    def get_serializer_class(self):
+        if self.request.method == 'PUT':
+            return NewWineGrapeSerializer
+        return WineGrapeSerializer
 
 
 class WineList(generics.ListCreateAPIView):
     queryset = Wine.objects.all()
-    serializer_class = WineSerializer
     name = 'wine-list'
 
-
-@api_view(['GET'])
-def wine_vintages(request, pk):
-    pass
-
-
-@api_view(['GET'])
-def wine_reviews(request, pk):
-    pass
+    def get_serializer_class(self):
+        if self.request.method == 'POST':
+            return NewWineSerializer
+        return WineSerializer
 
 
 class WineDetail(generics.RetrieveUpdateDestroyAPIView):
@@ -139,37 +190,77 @@ class WineDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = WineSerializer
     name = 'wine-detail'
 
+    def get_serializer_class(self):
+        if self.request.method == 'PUT':
+            return NewWineSerializer
+        return WineSerializer
+
+
+@api_view(['GET'])
+def wine_vintages(request, pk):
+    wine = get_object_or_404(Wine, pk=pk)
+    vintages = Vintage.objects.filter(wine=wine)
+    serializer = VintageShortSerializer(vintages, many=True, context={'request': request})
+    return Response(serializer.data)
+
+
+# @api_view(['GET'])
+# def wine_reviews(request, pk):
+#     wine = get_object_or_404(Wine, pk=pk)
+#     reviews = Review.objects.filter(wine=wine)
+#     serializer = ReviewSerializer(reviews, many=True, context={'request': request})
+#     return Response(serializer.data)
+
 
 class VintageList(generics.ListCreateAPIView):
     queryset = Vintage.objects.all()
-    serializer_class = VintageSerializer
     name = 'vintage-list'
+
+    def get_serializer_class(self):
+        if self.request.method == 'POST':
+            return NewVintageSerializer
+        return VintageSerializer
 
 
 class VintageDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Vintage.objects.all()
-    serializer_class = VintageSerializer
     name = 'vintage-detail'
 
+    def get_serializer_class(self):
+        if self.request.method == 'PUT':
+            return NewVintageSerializer
+        return VintageSerializer
 
-@api_view(['GET'])
-def vintage_reviews(request, pk):
-    pass
+
+# @api_view(['GET'])
+# def vintage_reviews(request, pk):
+#     vintage = get_object_or_404(Vintage, pk=pk)
+#     reviews = Review.objects.filter(vintage=vintage)
+#     serializer = ReviewSerializer(reviews, many=True, context={'request': request})
+#     return Response(serializer.data)
 
 
 class GrapeAliasList(generics.ListCreateAPIView):
     queryset = GrapeAlias.objects.all()
-    serializer_class = GrapeAliasSerializer
     name = 'grapealias-list'
+
+    def get_serializer_class(self):
+        if self.request.method == 'POST':
+            return NewGrapeAliasSerializer
+        return GrapeAliasSerializer
 
 
 class GrapeAliasDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = GrapeAlias.objects.all()
-    serializer_class = GrapeAliasSerializer
     name = 'grapealias-detail'
 
+    def get_serializer_class(self):
+        if self.request.method == 'PUT':
+            return NewGrapeAliasSerializer
+        return GrapeAliasSerializer
 
-class ReviewList(generics.ListCreateAPIView):
+
+class ReviewList(generics.ListAPIView):
     queryset = Review.objects.all()
     serializer_class = ReviewSerializer
     name = 'review-list'
@@ -179,6 +270,47 @@ class ReviewDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Review.objects.all()
     serializer_class = ReviewSerializer
     name = 'review-detail'
+
+
+class WineReviewList(generics.ListCreateAPIView):
+    queryset = Review.objects.all()
+    name = 'wine-review-list'
+
+    def get_serializer_class(self):
+        if self.request.method == 'POST':
+            return NewWineReviewSerializer
+        return WineReviewSerializer
+
+
+# class WineReviewDetail(generics.RetrieveUpdateDestroyAPIView):
+#     queryset = Review.objects.all()
+#     name = 'wine-review-detail'
+#
+#     def get_serializer_class(self):
+#         if self.request.method == 'PUT':
+#             return NewWineReviewSerializer
+#         return WineReviewSerializer
+
+
+class VintageReviewList(generics.ListCreateAPIView):
+    queryset = Review.objects.all()
+    name = 'vintage-review-list'
+
+    def get_serializer_class(self):
+        if self.request.method == 'POST':
+            return NewVintageReviewSerializer
+        return VintageReviewSerializer
+
+
+# class VintageReviewDetail(generics.RetrieveUpdateDestroyAPIView):
+#     queryset = Review.objects.all()
+#     serializer_class = VintageReviewSerializer
+#     name = 'vintage-review-detail'
+#
+#     def get_serializer_class(self):
+#         if self.request.method == 'PUT':
+#             return NewVintageReviewSerializer
+#         return VintageReviewSerializer
 
 
 class ApiRoot(generics.GenericAPIView):

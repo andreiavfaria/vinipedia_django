@@ -45,11 +45,11 @@ urlpatterns = [
     path('wines/', views.WineList.as_view(), name=views.WineList.name),
     path('wines/<int:pk>', views.WineDetail.as_view(), name=views.WineDetail.name),
     path('wines/<int:pk>/vintages', views.wine_vintages, name='wine-vintage-list'),
-    path('wines/<int:pk>/reviews', views.wine_reviews, name='wine-review-list'),
+    path('wines/<int:pk>/reviews', views.WineReviewList.as_view(), name=views.WineReviewList.name),
 
     path('vintages/', views.VintageList.as_view(), name=views.VintageList.name),
     path('vintages/<int:pk>', views.VintageDetail.as_view(), name=views.VintageDetail.name),
-    path('vintages/<int:pk>/reviews', views.vintage_reviews, name='vintage-review-list'),
+    path('vintages/<int:pk>/reviews', views.VintageReviewList.as_view(), name=views.VintageReviewList.name),
 
     path('grape-aliases/', views.GrapeAliasList.as_view(), name=views.GrapeAliasList.name),
     path('grape-aliases/<int:pk>', views.GrapeAliasDetail.as_view(), name=views.GrapeAliasDetail.name),
@@ -64,7 +64,7 @@ urlpatterns = [
     # path('vintages/year/', views.vintages_per_year_list.as_view(), name='vintages-per-year-list'),
     # path('vintages/year/<int:pk>', views.vintages_per_year_detail.as_view(), name='vintages-per-year-detail'),
     # path('user/reviews/', ...),
-    # path('user/<int:year>/reviews/', ...),
+    # path('user/<int:pk>/reviews/', ...),
     # path('reviews/user/', views.ReviewList.as_view(), name=views.ReviewList.name),
     # path('reviews/user/<int:pk>', views.ReviewList.as_view(), name=views.ReviewList.name),
 

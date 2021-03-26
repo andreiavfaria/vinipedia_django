@@ -3,7 +3,66 @@ from rest_framework import serializers
 from wines.models import Country, Region, Producer, Grape, ProducerRegion, Wine, WineGrape, Vintage, GrapeAlias, Review
 
 
+class RegionShortSerializer(serializers.HyperlinkedModelSerializer):
+
+    class Meta:
+        model = Region
+        fields = (
+            'url',
+            'name',
+        )
+
+
+class ProducerShortSerializer(serializers.HyperlinkedModelSerializer):
+
+    class Meta:
+        model = Producer
+        fields = (
+            'url',
+            'name',
+        )
+
+
+class GrapeShortSerializer(serializers.HyperlinkedModelSerializer):
+
+    class Meta:
+        model = Grape
+        fields = (
+            'url',
+            'name',
+            'type',
+        )
+
+
+class WineShortSerializer(serializers.HyperlinkedModelSerializer):
+
+    class Meta:
+        model = Wine
+        fields = (
+            'url',
+            'name',
+            'type',
+        )
+
+
+class VintageShortSerializer(serializers.HyperlinkedModelSerializer):
+
+    wine = WineShortSerializer()
+
+    class Meta:
+        model = Vintage
+        fields = (
+            'url',
+            'wine',
+            'year',
+        )
+
+
 class CountrySerializer(serializers.HyperlinkedModelSerializer):
+
+    region_list = serializers.HyperlinkedIdentityField(view_name='country-region-list', read_only=True)
+    nr_regions = serializers.IntegerField(source='regions.count', read_only=True)
+    regions = RegionShortSerializer(many=True, read_only=True)
 
     class Meta:
         model = Country
@@ -11,12 +70,21 @@ class CountrySerializer(serializers.HyperlinkedModelSerializer):
             'url',
             'pk',
             'name',
-            # 'regions',
-            # 'region_list'
+            'nr_regions',
+            'region_list',
+            'regions',
         )
 
 
 class RegionSerializer(serializers.HyperlinkedModelSerializer):
+
+    wine_list = serializers.HyperlinkedIdentityField(view_name='region-wine-list', read_only=True)
+    producer_list = serializers.HyperlinkedIdentityField(view_name='region-producer-list', read_only=True)
+    grape_list = serializers.HyperlinkedIdentityField(view_name='region-grape-list', read_only=True)
+    # bugged: see views.region_wines note!
+    # nr_wines = serializers.IntegerField(source='wines.count')
+    nr_producers = serializers.IntegerField(source='producers.count', read_only=True)
+    nr_grapes = serializers.IntegerField(source='grapes.count', read_only=True)
 
     class Meta:
         model = Region
@@ -26,10 +94,16 @@ class RegionSerializer(serializers.HyperlinkedModelSerializer):
             'name',
             'country',
             'description',
+            # 'nr_wines',
+            'nr_producers',
+            'nr_grapes',
+            'wine_list',
+            'producer_list',
+            'grape_list',
         )
 
 
-class ProducerSerializer(serializers.HyperlinkedModelSerializer):
+class NewProducerSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Producer
@@ -43,7 +117,28 @@ class ProducerSerializer(serializers.HyperlinkedModelSerializer):
         )
 
 
-class ProducerRegionSerializer(serializers.HyperlinkedModelSerializer):
+class ProducerSerializer(NewProducerSerializer):
+
+    origin = RegionShortSerializer()
+    presence = RegionShortSerializer(many=True)
+    wine_list = serializers.HyperlinkedIdentityField(view_name='producer-wine-list', read_only=True)
+    nr_wines = serializers.IntegerField(source='wines.count', read_only=True)
+
+    class Meta:
+        model = Producer
+        fields = (
+            'url',
+            'pk',
+            'name',
+            'origin',
+            'presence',
+            'description',
+            'nr_wines',
+            'wine_list',
+        )
+
+
+class NewProducerRegionSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = ProducerRegion
@@ -55,7 +150,22 @@ class ProducerRegionSerializer(serializers.HyperlinkedModelSerializer):
         )
 
 
-class GrapeSerializer(serializers.HyperlinkedModelSerializer):
+class ProducerRegionSerializer(NewProducerRegionSerializer):
+
+    region = RegionShortSerializer()
+    producer = ProducerShortSerializer()
+
+    class Meta:
+        model = ProducerRegion
+        fields = (
+            'url',
+            'pk',
+            'producer',
+            'region',
+        )
+
+
+class NewGrapeSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Grape
@@ -63,12 +173,35 @@ class GrapeSerializer(serializers.HyperlinkedModelSerializer):
             'url',
             'pk',
             'name',
+            'origin',
             'type',
             'description',
         )
 
 
-class WineSerializer(serializers.HyperlinkedModelSerializer):
+class GrapeSerializer(NewGrapeSerializer):
+
+    origin = RegionShortSerializer()
+    aliases = serializers.SlugRelatedField(many=True, read_only=True, slug_field='name')
+    wine_list = serializers.HyperlinkedIdentityField(view_name='grape-wine-list', read_only=True)
+    nr_wines = serializers.IntegerField(source='wines.count', read_only=True)
+
+    class Meta:
+        model = Grape
+        fields = (
+            'url',
+            'pk',
+            'name',
+            'aliases',
+            'origin',
+            'type',
+            'description',
+            'nr_wines',
+            'wine_list',
+        )
+
+
+class NewWineSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Wine
@@ -83,7 +216,33 @@ class WineSerializer(serializers.HyperlinkedModelSerializer):
         )
 
 
-class WineGrapeSerializer(serializers.HyperlinkedModelSerializer):
+class WineSerializer(NewWineSerializer):
+
+    producer = ProducerShortSerializer()
+    grape_varieties = GrapeShortSerializer(many=True)
+    vintage_list = serializers.HyperlinkedIdentityField(view_name='wine-vintage-list', read_only=True)
+    review_list = serializers.HyperlinkedIdentityField(view_name='wine-review-list', read_only=True)
+    nr_vintages = serializers.IntegerField(source='vintages.count', read_only=True)
+    nr_reviews = serializers.IntegerField(source='reviews.count', read_only=True)
+
+    class Meta:
+        model = Wine
+        fields = (
+            'url',
+            'pk',
+            'name',
+            'producer',
+            'grape_varieties',
+            'type',
+            'description',
+            'nr_vintages',
+            'nr_reviews',
+            'vintage_list',
+            'review_list',
+        )
+
+
+class NewWineGrapeSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = WineGrape
@@ -95,7 +254,22 @@ class WineGrapeSerializer(serializers.HyperlinkedModelSerializer):
         )
 
 
-class VintageSerializer(serializers.HyperlinkedModelSerializer):
+class WineGrapeSerializer(NewWineGrapeSerializer):
+
+    wine = WineShortSerializer()
+    grape = GrapeShortSerializer()
+
+    class Meta:
+        model = WineGrape
+        fields = (
+            'url',
+            'pk',
+            'wine',
+            'grape',
+        )
+
+
+class NewVintageSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Vintage
@@ -108,7 +282,26 @@ class VintageSerializer(serializers.HyperlinkedModelSerializer):
         )
 
 
-class GrapeAliasSerializer(serializers.HyperlinkedModelSerializer):
+class VintageSerializer(NewVintageSerializer):
+
+    wine = WineShortSerializer()
+    review_list = serializers.HyperlinkedIdentityField(view_name='vintage-review-list', read_only=True)
+    nr_reviews = serializers.IntegerField(source='reviews.count', read_only=True)
+
+    class Meta:
+        model = Vintage
+        fields = (
+            'url',
+            'pk',
+            'wine',
+            'year',
+            'description',
+            'nr_reviews',
+            'review_list',
+        )
+
+
+class NewGrapeAliasSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = GrapeAlias
@@ -120,7 +313,23 @@ class GrapeAliasSerializer(serializers.HyperlinkedModelSerializer):
         )
 
 
-class ReviewSerializer(serializers.ModelSerializer):
+class GrapeAliasSerializer(NewGrapeAliasSerializer):
+
+    grape = GrapeShortSerializer()
+
+    class Meta:
+        model = GrapeAlias
+        fields = (
+            'url',
+            'pk',
+            'name',
+            'grape',
+        )
+
+
+class ReviewSerializer(serializers.HyperlinkedModelSerializer):
+
+    user = serializers.ReadOnlyField(source='user.username')
 
     class Meta:
         model = Review
@@ -139,3 +348,95 @@ class ReviewSerializer(serializers.ModelSerializer):
             'updated',
             'active',
         )
+
+
+class NewWineReviewSerializer(serializers.HyperlinkedModelSerializer):
+
+    user = serializers.ReadOnlyField(source='user.username')
+
+    class Meta:
+        model = Review
+        fields = (
+            'url',
+            'pk',
+            'wine',
+            'user',
+            'text',
+            'score',
+            'sweetness',
+            'body',
+            'acidity',
+            'published_on',
+            'updated',
+            'active',
+        )
+
+
+class WineReviewSerializer(NewWineReviewSerializer):
+
+    wine = WineShortSerializer()
+    user = serializers.ReadOnlyField(source='user.username')
+
+    class Meta:
+        model = Review
+        fields = (
+            'url',
+            'pk',
+            'wine',
+            'user',
+            'text',
+            'score',
+            'sweetness',
+            'body',
+            'acidity',
+            'published_on',
+            'updated',
+            'active',
+        )
+
+
+class NewVintageReviewSerializer(serializers.HyperlinkedModelSerializer):
+
+    user = serializers.ReadOnlyField(source='user.username')
+
+    class Meta:
+        model = Review
+        fields = (
+            'url',
+            'pk',
+            'vintage',
+            'user',
+            'text',
+            'score',
+            'sweetness',
+            'body',
+            'acidity',
+            'published_on',
+            'updated',
+            'active',
+        )
+
+
+class VintageReviewSerializer(NewVintageReviewSerializer):
+
+    vintage = VintageShortSerializer()
+    user = serializers.ReadOnlyField(source='user.username')
+
+    class Meta:
+        model = Review
+        fields = (
+            'url',
+            'pk',
+            'vintage',
+            'user',
+            'text',
+            'score',
+            'sweetness',
+            'body',
+            'acidity',
+            'published_on',
+            'updated',
+            'active',
+        )
+
+
