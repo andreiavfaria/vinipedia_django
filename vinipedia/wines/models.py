@@ -8,6 +8,7 @@ from django.urls import reverse
 
 class Country(models.Model):
     name = models.CharField(max_length=50, unique=True)
+    image = models.ImageField(upload_to='countries/%Y/%m/%d/', null=True, blank=True)
 
     class Meta:
         ordering = ('name',)
@@ -22,6 +23,7 @@ class Region(models.Model):
                                 on_delete=models.CASCADE,
                                 related_name='regions')
     description = models.TextField(blank=True)
+    image = models.ImageField(upload_to='regions/%Y/%m/%d/', null=True, blank=True)
 
     class Meta:
         unique_together = (('name', 'country',),)
@@ -37,14 +39,19 @@ class Region(models.Model):
 
 class Producer(models.Model):
     name = models.CharField(max_length=100, unique=True)
+    short_name = models.CharField(max_length=50, unique=True, null=True)
     origin = models.ForeignKey(Region,
-                               on_delete=models.CASCADE,
+                               on_delete=models.RESTRICT,
                                related_name='local_producers')
     presence = models.ManyToManyField(Region,
                                       through='ProducerRegion',
                                       through_fields=('producer', 'region'))
     description = models.TextField(blank=True)
-    # ^^^^ country (derived from region)
+    image = models.ImageField(upload_to='producers/%Y/%m/%d/', null=True, blank=True)
+    website = models.URLField(null=True, blank=True)
+    email = models.EmailField(null=True, blank=True)
+    # phone
+    # social media
 
     class Meta:
         ordering = ('name',)
@@ -86,16 +93,17 @@ class Grape(models.Model):
     )
     name = models.CharField(max_length=100, unique=True)
     origin = models.ForeignKey(Region,
-                               on_delete=models.CASCADE,
+                               on_delete=models.RESTRICT,
                                related_name='grapes',
                                null=True,
                                blank=True)
     type = models.CharField(max_length=5, choices=GRAPE_TYPE_CHOICES)
     description = models.TextField(blank=True)
-    """ vivino """
-    # body
-    # colour
-    # acidity
+    image = models.ImageField(upload_to='grapes/%Y/%m/%d/', null=True, blank=True)
+    # body = models.CharField(max_length=12, choices=GRAPE_BODY_CHOICES)
+    # colour = models.CharField(max_length=12, choices=GRAPE_COLOUR_CHOICES)
+    # acidity = models.CharField(max_length=12, choices=GRAPE_ACIDITY_CHOICES)
+    # tannin (?) = models.CharField(max_length=12, choices=GRAPE_TANNIN_CHOICES)
 
     class Meta:
         ordering = ('name',)
@@ -122,7 +130,7 @@ class Wine(models.Model):
     name = models.CharField(max_length=100)
     producer = models.ForeignKey(
         Producer,
-        on_delete=models.CASCADE,
+        on_delete=models.RESTRICT,
         related_name='wines'
     )
     grape_varieties = models.ManyToManyField(Grape,
@@ -130,15 +138,7 @@ class Wine(models.Model):
                                     through_fields=('wine', 'grape'))
     type = models.CharField(max_length=9, choices=WINE_TYPE_CHOICES)
     description = models.TextField(blank=True)
-    # style : tawny port
-    # alcohol content : 20%
-
-    # (vintage) year
-    # tasting notes
-    # production size
-    # food pairings
-    # updated_on
-    # inserted_on
+    # origin (must match the producer's origin or presence)
 
     class Meta:
         unique_together = (('name', 'producer', 'type',),)
@@ -179,6 +179,14 @@ class Vintage(models.Model):
                                     validators=[MinValueValidator(1700),
                                                 MaxValueValidator(2050)])
     description = models.TextField(blank=True)
+    alcohol_content = models.FloatField(null=True, blank=True,
+                                    validators=[MinValueValidator(0),
+                                                MaxValueValidator(100)])
+    # production size
+    # tasting notes
+    # food pairings
+    # updated_on
+    # inserted_on
 
     class Meta:
         unique_together = (('wine', 'year',),)
@@ -197,6 +205,7 @@ class GrapeAlias(models.Model):
     grape = models.ForeignKey(Grape,
                               on_delete=models.CASCADE,
                               related_name='aliases')
+    # region/country
 
     class Meta:
         unique_together = (('name', 'grape',),)
@@ -235,6 +244,7 @@ class Review(models.Model):
     published_on = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     active = models.BooleanField(default=True)
+    # taste
 
     class Meta:
         # A second constraint is needed since the first constraint isn't

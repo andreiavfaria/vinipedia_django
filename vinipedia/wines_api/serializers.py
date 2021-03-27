@@ -36,12 +36,15 @@ class GrapeShortSerializer(serializers.HyperlinkedModelSerializer):
 
 class WineShortSerializer(serializers.HyperlinkedModelSerializer):
 
+    producer = ProducerShortSerializer()
+
     class Meta:
         model = Wine
         fields = (
             'url',
             'name',
             'type',
+            'producer',
         )
 
 
@@ -70,6 +73,7 @@ class CountrySerializer(serializers.HyperlinkedModelSerializer):
             'url',
             'pk',
             'name',
+            'image',
             'nr_regions',
             'region_list',
             'regions',
@@ -93,9 +97,12 @@ class RegionSerializer(serializers.HyperlinkedModelSerializer):
             'pk',
             'name',
             'country',
+            'image',
             'description',
             # 'nr_wines',
             'nr_producers',
+            # 'nr_producers_from',
+            # 'nr_producers_in_operation',
             'nr_grapes',
             'wine_list',
             'producer_list',
@@ -111,8 +118,12 @@ class NewProducerSerializer(serializers.HyperlinkedModelSerializer):
             'url',
             'pk',
             'name',
+            'short_name',
             'origin',
             'presence',
+            'website',
+            'email',
+            'image',
             'description',
         )
 
@@ -130,8 +141,12 @@ class ProducerSerializer(NewProducerSerializer):
             'url',
             'pk',
             'name',
+            'short_name',
             'origin',
             'presence',
+            'website',
+            'email',
+            'image',
             'description',
             'nr_wines',
             'wine_list',
@@ -175,6 +190,7 @@ class NewGrapeSerializer(serializers.HyperlinkedModelSerializer):
             'name',
             'origin',
             'type',
+            'image',
             'description',
         )
 
@@ -195,6 +211,7 @@ class GrapeSerializer(NewGrapeSerializer):
             'aliases',
             'origin',
             'type',
+            'image',
             'description',
             'nr_wines',
             'wine_list',
@@ -278,6 +295,7 @@ class NewVintageSerializer(serializers.HyperlinkedModelSerializer):
             'pk',
             'wine',
             'year',
+            'alcohol_content',
             'description',
         )
 
@@ -295,6 +313,7 @@ class VintageSerializer(NewVintageSerializer):
             'pk',
             'wine',
             'year',
+            'alcohol_content',
             'description',
             'nr_reviews',
             'review_list',
