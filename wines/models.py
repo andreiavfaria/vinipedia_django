@@ -87,6 +87,14 @@ class ProducerRegion(models.Model):
 
 
 class Grape(models.Model):
+
+    class Tannin(models.IntegerChoices):
+        VERY_WEAK = 1
+        WEAK = 2
+        MEDIUM = 3
+        STRONG = 4
+        VERY_STRONG = 5
+
     GRAPE_TYPE_CHOICES = (
         ('white', 'White'),
         ('red', 'Red'),
@@ -104,6 +112,7 @@ class Grape(models.Model):
     # colour = models.CharField(max_length=12, choices=GRAPE_COLOUR_CHOICES)
     # acidity = models.CharField(max_length=12, choices=GRAPE_ACIDITY_CHOICES)
     # tannin (?) = models.CharField(max_length=12, choices=GRAPE_TANNIN_CHOICES)
+    tannin = models.IntegerField(choices=Tannin.choices, null=True)
 
     class Meta:
         ordering = ('name',)

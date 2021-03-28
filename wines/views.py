@@ -4,7 +4,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 
 # Create your views here.
 from .forms import ReviewForm
-from .models import Wine, Grape, Producer, Region, Vintage
+from .models import Wine, Grape, Producer, Region, Vintage, Review
 from .utils import paginator_helper
 
 
@@ -31,12 +31,22 @@ def wine_detail(request, id):
             new_review.save()
             return redirect(wine)
     elif request.method == 'GET':
-        review_form = ReviewForm()
+        # Show review form only if no generic review for this wine has been
+        # written (i.e. show review form even if vintage specific reviews have
+        # been written... does that make sense?)
+        reviewed_already_by_this_user = Review.objects.filter(wine=wine,
+                                                              user=request.user,
+                                                              vintage=None).count()
+        if not reviewed_already_by_this_user:
+            review_form = ReviewForm()
+        else:
+            review_form = None
 
     return render(request,
                   'wines/wine/detail.html',
                   {'wine': wine,
-                   'review_form': review_form})
+                   'review_form': review_form,
+                   'reviewed_already_by_this_user': reviewed_already_by_this_user})
 
 
 def wines_per_type(request, type):
@@ -82,11 +92,18 @@ def vintage_detail(request, id):
             new_review.save()
             return redirect(vintage)
     elif request.method == 'GET':
-        review_form = ReviewForm()
+        # Show review form only if no review for this vintage has been written
+        reviewed_already_by_this_user = Review.objects.filter(vintage=vintage,
+                                                              user=request.user).count()
+        if not reviewed_already_by_this_user:
+            review_form = ReviewForm()
+        else:
+            review_form = None
     return render(request,
                   'wines/vintage/detail.html',
                   {'vintage': vintage,
-                   'review_form': review_form})
+                   'review_form': review_form,
+                   'reviewed_already_by_this_user': reviewed_already_by_this_user})
 
 
 def vintages_per_year(request, year):

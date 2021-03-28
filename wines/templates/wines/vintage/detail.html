@@ -96,7 +96,7 @@
 {% if request.user.is_authenticated %}
     {% if new_review %}
         <h2>Your review has been added.</h2>
-    {% else %}
+    {% elif not reviewed_already_by_this_user %}
         <h2>Add a review</h2>
         <form method="POST">
           {% csrf_token %}
