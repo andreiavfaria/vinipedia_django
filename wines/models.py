@@ -138,11 +138,23 @@ class Wine(models.Model):
                                     through_fields=('wine', 'grape'))
     type = models.CharField(max_length=9, choices=WINE_TYPE_CHOICES)
     description = models.TextField(blank=True)
-    # origin (must match the producer's origin or presence)
+    image = models.ImageField(upload_to='wines/%Y/%m/%d/', null=True, blank=True)
+    origin = models.ForeignKey(Region,
+                               on_delete=models.RESTRICT,
+                               related_name='local_wines')
 
     class Meta:
-        unique_together = (('name', 'producer', 'type',),)
+        unique_together = (('name', 'type', 'producer',),)
         ordering = ('name',)
+
+    def save(self, *args, **kwargs):
+        # Ensure the wine's origin matches its producer's origin or presence
+        # (we override the model's save method since this constraint apparently
+        # can't be implemented using pure Django model constraints)
+        producer_operating_in_this_region = self.producer.regions.filter(region=self.origin).count()
+        if self.origin != self.producer.origin and not producer_operating_in_this_region:
+            raise Exception("The wine origin must match the producer's origin or regional presence.")
+        super(Wine, self).save(*args, **kwargs)
 
     def __str__(self):
         return f"{self.name} ({self.type})"
@@ -179,6 +191,7 @@ class Vintage(models.Model):
                                     validators=[MinValueValidator(1700),
                                                 MaxValueValidator(2050)])
     description = models.TextField(blank=True)
+    image = models.ImageField(upload_to='vintages/%Y/%m/%d/', null=True, blank=True)
     alcohol_content = models.FloatField(null=True, blank=True,
                                     validators=[MinValueValidator(0),
                                                 MaxValueValidator(100)])
@@ -260,7 +273,18 @@ class Review(models.Model):
         ]
         ordering = ('published_on',)
 
+    def save(self, *args, **kwargs):
+        # Ensure that (if vintage != null) the selected vintage corresponds to
+        # the selected wine.
+        # (we override the model's save method since this constraint apparently
+        # can't be implemented using pure Django model constraints)
+        if self.vintage is not None and self.vintage.wine != self.wine:
+            raise Exception("The selected vintage must correspond to the selected wine.")
+        super(Review, self).save(*args, **kwargs)
+
     def __str__(self):
+        if self.vintage:
+            return f"{self.vintage} review #{self.id}"
         return f"{self.wine} review #{self.id}"
 
     def get_absolute_url(self):

@@ -229,6 +229,7 @@ class NewWineSerializer(serializers.HyperlinkedModelSerializer):
             'producer',
             'grape_varieties',
             'type',
+            'image',
             'description',
         )
 
@@ -251,6 +252,7 @@ class WineSerializer(NewWineSerializer):
             'producer',
             'grape_varieties',
             'type',
+            'image',
             'description',
             'nr_vintages',
             'nr_reviews',
@@ -296,6 +298,7 @@ class NewVintageSerializer(serializers.HyperlinkedModelSerializer):
             'wine',
             'year',
             'alcohol_content',
+            'image',
             'description',
         )
 
@@ -314,6 +317,7 @@ class VintageSerializer(NewVintageSerializer):
             'wine',
             'year',
             'alcohol_content',
+            'image',
             'description',
             'nr_reviews',
             'review_list',
