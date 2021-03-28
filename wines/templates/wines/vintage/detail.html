@@ -93,17 +93,21 @@
 {% endfor %}
 
 <!-- Review form -->
-{% if new_review %}
-    <h2>Your review has been added.</h2>
+{% if request.user.is_authenticated %}
+    {% if new_review %}
+        <h2>Your review has been added.</h2>
+    {% else %}
+        <h2>Add a review</h2>
+        <form method="POST">
+          {% csrf_token %}
+          {{ review_form.as_p }}
+          <p>
+            <input type="submit" value="Add review">
+          </p>
+        </form>
+    {% endif %}
 {% else %}
-    <h2>Add a review</h2>
-    <form method="POST">
-      {% csrf_token %}
-      {{ review_form.as_p }}
-      <p>
-        <input type="submit" value="Add review">
-      </p>
-    </form>
+    <a href="{% url 'accounts:login' %}">Log in to write a review</a>
 {% endif %}
 
 {% endblock %}
