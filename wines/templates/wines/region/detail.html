@@ -27,9 +27,9 @@
 
 <!-- Other producers operating in the region -->
 <h4>Other producers operating in the region</h4>
-{% for region_producer in region.producers.all %}
+{% for region_producer in region.get_other_producers %}
 <p>
-    <a href="{{ region_producer.producer.get_absolute_url }}">{{ region_producer.producer|capfirst }}</a>
+    <a href="{{ region_producer.get_absolute_url }}">{{ region_producer|capfirst }}</a>
 </p>
 {% empty %}
 <p class="info">No additional producers were registered for this region.</p>

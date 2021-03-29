@@ -29,6 +29,11 @@ class Region(models.Model):
         unique_together = (('name', 'country',),)
         ordering = ('name',)
 
+    def get_other_producers(self):
+        other_producers = Producer.objects.filter(presence=self.pk).exclude(origin=self.pk)
+        return other_producers
+
+
     def __str__(self):
         return self.name
 
