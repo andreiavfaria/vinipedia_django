@@ -5,7 +5,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 # Create your views here.
 from .forms import ReviewForm
 from .models import Wine, Grape, Producer, Region, Vintage, Review
-from .utils import paginator_helper
+from .utils import paginator_helper, session_updater
 
 
 def wine_list(request):
@@ -19,6 +19,13 @@ def wine_list(request):
 
 def wine_detail(request, id):
     wine = get_object_or_404(Wine, id=id)
+
+    # update session data
+    visited_page = {'type': 'wine', 'id': wine.id}
+    session_updater(request, visited_page)
+
+    print (request.session["last_visited"])
+
     # review handling
     new_review = None
     if request.method == 'POST':
@@ -80,6 +87,13 @@ def vintage_list(request):
 
 def vintage_detail(request, id):
     vintage = get_object_or_404(Vintage, id=id)
+
+    # update session data
+    visited_page = {'type': 'vintage', 'id': vintage.id}
+    session_updater(request, visited_page)
+
+    print (request.session["last_visited"])
+
     # review handling
     new_review = None
     if request.method == 'POST':

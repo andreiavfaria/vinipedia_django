@@ -14,3 +14,14 @@ def paginator_helper(request, paginator):
         objects = paginator.page(paginator.num_pages)
     return objects
 
+
+def session_updater(request, visited_page):
+    """ Abstracts the repeated logic for updating sessions inside the views. """
+    # Gets the last_visited session key if it exists, creating it otherwise
+    last_visited = request.session.get("last_visited", [])
+    if visited_page in last_visited:
+        last_visited = list(filter(lambda x: x != visited_page, last_visited))
+    last_visited.insert(0, visited_page)
+    last_visited = last_visited[:10]
+    request.session["last_visited"] = last_visited
+    request.session.modified = True
