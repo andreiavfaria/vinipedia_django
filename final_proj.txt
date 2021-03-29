@@ -25,10 +25,13 @@ Etc
 
 to do:
 ------
+- (done) add class integerchoice fields
+- add class methods (avg_rating, avg_acidity, etc)
 - cookies: last pages viewed (persistent)
 - session: last pages visited today
-- token auth: (react) login -> token auth -> acesso à lista de vinhos
 - django-filters: filter + sort
+----
+- token auth: (react) login -> token auth -> acesso à lista de vinhos
 - pesquisa site: vinhos por múltiplos critérios
 - reviews: ...
 - throttling
@@ -45,6 +48,7 @@ notes:
 - usar crispy-forms e/ou bootstrap?
 - tokenauth através de https?
 - alterar debug=TRUE em settings.py, remover debug url_patterns de urls.py
+- ocultar todas as keys (p.ex., SECRET_KEY) e passwords (com config.json, etc)
 - bread crumbs
 - nav bar missing
 - add class integer choice fields (to review, grape, vintage/wine?)
@@ -56,12 +60,13 @@ notes:
 
 bugs:
 -----
-- region_detail: remover "local producers" dos "other producers"
 - review detail views (wine e vintage)
 - api (vintage): retornar N.V. em vez de null? (ver código e notas em baixo)
 - api (image): editing an instance deletes the current image field value
 - review page login link shouldn't redirect to the landing page
 - wine/vintage detail view when no user is logged in (TypeError: 'AnonymousUser' object is not iterable)
+- grape body scale (current: light<->bold, vivino: light-bodied<->full-bodied)
+- (fixed) region_detail: remover "local producers" dos "other producers"
 - (fixed) region wines: adicionar field:origin em wine (com check constraint, deve estar incluído nas regiões do seu produtor)
 - (fixed) review constraint: vintage.wine === wine
 - (fixed) unique constraint nas reviews não é respeitada quando vintage=null
@@ -90,6 +95,7 @@ next:
     - throttling
     - cors
 - app react
+- ssl/https
 
 accounts setup          10
 context processors      15

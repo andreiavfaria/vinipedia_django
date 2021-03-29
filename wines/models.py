@@ -30,9 +30,13 @@ class Region(models.Model):
         ordering = ('name',)
 
     def get_other_producers(self):
+        """ Returns the non-local producers that operate in the region.
+
+        (e.g. Bacalhôa, which is from Setúbal but also operates in Alentejo.
+
+        """
         other_producers = Producer.objects.filter(presence=self.pk).exclude(origin=self.pk)
         return other_producers
-
 
     def __str__(self):
         return self.name
@@ -93,12 +97,33 @@ class ProducerRegion(models.Model):
 
 class Grape(models.Model):
 
-    class Tannin(models.IntegerChoices):
-        VERY_WEAK = 1
-        WEAK = 2
+    class Body(models.IntegerChoices):
+        VERY_LIGHT = 1
+        LIGHT = 2
         MEDIUM = 3
-        STRONG = 4
-        VERY_STRONG = 5
+        BOLD = 4
+        VERY_BOLD = 5
+
+    class Acidity(models.IntegerChoices):
+        VERY_SOFT = 1
+        SOFT = 2
+        MEDIUM = 3
+        ACIDIC = 4
+        VERY_ACIDIC = 5
+
+    class Colour(models.IntegerChoices):
+        STRAW = 1
+        YELLOW = 2
+        GOLD = 3
+        BROWN = 4
+        AMBER = 5
+        COPPER = 6
+        SALMON = 7
+        PINK = 8
+        RUBY = 9
+        PURPLE = 10
+        GARNET = 11
+        TAWNY = 12
 
     GRAPE_TYPE_CHOICES = (
         ('white', 'White'),
@@ -113,11 +138,9 @@ class Grape(models.Model):
     type = models.CharField(max_length=5, choices=GRAPE_TYPE_CHOICES)
     description = models.TextField(blank=True)
     image = models.ImageField(upload_to='grapes/%Y/%m/%d/', null=True, blank=True)
-    # body = models.CharField(max_length=12, choices=GRAPE_BODY_CHOICES)
-    # colour = models.CharField(max_length=12, choices=GRAPE_COLOUR_CHOICES)
-    # acidity = models.CharField(max_length=12, choices=GRAPE_ACIDITY_CHOICES)
-    # tannin (?) = models.CharField(max_length=12, choices=GRAPE_TANNIN_CHOICES)
-    tannin = models.IntegerField(choices=Tannin.choices, null=True)
+    # colour = models.IntegerField(choices=Colour.choices, null=True)
+    body = models.IntegerField(choices=Body.choices, null=True)
+    acidity = models.IntegerField(choices=Acidity.choices, null=True)
 
     class Meta:
         ordering = ('name',)
@@ -196,6 +219,7 @@ class WineGrape(models.Model):
 
 
 class Vintage(models.Model):
+
     wine = models.ForeignKey(Wine,
                              on_delete=models.CASCADE,
                              related_name='vintages')
@@ -246,6 +270,34 @@ class Review(models.Model):
     """ Model for wine reviews. """
     validators = [MinValueValidator(0), MaxValueValidator(10)]
 
+    class Sweetness(models.IntegerChoices):
+        VERY_DRY = 1
+        DRY = 2
+        MEDIUM = 3
+        SWEET = 4
+        VERY_SWEET = 5
+
+    class Body(models.IntegerChoices):
+        VERY_LIGHT = 1
+        LIGHT = 2
+        MEDIUM = 3
+        BOLD = 4
+        VERY_BOLD = 5
+
+    class Acidity(models.IntegerChoices):
+        VERY_SOFT = 1
+        SOFT = 2
+        MEDIUM = 3
+        ACIDIC = 4
+        VERY_ACIDIC = 5
+
+    class Tannin(models.IntegerChoices):
+        VERY_SMOOTH = 1
+        SMOOTH = 2
+        MEDIUM = 3
+        TANNIC = 4
+        VERY_TANNIC = 5
+
     wine = models.ForeignKey(
         Wine,
         on_delete=models.CASCADE,
@@ -265,9 +317,10 @@ class Review(models.Model):
     )
     text = models.TextField()
     score = models.PositiveSmallIntegerField(default=5, validators=validators)
-    sweetness = models.PositiveSmallIntegerField(default=5, validators=validators)
-    body = models.PositiveSmallIntegerField(default=5, validators=validators)
-    acidity = models.PositiveSmallIntegerField(default=5, validators=validators)
+    sweetness = models.IntegerField(choices=Sweetness.choices, null=True)
+    body = models.IntegerField(choices=Body.choices, null=True)
+    acidity = models.IntegerField(choices=Acidity.choices, null=True)
+    tannin = models.IntegerField(choices=Tannin.choices, null=True)
     published_on = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     active = models.BooleanField(default=True)
