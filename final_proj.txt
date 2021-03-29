@@ -1,0 +1,196 @@
+
+---------------------------------------------------------------------------
+Plataforma/site
+---------------------------------------------------------------------------
+- Permitir a visualização de info sobre vinhos, produtores e castas
+- Permitir a pesquisa de vinhos por diversos critérios
+- Permite o registo e autenticação de utilizadores
+- Permitir a avaliação dos vinhos por utilizadores autenticados
+---------------------------------------------------------------------------
+API RESTful
+---------------------------------------------------------------------------
+- Permite a consulta da informação (vinhos, produtores, castas)
+- Permite a criação e edição da informação (apenas a users com permissão de admin)
+---------------------------------------------------------------------------
+Client app
+---------------------------------------------------------------------------
+- Permite listar os vinhos existentes na plataforma
+---------------------------------------------------------------------------
+Etc
+---------------------------------------------------------------------------
+- Database    : Postgresql
+- Storage     : Amazon s3
+- Deployment  : Heroku
+
+
+notes:
+------
+- missing fields (wine: style/type; grape:body,colour,acidity; etc)
+- @login_required (ou similar) nas views apropriadas
+- api: adicionar filters/permitir sorting e filtering nos pedidos à API (limit, offset, sort, etc)
+- usar crispy-forms e/ou bootstrap?
+- tokenauth através de https?
+- alterar debug=TRUE em settings.py, remover debug url_patterns de urls.py
+- bread crumbs
+- nav bar missing
+- add class integer choice fields (to review, grape, vintage/wine?)
+- verificar se a "constraint" para wine origin não pode ser mesmo impelementada sem recurso a override do save()
+- (done) confirmar on delete/update cascade/restrict
+- (done) abstrair lógica de paginação (numa função?)
+- (done) requirements.txt
+
+
+bugs:
+-----
+- region_detail: remover "local producers" dos "other producers"
+- review detail views (wine e vintage)
+- api (vintage): retornar N.V. em vez de null? (ver código e notas em baixo)
+- api (image): editing an instance deletes the current image field value
+- review page login link shouldn't redirect to the landing page
+- (fixed) region wines: adicionar field:origin em wine (com check constraint, deve estar incluído nas regiões do seu produtor)
+- (fixed) review constraint: vintage.wine === wine
+- (fixed) unique constraint nas reviews não é respeitada quando vintage=null
+- (fixed) api: reviews, grape-alias, producer-region, wine-grape
+- (fixed) api: logout related bug (when 'rest_framework.permissions.IsAuthenticated' is in DEFAULT_PERMISSION_CLASSES)
+
+
+next:
+-----
+- (done) views + templates
+- (done) accounts
+- (done) reviews
+- adicionar todos os campos em falta às views
+- sessions / cookies
+- accounts urls
+- pesquisa de vinhos por vários critérios
+- (done) pesquisa integral
+- api rest
+    - (done) create app
+    - set all the endpoints
+    - (done) (models)
+    - (done) serializers
+    - views
+    - urls
+    - auth
+    - throttling
+    - cors
+- app react
+
+accounts setup          10
+context processors      15
+model methods           21   (e.g., get_rating() for a wine vintage)
+cookies / session       15
+global static files     18
+img src issues          19
+templatetags            9
+taggit                  8
+rest api:                
+setup                   6
+class views             7
+viewset classes         7
+pagination              7
+filters                 7
+authentication          8
+throttling              9
+cors                    10
+deployment:
+postgres                2 / 5                
+heroku                  5
+amazon s3               4
+
+
+incorporate:
+- crispy-forms
+- bootstrap
+
+
+postgres
+media > amazon bucket
+static? > amazon bucket
+
+
+
+
+
+
+
+
+postgres
+--------
+> pip install psycopg2
+
+DATABASES = {
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.sqlite3',
+    #     'NAME': BASE_DIR / 'db.sqlite3',
+    # }
+    'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': 'vinipedia',
+            'USER': 'postgres',
+            'PASSWORD': 'admin',
+            'HOST': 'localhost',
+            'PORT': '5432',
+        }
+}
+
+
+
+heroku
+------
+> pip install gunicorn
+
+# STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+> pip install django-heroku
+
+import django_heroku
+
+# Activate Django-Heroku.
+django_heroku.settings(locals())
+
+
+Procfile
+--------
+Quando o dir .git estava no dir vinipedia (exterior à root do proj, 
+ao mesmo nível do venv), a config seguinte funcionou:
+    web: gunicorn --pythonpath vinipedia vinipedia.wsgi
+
+
+Acrescentar
+-----------
+ALLOWED_HOSTS = [
+    'vinipedia.herokuapp.com'
+]
+
+
+Heroku setup
+------------
+- Ir para o dir do projecto (root dir, onde está o .git do repo do projecto, 
+assim como o ficheiro requirements.txt - e onde deve estar também o ficheiro manage.py)
+- heroku create vinipedia
+- heroku open (verificar se abre o site default do heroku)
+- git push heroku master (fazer push do conteúdo do proj para o heroku)
+- heroku logs --tail (verificar se a build não deu erro)
+- refresh ao site (deverá dar erro: faltam as migrações)
+- heroku run python manage.py migrate (executar migrações)
+- refresh ao site (verificar se está tudo ok!)
+
+
+Notas
+-----
+
+- api (vintage): retornar N.V. em vez de null?
+
+def __getattribute__(self, name):
+    attr = models.Model.__getattribute__(self, name)
+    if name == 'year' and not attr:
+        return 'N.V.'
+    return attr
+
+ValueError at /wines/api/vintages/
+invalid literal for int() with base 10: 'N.V.'
+
+
+pip install -r requirements.txt
