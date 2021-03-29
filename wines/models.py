@@ -3,6 +3,7 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 
 # Create your models here.
+from django.db.models import Avg
 from django.urls import reverse
 
 
@@ -25,10 +26,6 @@ class Region(models.Model):
     description = models.TextField(blank=True)
     image = models.ImageField(upload_to='regions/%Y/%m/%d/', null=True, blank=True)
 
-    class Meta:
-        unique_together = (('name', 'country',),)
-        ordering = ('name',)
-
     def get_other_producers(self):
         """ Returns the non-local producers that operate in the region.
 
@@ -37,6 +34,10 @@ class Region(models.Model):
         """
         other_producers = Producer.objects.filter(presence=self.pk).exclude(origin=self.pk)
         return other_producers
+
+    class Meta:
+        unique_together = (('name', 'country',),)
+        ordering = ('name',)
 
     def __str__(self):
         return self.name
@@ -180,6 +181,12 @@ class Wine(models.Model):
                                on_delete=models.RESTRICT,
                                related_name='local_wines')
 
+    def get_average_rating(self):
+        """ Returns the consolidated average review rating for a wine
+        (including every review for each of its vintages). """
+        average_rating = Review.objects.filter(wine=self.pk).aggregate(Avg('score'))['score__avg']
+        return round(average_rating, 1)
+
     class Meta:
         unique_together = (('name', 'type', 'producer',),)
         ordering = ('name',)
@@ -239,6 +246,41 @@ class Vintage(models.Model):
     # updated_on
     # inserted_on
 
+    def get_average_rating(self):
+        """ Returns the average review rating for a vintage. """
+        if self.reviews:
+            avg = Review.objects.filter(vintage=self.pk).aggregate(Avg('score'))['score__avg']
+            return round(avg, 1)
+        return None
+
+    def get_average_body(self):
+        reviews_with_body_score = Review.objects.filter(vintage=self.pk).exclude(body=None)
+        if reviews_with_body_score:
+            avg = Review.objects.filter(vintage=self.pk).aggregate(Avg('body'))['body__avg']
+            return round(avg, 1)
+        return None
+
+    def get_average_sweetness(self):
+        reviews_with_sweetness_score = Review.objects.filter(vintage=self.pk).exclude(sweetness=None)
+        if reviews_with_sweetness_score:
+            avg = Review.objects.filter(vintage=self.pk).aggregate(Avg('sweetness'))['sweetness__avg']
+            return round(avg, 1)
+        return None
+
+    def get_average_acidity(self):
+        reviews_with_acidity_score = Review.objects.filter(vintage=self.pk).exclude(acidity=None)
+        if reviews_with_acidity_score:
+            avg = Review.objects.filter(vintage=self.pk).aggregate(Avg('acidity'))['acidity__avg']
+            return round(avg, 1)
+        return None
+
+    def get_average_tannin(self):
+        reviews_with_tannin_score = Review.objects.filter(vintage=self.pk).exclude(tannin=None)
+        if reviews_with_tannin_score:
+            avg = Review.objects.filter(vintage=self.pk).aggregate(Avg('tannin'))['tannin__avg']
+            return round(avg, 1)
+        return None
+
     class Meta:
         unique_together = (('wine', 'year',),)
         ordering = ('wine', 'year')
@@ -268,7 +310,7 @@ class GrapeAlias(models.Model):
 
 class Review(models.Model):
     """ Model for wine reviews. """
-    validators = [MinValueValidator(0), MaxValueValidator(10)]
+    validators = [MinValueValidator(1), MaxValueValidator(5)]
 
     class Sweetness(models.IntegerChoices):
         VERY_DRY = 1
@@ -316,7 +358,7 @@ class Review(models.Model):
         related_name='reviews'
     )
     text = models.TextField()
-    score = models.PositiveSmallIntegerField(default=5, validators=validators)
+    score = models.PositiveSmallIntegerField(default=3, validators=validators)
     sweetness = models.IntegerField(choices=Sweetness.choices, null=True)
     body = models.IntegerField(choices=Body.choices, null=True)
     acidity = models.IntegerField(choices=Acidity.choices, null=True)

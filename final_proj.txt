@@ -26,7 +26,7 @@ Etc
 to do:
 ------
 - (done) add class integerchoice fields
-- add class methods (avg_rating, avg_acidity, etc)
+- (done) add class methods (avg_rating, avg_acidity, etc)
 - cookies: last pages viewed (persistent)
 - (done) session: last pages visited today
 - django-filters: filter + sort

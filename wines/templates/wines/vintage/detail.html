@@ -67,6 +67,45 @@
 <p class="info">No other vintages were registered for this wine.</p>
 {% endif %}
 
+<!-- Average rating -->
+<h4>Rating</h4>
+{% if vintage.reviews.all %}
+<p>{{ vintage.get_average_rating }}*</p>
+{% else %}
+<p>N/A</p>
+{% endif %}
+
+<!-- Taste profile -->
+<h4>Taste summary</h4>
+{% if vintage.reviews.all %}
+<!-- Body -->
+{% if vintage.get_average_body %}
+<p class="score">Body: {{ vintage.get_average_body }}*</p>
+{% else %}
+<p class="score">Body: N/A</p>
+{% endif %}
+<!-- Sweetness -->
+{% if vintage.get_average_sweetness %}
+<p class="score">Sweetness: {{ vintage.get_average_sweetness }}*</p>
+{% else %}
+<p class="score">Sweetness: N/A</p>
+{% endif %}
+<!-- Acidity -->
+{% if vintage.get_average_acidity %}
+<p class="score">Acidity: {{ vintage.get_average_acidity }}*</p>
+{% else %}
+<p class="score">Acidity: N/A</p>
+{% endif %}
+<!-- Tannin -->
+{% if vintage.get_average_tannin %}
+<p class="score">Tannin: {{ vintage.get_average_tannin }}*</p>
+{% else %}
+<p class="score">Tannin: N/A</p>
+{% endif %}
+{% else %}
+<p>No info </p>
+{% endif %}
+
 <!-- Existing reviews -->
 <h4>Reviews</h4>
 {% with vintage.reviews.count as total_reviews %}
@@ -83,10 +122,32 @@
     </p>
     <p>Date: {{ review.published_on }}</p>
     <p>{{ review.text|linebreaks }}</p>
+    <!-- Score -->
     <p class="score">Score: {{ review.score }}*</p>
+    <!-- Body -->
+    {% if review.body %}
     <p class="score">Body: {{ review.body }}*</p>
+    {% else %}
+    <p class="score">Body: N/A</p>
+    {% endif %}
+    <!-- Sweetness -->
+    {% if review.sweetness %}
     <p class="score">Sweetness: {{ review.sweetness }}*</p>
+    {% else %}
+    <p class="score">Sweetness: N/A</p>
+    {% endif %}
+    <!-- Acidity -->
+    {% if review.acidity %}
     <p class="score">Acidity: {{ review.acidity }}*</p>
+    {% else %}
+    <p class="score">Acidity: N/A</p>
+    {% endif %}
+    <!-- Tannin -->
+    {% if review.tannin %}
+    <p class="score">Tannin: {{ review.tannin }}*</p>
+    {% else %}
+    <p class="score">Tannin: N/A</p>
+    {% endif %}
   </div>
 {% empty %}
     <p class="info">There are no reviews yet.</p>

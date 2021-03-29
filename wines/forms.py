@@ -11,6 +11,7 @@ class ReviewForm(forms.ModelForm):
                   'body',
                   'sweetness',
                   'acidity',
+                  'tannin',
                   'text')
 
 
