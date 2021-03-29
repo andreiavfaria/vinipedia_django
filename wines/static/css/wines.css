@@ -50,26 +50,26 @@ p.date {
 /* forms */
 label {
     float:left;
-    clear:both;
+    /*clear:both;
     color:#333;
-    margin-bottom:4px;
+    margin-bottom:4px;*/
 }
 input, textarea {
-    clear:both;
+    /*clear:both;
     float:left;
     margin:0 0 10px;
     background:#dcdcdc;
     border:0;
     padding:6px 10px;
-    font-size:12px;
+    font-size:12px;*/
 }
 input[type=submit] {
-    font-weight:bold;
+    /*font-weight:bold;
     background:#00abff;
     color:#fff;
     padding:10px 20px;
     font-size:14px;
-    text-transform:uppercase;
+    text-transform:uppercase;*/
 }
 .errorlist {
     color:#cc0033;

@@ -61,10 +61,26 @@ def show_producers_search_form():
     return {"search_form": search_form}
 
 
+@register.inclusion_tag('wines/last_visited_pages.html')
+def show_last_visited_pages(request):
+    last_visited = []
+    pages = request.session.get("last_visited")
+    if pages is not None:
+        for page in pages:
+            id = page['id']
+            if page['type'] == 'wine':
+                wine = Wine.objects.get(id=id)
+                last_visited.append(wine)
+            elif page['type'] == 'vintage':
+                vintage = Vintage.objects.get(id=id)
+                last_visited.append(vintage)
+    return {"last_visited_pages": last_visited}
+
+
 
 """ Other tags """
 
+# @register.simple_tag
+# def other_wine_vintages(wine, vintage):
+#     return wine.vintages.all.exclude(vintage=vintage)
 
-@register.simple_tag
-def other_wine_vintages(wine, vintage):
-    return wine.vintages.all.exclude(vintage=vintage)

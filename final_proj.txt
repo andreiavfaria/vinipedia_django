@@ -28,7 +28,7 @@ to do:
 - (done) add class integerchoice fields
 - add class methods (avg_rating, avg_acidity, etc)
 - cookies: last pages viewed (persistent)
-- session: last pages visited today
+- (done) session: last pages visited today
 - django-filters: filter + sort
 ----
 - token auth: (react) login -> token auth -> acesso à lista de vinhos

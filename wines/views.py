@@ -251,7 +251,9 @@ def sitewide_search(request):
 
 
 def landing_page(request):
-    # temporary hack
-    return redirect('wines/')
+    # # temporary hack
+    # return redirect('wines/')
+    return render(request,
+                  'wines/landing_page.html')
 
 

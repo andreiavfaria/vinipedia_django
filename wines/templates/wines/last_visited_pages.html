@@ -1,0 +1,7 @@
+<div>
+    {% for page in last_visited_pages %}
+    <div>
+        <a href="{{ page.get_absolute_url }}">{{ page }}</a>
+    </div>
+    {% endfor %}
+</div>
