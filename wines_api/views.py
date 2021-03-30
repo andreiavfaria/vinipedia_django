@@ -1,7 +1,7 @@
 from django.shortcuts import render
 
 # Create your views here.
-from rest_framework import generics
+from rest_framework import generics, permissions
 from rest_framework.decorators import api_view
 from rest_framework.generics import get_object_or_404
 from rest_framework.response import Response
@@ -9,6 +9,7 @@ from rest_framework.reverse import reverse
 
 from wines.models import Country, Region, ProducerRegion, Producer, Grape, WineGrape, Wine, Vintage, GrapeAlias, Review
 
+from . import custompermissions
 from .serializers import CountrySerializer, RegionSerializer, ProducerRegionSerializer, ProducerSerializer, GrapeSerializer, WineGrapeSerializer, WineSerializer, VintageSerializer, \
     GrapeAliasSerializer, ReviewSerializer, VintageReviewSerializer, WineReviewSerializer, NewProducerSerializer, NewProducerRegionSerializer, NewGrapeSerializer, ProducerShortSerializer, \
     NewWineSerializer, NewWineGrapeSerializer, NewVintageSerializer, NewGrapeAliasSerializer, NewWineReviewSerializer, NewVintageReviewSerializer, RegionShortSerializer, WineShortSerializer, \
@@ -260,10 +261,17 @@ class GrapeAliasDetail(generics.RetrieveUpdateDestroyAPIView):
         return GrapeAliasSerializer
 
 
-class ReviewList(generics.ListAPIView):
+class ReviewList(generics.ListCreateAPIView):
     queryset = Review.objects.all()
     serializer_class = ReviewSerializer
     name = 'review-list'
+
+    def perform_create(self, serializer_class):
+        serializer_class.save(user=self.request.user)
+
+    permission_classes = (
+        permissions.IsAuthenticatedOrReadOnly,
+    )
 
 
 class ReviewDetail(generics.RetrieveUpdateDestroyAPIView):
@@ -271,10 +279,25 @@ class ReviewDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = ReviewSerializer
     name = 'review-detail'
 
+    def perform_create(self, serializer_class):
+        serializer_class.save(user=self.request.user)
+
+    def perform_update(self, serializer_class):
+        instance = serializer_class.save()
+        if self.request.user != instance.user and self.request.user.is_staff:
+            serializer_class.save(text=f'(ADMIN EDIT BY {self.request.user}) ' + instance.text)
+
+    permission_classes = (
+        custompermissions.IsCurrentUserAdminOrOwnerOrReadOnly,
+    )
+
 
 class WineReviewList(generics.ListCreateAPIView):
     queryset = Review.objects.all()
     name = 'wine-review-list'
+
+    def perform_create(self, serializer_class):
+        serializer_class.save(user=self.request.user)
 
     def get_serializer_class(self):
         if self.request.method == 'POST':
@@ -295,6 +318,9 @@ class WineReviewList(generics.ListCreateAPIView):
 class VintageReviewList(generics.ListCreateAPIView):
     queryset = Review.objects.all()
     name = 'vintage-review-list'
+
+    def perform_create(self, serializer_class):
+        serializer_class.save(user=self.request.user)
 
     def get_serializer_class(self):
         if self.request.method == 'POST':

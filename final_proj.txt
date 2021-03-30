@@ -25,13 +25,11 @@ Etc
 
 to do:
 ------
-- cookies: last pages viewed (persistent)
-- (done) pesquisa site: vinhos por múltiplos critérios
 - django-filters: filter + sort
-- reviews (api): acrescentar lógica de permissões user vs review
 - token auth: (react) login -> token auth -> acesso à lista de vinhos
 ----
 - reviews: ...
+- cookies: last pages viewed (persistent)
 - throttling
 - amazon s3
 - novos models: bottle, taste
@@ -39,6 +37,8 @@ to do:
 - (done) add class integerchoice fields
 - (done) add class methods (avg_rating, avg_acidity, etc)
 - (done) session: last pages visited
+- (done) pesquisa site: vinhos por múltiplos critérios
+- (done) reviews (api): acrescentar lógica de permissões user vs review
 
 
 notes:

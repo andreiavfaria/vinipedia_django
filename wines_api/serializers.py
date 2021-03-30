@@ -376,7 +376,6 @@ class ReviewSerializer(serializers.HyperlinkedModelSerializer):
             'tannin',
             'published_on',
             'updated',
-            'active',
         )
 
 
@@ -399,7 +398,6 @@ class NewWineReviewSerializer(serializers.HyperlinkedModelSerializer):
             'tannin',
             'published_on',
             'updated',
-            'active',
         )
 
 
@@ -423,7 +421,6 @@ class WineReviewSerializer(NewWineReviewSerializer):
             'tannin',
             'published_on',
             'updated',
-            'active',
         )
 
 
@@ -446,7 +443,6 @@ class NewVintageReviewSerializer(serializers.HyperlinkedModelSerializer):
             'tannin',
             'published_on',
             'updated',
-            'active',
         )
 
 
@@ -470,7 +466,6 @@ class VintageReviewSerializer(NewVintageReviewSerializer):
             'tannin',
             'published_on',
             'updated',
-            'active',
         )
 
 
