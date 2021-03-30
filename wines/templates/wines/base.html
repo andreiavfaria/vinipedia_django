@@ -15,76 +15,88 @@
   <link href="{% static 'css/wines.css' %}" rel="stylesheet">
 </head>
 <body>
-  <div id="content">
-    {% block content %}
-    {% endblock %}
-  </div>
-  <div id="sidebar">
-
-
-    <!-- General info -->
-    <h2>
-      <a href="/">Vinipedia</a>
-    </h2>
-    <p>All about the Portuguese wine industry since 1893.</p>
-    <h4>Database status</h4>
-    <p>There are {% total_wines_registered %} wines (and {% total_vintages_registered %} different vintages) in the DB.</p>
-    <p>There are {% total_grapes_registered %} grape varieties in the DB.</p>
-    <p>There are {% total_producers_registered %} producers in the DB.</p>
-
-
-    <!-- User status -->
-    {% if request.user.is_authenticated %}
-      <h3>
-        Welcome, {{request.user.username}}
-      </h3>
-      <div class="container-vertical">
-        {% if request.user.is_superuser %}
-        <a href="{% url 'admin:index' %}">Admin dashboard</a>
-        {% endif %}
-        <a href="{% url 'accounts:profile' profile_id=request.user.profile.id %}">My profile</a>
-        <a href="{% url 'accounts:edit' %}">Edit</a>
-        <a href="{% url 'accounts:logout' %}">Log out</a>
-      </div>
-      <!-- Generic info regarding the logged in user's activity -->
-
-
-    {% else %}
-      <a href="{% url 'accounts:login' %}">Log in</a>
-      <a href="{% url 'accounts:register' %}">Register</a>
-    {% endif %}
-
-
-    <!-- Links for navigation (meant to be included in the navbar) -->
-    <div class="container-vertical">
-      <h3>General navigation links</h3>
+  <!-- Links for navigation -->
+  <div id="navbar">
+    <div id="a_nav">
       <a href="/">Home</a>
       <a href="{% url 'wines:wine_list' %}">Wines</a>
       <a href="{% url 'wines:vintage_list' %}">Vintages</a>
       <a href="{% url 'wines:grape_list' %}">Grapes</a>
       <a href="{% url 'wines:producer_list' %}">Producers</a>
       <a href="{% url 'wines:region_list' %}">Regions</a>
-      <h3>Additional navigation links</h3>
-
     </div>
+  </div>
 
-    <!-- Info regarding the latest DB activity on the website -->
-    <h3>Last pages visited</h3>
-    {% show_last_visited_pages request %}
+  <!-- site info -->
+  <div id="content">
+    {% block content %}
+    {% endblock %}
+  </div>
 
-    <!-- Info regarding the latest DB activity on the website -->
-    <h3>Latest Wines/Grapes/Producers added</h3>
+  <div id="sidebar">
+    <div id="user_info">
+      <!-- User status -->
+      {% if request.user.is_authenticated %}
+        <h3>
+          Welcome, {{request.user.username}}
+        </h3>
+        <div class="container-vertical">
+          {% if request.user.is_superuser %}
+          <a href="{% url 'admin:index' %}">Admin dashboard</a>
+          {% endif %}
+          <a href="{% url 'accounts:profile' profile_id=request.user.profile.id %}">My profile</a>
+          <a href="{% url 'accounts:edit' %}">Edit</a>
+          <a href="{% url 'accounts:logout' %}">Log out</a>
+        </div>
+        <!-- Generic info regarding the logged in user's activity -->
+      {% else %}
+        <a href="{% url 'accounts:login' %}">Log in</a>
+        <a href="{% url 'accounts:register' %}">Register</a>
+      {% endif %}
+    </div>
+    <!-- General info -->
+    <h2>
+      <a href="/">Vinipedia</a>
+    </h2>
+    <p>All about the Portuguese wine industry since 1893.</p>
 
+    <!-- Search -->
+    <br>
     <h3>Search:</h3>
     <div class="container adjust_margin">{% show_sitewide_search_form %}</div>
 
     <h3>Find wines:</h3>
     <div class="container adjust_margin">{% show_wines_search_form %}</div>
+    <br>
     <a href="{% url 'wines:wine_advanced_search' %}">Advanced wine search</a>
+
     <h3>Find grape varieties:</h3>
     <div class="container adjust_margin">{% show_grapes_search_form %}</div>
+
     <h3>Find producers:</h3>
     <div class="container adjust_margin">{% show_producers_search_form %}</div>
+
+
+    <br><br>
+    <h4>Database status</h4>
+    <p>There are {% total_wines_registered %} wines (and {% total_vintages_registered %} different vintages) in the DB.</p>
+    <p>There are {% total_grapes_registered %} grape varieties in the DB.</p>
+    <p>There are {% total_producers_registered %} producers in the DB.</p>
+
+
+    <!-- Info regarding the latest DB activity on the website -->
+    <br><br>
+    <h3>Last pages visited</h3>
+    {% show_last_visited_pages request %}
+
+    <!-- Info regarding the latest reviews the website -->
+    <br><br>
+    <h3>Latest reviews</h3>
+
+    <!-- Info regarding the latest DB activity on the website -->
+    <br><br>
+    <h3>Latest Wines/Grapes/Producers added</h3>
+
   </div>
 <!-- Optional JavaScript -->
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->

@@ -4,6 +4,26 @@ body {
     font-family:helvetica, sans-serif;
 }
 
+#navbar {
+    height: 8vh;
+    width: 100%;
+    display: flex;
+    margin: auto;
+    justify-content: left;
+    align-items: center;
+    background-color: #282828;
+    flex-wrap: nowrap;
+}
+
+#a_nav{
+    margin: 0px 20px;
+}
+
+#a_nav a{
+    color: #ffffff;
+    margin: 0px 18px;
+}
+
 a {
     color:#00abff; /*#827878;*/
     text-decoration:none;
@@ -23,16 +43,33 @@ h2 {
 #content {
     float:left;
     width:60%;
-    padding:0 0 0 30px;
+    padding:10px 0 0 40px;
 }
 
 #sidebar {
     float:right;
     width:30%;
-    padding:10px;
+    padding:20px;
     background:#efefef;
     height:100%;
 }
+
+
+
+#user_info {
+    padding:30px 40px 30px 40px;
+    background:#4f4f4f;
+}
+
+#user_info h3{
+    color: #ffffff;
+}
+
+#user_info a{
+    color: #ffffff;
+}
+
+
 
 p.date {
     color:#ccc;
@@ -95,8 +132,8 @@ input[type=submit] {
 #wine_details {
     box-sizing: border-box;
     padding:0 0 0 0;
-    background-color: #333;
-    color: rgba(255,255,255,0.8);
+    background-color: white;
+    color: black;
 }
 
 #wine_metascore {
@@ -123,7 +160,7 @@ input[type=submit] {
 */
 
 #wine_details h1 {
-    color: #fff;
+    color: black;
 }
 
 .grey {
@@ -138,10 +175,10 @@ input[type=submit] {
     display: flex;
     flex-direction: column;
 }
-
+/*
 #sidebar form {
     display: flex;
-}
+}*/
 
 #sidebar input,
 #sidebar textarea {
@@ -159,10 +196,10 @@ input[type=submit] {
     font-weight: bold;
     background: #00abff;
     color: #fff;
-    padding: 12px 20px;
+    padding: 10px 15px;
     font-size: 0.55rem;
     text-transform: uppercase;
-    width: 10rem;
+    width: 7rem;
 }
 
 
