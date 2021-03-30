@@ -51,8 +51,8 @@ notes:
 - ocultar todas as keys (p.ex., SECRET_KEY) e passwords (com config.json, etc)
 - bread crumbs
 - nav bar missing
-- add class integer choice fields (to review, grape, vintage/wine?)
-- verificar se a "constraint" para wine origin não pode ser mesmo impelementada sem recurso a override do save()
+- (done) add class integer choice fields (to review, grape, vintage/wine?)
+- (done) verificar se a "constraint" para wine origin não pode ser mesmo impelementada sem recurso a override do save()
 - (done) confirmar on delete/update cascade/restrict
 - (done) abstrair lógica de paginação (numa função?)
 - (done) requirements.txt
@@ -66,6 +66,7 @@ bugs:
 - review page login link shouldn't redirect to the landing page
 - wine/vintage detail view when no user is logged in (TypeError: 'AnonymousUser' object is not iterable)
 - grape body scale (current: light<->bold, vivino: light-bodied<->full-bodied)
+- advanced wine search (hiding empty fields from the sent GET parameters)
 - (fixed) region_detail: remover "local producers" dos "other producers"
 - (fixed) region wines: adicionar field:origin em wine (com check constraint, deve estar incluído nas regiões do seu produtor)
 - (fixed) review constraint: vintage.wine === wine

@@ -196,6 +196,23 @@ def region_detail(request, id):
                   {'region': region})
 
 
+def wine_advanced_search(request):
+    print(request.GET)
+    results = Wine.objects.all()
+    for k, v in request.GET.items():
+        if k == 'name' and v:
+            print('name')
+            results = results.filter(Q(name__contains=v))
+        elif k == 'type' and v:
+            print('type')
+            results = results.filter(Q(type=v))
+
+
+    return render(request,
+                  'wines/wine/advanced_search.html',
+                  {'results': results})
+
+
 def wine_search(request):
     search_string = request.GET.get("query")
     if search_string:

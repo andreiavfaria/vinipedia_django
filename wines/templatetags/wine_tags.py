@@ -1,6 +1,6 @@
 from django import template
 
-from ..forms import SearchForm
+from ..forms import SearchForm, AdvancedWineSearchForm
 from ..models import Wine, Vintage, Grape, Producer
 
 register = template.Library()
@@ -40,6 +40,12 @@ def total_producers_registered():
 @register.inclusion_tag('wines/search_bar.html')
 def show_sitewide_search_form():
     search_form = SearchForm()
+    return {"search_form": search_form}
+
+
+@register.inclusion_tag('wines/wine/advanced_search_bar.html')
+def show_wines_advanced_search_form():
+    search_form = AdvancedWineSearchForm()
     return {"search_form": search_form}
 
 
