@@ -1,5 +1,5 @@
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
-from django.db.models import Q
+from django.db.models import Q, Avg, Count
 from django.shortcuts import render, get_object_or_404, redirect
 
 # Create your views here.
@@ -201,12 +201,25 @@ def wine_advanced_search(request):
     results = Wine.objects.all()
     for k, v in request.GET.items():
         if k == 'name' and v:
-            print('name')
             results = results.filter(Q(name__contains=v))
-        elif k == 'type' and v:
-            print('type')
-            results = results.filter(Q(type=v))
-
+        elif k == 'type':
+            results = results.filter(Q(type__in=request.GET.getlist(k)))
+        elif k == 'producer':
+            results = results.filter(Q(producer__in=request.GET.getlist(k)))
+        elif k == 'grape_varieties':
+            results = results.filter(Q(grape_varieties__in=request.GET.getlist(k)))
+        elif k == 'average_score' and v:
+            wines_with_avg_rating = Review.objects.all().select_related('wine') \
+                                    .values('wine_id') \
+                                    .annotate(avg_score=Avg('score'), nr_reviews=Count('wine_id')) \
+                                    .order_by('-avg_score')\
+                                    .filter(Q(avg_score__gte=v)) \
+                                    .values('wine_id')
+            results = results.filter(Q(pk__in=wines_with_avg_rating))
+        # Make sure 'vintage_year' is the last elif condition
+        elif k == 'vintage_year' and v:
+            vintages = Vintage.objects.filter(year=v, wine__in=results)
+            results = vintages
 
     return render(request,
                   'wines/wine/advanced_search.html',

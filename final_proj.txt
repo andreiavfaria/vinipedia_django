@@ -25,19 +25,20 @@ Etc
 
 to do:
 ------
-- (done) add class integerchoice fields
-- (done) add class methods (avg_rating, avg_acidity, etc)
 - cookies: last pages viewed (persistent)
-- (done) session: last pages visited today
+- (done) pesquisa site: vinhos por múltiplos critérios
 - django-filters: filter + sort
-----
+- reviews (api): acrescentar lógica de permissões user vs review
 - token auth: (react) login -> token auth -> acesso à lista de vinhos
-- pesquisa site: vinhos por múltiplos critérios
+----
 - reviews: ...
 - throttling
 - amazon s3
 - novos models: bottle, taste
 - rever o aspecto do site
+- (done) add class integerchoice fields
+- (done) add class methods (avg_rating, avg_acidity, etc)
+- (done) session: last pages visited
 
 
 notes:
@@ -63,10 +64,12 @@ bugs:
 - review detail views (wine e vintage)
 - api (vintage): retornar N.V. em vez de null? (ver código e notas em baixo)
 - api (image): editing an instance deletes the current image field value
+- api (wine_reviews / vintage_reviews): mostra as reviews todas (em vez de mostrar apenas a do vinho seleccionado - ver views wine_reviews e vintage_reviews comentadas)
 - review page login link shouldn't redirect to the landing page
 - wine/vintage detail view when no user is logged in (TypeError: 'AnonymousUser' object is not iterable)
 - grape body scale (current: light<->bold, vivino: light-bodied<->full-bodied)
-- advanced wine search (hiding empty fields from the sent GET parameters)
+- advanced search (vintages): os nomes não aparecem!
+- (fixed) advanced wine search (hiding empty fields from the sent GET parameters)
 - (fixed) region_detail: remover "local producers" dos "other producers"
 - (fixed) region wines: adicionar field:origin em wine (com check constraint, deve estar incluído nas regiões do seu produtor)
 - (fixed) review constraint: vintage.wine === wine
@@ -216,3 +219,10 @@ invalid literal for int() with base 10: 'N.V.'
 
 
 pip install -r requirements.txt
+
+
+
+bugged search: ...type=white&type=red (Duarte)
+-------------------------------------
+request.GET.getlist('myvar')
+https://stackoverflow.com/a/3910203

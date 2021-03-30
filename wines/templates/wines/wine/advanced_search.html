@@ -8,16 +8,33 @@
   <div class="container adjust_margin">{% show_wines_advanced_search_form %}</div>
 {% if request.GET.values %}
   <h2>Search results:</h2>
-  {% for wine in results %}
-    <h2>
-      <a href="{{ wine.get_absolute_url }}">
-        {{ wine.name }}
-      </a>
-    </h2>
-  {% empty %}
-    <p>
-      No matching wines were found.
-    </p>
-  {% endfor %}
+  <!--<p>{{ results.0.wine.name }}</p>
+  <p>{{ results.0.vintage.wine }}</p>
+  <p>{{ results.0.vintage.wine.name }}</p>-->
+  {% if request.GET.values.vintages %}
+    {% for vintage in results %}
+      <h2>
+        <a href="{{ vintage.get_absolute_url }}">
+          {{ vintage.wine.name }}
+        </a>
+      </h2>
+    {% empty %}
+      <p>
+        No matching vintages were found.
+      </p>
+    {% endfor %}
+  {% else %}
+    {% for wine in results %}
+      <h2>
+        <a href="{{ wine.get_absolute_url }}">
+          {{ wine.name }}
+        </a>
+      </h2>
+    {% empty %}
+      <p>
+        No matching wines were found.
+      </p>
+    {% endfor %}
+  {% endif %}
 {% endif %}
 {% endblock %}
