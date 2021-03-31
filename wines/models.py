@@ -185,7 +185,9 @@ class Wine(models.Model):
         """ Returns the consolidated average review rating for a wine
         (including every review for each of its vintages). """
         average_rating = Review.objects.filter(wine=self.pk).aggregate(Avg('score'))['score__avg']
-        return round(average_rating, 1)
+        if average_rating:
+            return round(average_rating, 1)
+        return None
 
     class Meta:
         unique_together = (('name', 'type', 'producer',),)

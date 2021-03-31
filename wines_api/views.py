@@ -1,3 +1,4 @@
+from django.db.models import Count, Avg
 from django.shortcuts import render
 
 # Create your views here.
@@ -14,6 +15,8 @@ from .serializers import CountrySerializer, RegionSerializer, ProducerRegionSeri
     GrapeAliasSerializer, ReviewSerializer, VintageReviewSerializer, WineReviewSerializer, NewProducerSerializer, NewProducerRegionSerializer, NewGrapeSerializer, ProducerShortSerializer, \
     NewWineSerializer, NewWineGrapeSerializer, NewVintageSerializer, NewGrapeAliasSerializer, NewWineReviewSerializer, NewVintageReviewSerializer, RegionShortSerializer, WineShortSerializer, \
     GrapeShortSerializer, VintageShortSerializer
+
+from django_filters import FilterSet, BooleanFilter, NumberFilter, ChoiceFilter, RangeFilter
 
 
 class CountryList(generics.ListCreateAPIView):
@@ -232,9 +235,40 @@ class WineGrapeDetail(generics.RetrieveUpdateDestroyAPIView):
         return WineGrapeSerializer
 
 
+class WineFilter(FilterSet):
+    with_reviews = NumberFilter(field_name='reviews',
+                                method='filter_with_reviews',
+                                label='')
+    min_average_score = NumberFilter(field_name='reviews__score',
+                                     method='filter_min_average_score',
+                                     label='Minimum average score')
+    max_average_score = NumberFilter(field_name='reviews__score',
+                                     method='filter_max_average_score',
+                                     label='Maximum average score')
+
+
+    def filter_with_reviews(self, queryset, name, value):
+        return Wine.objects.annotate(review_count=Count('reviews')).filter(review_count__gte=value)
+
+    def filter_min_average_score(self, queryset, name, value):
+        return Wine.objects.annotate(review_count=Avg('reviews__score')).filter(review_count__gte=value)
+
+    def filter_max_average_score(self, queryset, name, value):
+        return Wine.objects.annotate(review_count=Avg('reviews__score')).filter(review_count__lte=value)
+
+    class Meta:
+        model = Wine
+        fields = (
+            'with_reviews',
+            'min_average_score',
+            'max_average_score',
+        )
+
+
 class WineList(generics.ListCreateAPIView):
     queryset = Wine.objects.all()
     name = 'wine-list'
+    filter_class = WineFilter
 
     def get_serializer_class(self):
         if self.request.method == 'POST':
@@ -272,6 +306,8 @@ class WineDetail(generics.RetrieveUpdateDestroyAPIView):
         return WineSerializer
 
 
+
+
 @api_view(['GET'])
 def wine_vintages(request, pk):
     wine = get_object_or_404(Wine, pk=pk)
@@ -297,8 +333,9 @@ class VintageList(generics.ListCreateAPIView):
             return NewVintageSerializer
         return VintageSerializer
     filter_fields = (
-        'name',
-
+        'wine',
+        'year',
+        'alcohol_content',
     )
 
     search_fields = (
@@ -307,13 +344,9 @@ class VintageList(generics.ListCreateAPIView):
 
     ordering_fields = (
         'name',
+        'year',
+        'alcohol_content',
     )
-
-
-
-
-
-
 
 
 class VintageDetail(generics.RetrieveUpdateDestroyAPIView):
@@ -342,9 +375,9 @@ class GrapeAliasList(generics.ListCreateAPIView):
         if self.request.method == 'POST':
             return NewGrapeAliasSerializer
         return GrapeAliasSerializer
-    filter_fields = (
-        'name',
 
+    filter_fields = (
+        'grape',
     )
 
     search_fields = (
@@ -354,14 +387,6 @@ class GrapeAliasList(generics.ListCreateAPIView):
     ordering_fields = (
         'name',
     )
-
-
-
-
-
-
-
-
 
 
 class GrapeAliasDetail(generics.RetrieveUpdateDestroyAPIView):
@@ -384,6 +409,21 @@ class ReviewList(generics.ListCreateAPIView):
 
     permission_classes = (
         permissions.IsAuthenticatedOrReadOnly,
+    )
+
+    filter_fields = (
+        'user',
+        'wine',
+        'vintage',
+        'active',
+    )
+
+    search_fields = (
+        'text',
+    )
+
+    ordering_fields = (
+        'score',
     )
 
 
