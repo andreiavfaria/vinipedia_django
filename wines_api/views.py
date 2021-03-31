@@ -41,6 +41,19 @@ class RegionList(generics.ListCreateAPIView):
     serializer_class = RegionSerializer
     name = 'region-list'
 
+    filter_fields = (
+        'country',
+        'local_producers',
+        'producers',
+        'grapes',
+    )
+    search_fields = (
+        '^name',
+    )
+    ordering_fields = (
+        'name',
+    )
+
 
 class RegionDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Region.objects.all()
@@ -109,6 +122,20 @@ class ProducerList(generics.ListCreateAPIView):
             return NewProducerSerializer
         return ProducerSerializer
 
+    filter_fields = (
+        'regions',
+        'origin',
+    )
+
+    search_fields = (
+        '^name',
+    )
+
+    ordering_fields = (
+        'name',
+        'regions',
+    )
+
 
 class ProducerDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Producer.objects.all()
@@ -136,6 +163,25 @@ class GrapeList(generics.ListCreateAPIView):
         if self.request.method == 'POST':
             return NewGrapeSerializer
         return GrapeSerializer
+
+    filter_fields = (
+        'origin',
+        'type',
+        # 'color',
+        'body',
+        'acidity',
+    )
+
+    search_fields = (
+        '^name',
+    )
+
+    ordering_fields = (
+        'name',
+        'type',
+        'body',
+        'acidity',
+    )
 
 
 class GrapeDetail(generics.RetrieveUpdateDestroyAPIView):
@@ -165,6 +211,16 @@ class WineGrapeList(generics.ListCreateAPIView):
             return NewWineGrapeSerializer
         return WineGrapeSerializer
 
+    filter_fields = (
+        'wine',
+        'grape',
+    )
+
+    ordering_fields = (
+        'wine',
+        'grape',
+    )
+
 
 class WineGrapeDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = WineGrape.objects.all()
@@ -184,6 +240,25 @@ class WineList(generics.ListCreateAPIView):
         if self.request.method == 'POST':
             return NewWineSerializer
         return WineSerializer
+    filter_fields = (
+        'type',
+        'producer',
+        'grape_varieties',
+        'origin',
+    )
+
+    search_fields = (
+        '^name',
+        '^type',
+    )
+
+    ordering_fields = (
+        'name',
+        'type',
+        'producer',
+        'grape_varieties',
+        'origin',
+    )
 
 
 class WineDetail(generics.RetrieveUpdateDestroyAPIView):
@@ -221,6 +296,24 @@ class VintageList(generics.ListCreateAPIView):
         if self.request.method == 'POST':
             return NewVintageSerializer
         return VintageSerializer
+    filter_fields = (
+        'name',
+
+    )
+
+    search_fields = (
+        '^name',
+    )
+
+    ordering_fields = (
+        'name',
+    )
+
+
+
+
+
+
 
 
 class VintageDetail(generics.RetrieveUpdateDestroyAPIView):
@@ -249,6 +342,26 @@ class GrapeAliasList(generics.ListCreateAPIView):
         if self.request.method == 'POST':
             return NewGrapeAliasSerializer
         return GrapeAliasSerializer
+    filter_fields = (
+        'name',
+
+    )
+
+    search_fields = (
+        '^name',
+    )
+
+    ordering_fields = (
+        'name',
+    )
+
+
+
+
+
+
+
+
 
 
 class GrapeAliasDetail(generics.RetrieveUpdateDestroyAPIView):
