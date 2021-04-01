@@ -6,16 +6,13 @@
 {% block content %}
   <h3>Advanced wine search</h3>
   <div class="container adjust_margin">{% show_wines_advanced_search_form %}</div>
-{% if request.GET.values %}
+{% if request.GET %}
   <h2>Search results:</h2>
-  <!--<p>{{ results.0.wine.name }}</p>
-  <p>{{ results.0.vintage.wine }}</p>
-  <p>{{ results.0.vintage.wine.name }}</p>-->
-  {% if request.GET.values.vintages %}
+  {% if request.GET.vintage_year %}
     {% for vintage in results %}
       <h2>
         <a href="{{ vintage.get_absolute_url }}">
-          {{ vintage.wine.name }}
+          <p>{{ vintage.wine.name }} ({{ vintage.year }})</p>
         </a>
       </h2>
     {% empty %}

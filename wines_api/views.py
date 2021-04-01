@@ -111,7 +111,7 @@ class ProducerRegionDetail(generics.RetrieveUpdateDestroyAPIView):
     name = 'producerregion-detail'
 
     def get_serializer_class(self):
-        if self.request.method == 'PUT':
+        if self.request.method in ('PUT', 'PATCH'):
             return NewProducerRegionSerializer
         return ProducerRegionSerializer
 
@@ -145,7 +145,7 @@ class ProducerDetail(generics.RetrieveUpdateDestroyAPIView):
     name = 'producer-detail'
 
     def get_serializer_class(self):
-        if self.request.method == 'PUT':
+        if self.request.method in ('PUT', 'PATCH'):
             return NewProducerSerializer
         return ProducerSerializer
 
@@ -192,7 +192,7 @@ class GrapeDetail(generics.RetrieveUpdateDestroyAPIView):
     name = 'grape-detail'
 
     def get_serializer_class(self):
-        if self.request.method == 'PUT':
+        if self.request.method in ('PUT', 'PATCH'):
             return NewGrapeSerializer
         return GrapeSerializer
 
@@ -230,7 +230,7 @@ class WineGrapeDetail(generics.RetrieveUpdateDestroyAPIView):
     name = 'winegrape-detail'
 
     def get_serializer_class(self):
-        if self.request.method == 'PUT':
+        if self.request.method in ('PUT', 'PATCH'):
             return NewWineGrapeSerializer
         return WineGrapeSerializer
 
@@ -301,7 +301,7 @@ class WineDetail(generics.RetrieveUpdateDestroyAPIView):
     name = 'wine-detail'
 
     def get_serializer_class(self):
-        if self.request.method == 'PUT':
+        if self.request.method in ('PUT', 'PATCH'):
             return NewWineSerializer
         return WineSerializer
 
@@ -354,7 +354,7 @@ class VintageDetail(generics.RetrieveUpdateDestroyAPIView):
     name = 'vintage-detail'
 
     def get_serializer_class(self):
-        if self.request.method == 'PUT':
+        if self.request.method in ('PUT', 'PATCH'):
             return NewVintageSerializer
         return VintageSerializer
 
@@ -394,7 +394,7 @@ class GrapeAliasDetail(generics.RetrieveUpdateDestroyAPIView):
     name = 'grapealias-detail'
 
     def get_serializer_class(self):
-        if self.request.method == 'PUT':
+        if self.request.method in ('PUT', 'PATCH'):
             return NewGrapeAliasSerializer
         return GrapeAliasSerializer
 
@@ -499,10 +499,8 @@ class ApiRoot(generics.GenericAPIView):
         return Response({
             'countries': reverse(CountryList.name, request=request),
             'regions': reverse(RegionList.name, request=request),
-            'producer-regions': reverse(ProducerRegionList.name, request=request),
             'producers': reverse(ProducerList.name, request=request),
             'grapes': reverse(GrapeList.name, request=request),
-            'wine-grapes': reverse(WineGrapeList.name, request=request),
             'wines': reverse(WineList.name, request=request),
             'vintages': reverse(VintageList.name, request=request),
             'grape-aliases': reverse(GrapeAliasList.name, request=request),

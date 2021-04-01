@@ -112,6 +112,8 @@ class RegionSerializer(serializers.HyperlinkedModelSerializer):
 
 class NewProducerSerializer(serializers.HyperlinkedModelSerializer):
 
+    presence = serializers.SlugRelatedField(queryset=Region.objects.all(), many=True, slug_field='name')
+
     class Meta:
         model = Producer
         fields = (
@@ -226,12 +228,15 @@ class GrapeSerializer(NewGrapeSerializer):
 
 class NewWineSerializer(serializers.HyperlinkedModelSerializer):
 
+    grape_varieties = serializers.SlugRelatedField(queryset=Grape.objects.all(), many=True, slug_field='name')
+
     class Meta:
         model = Wine
         fields = (
             'url',
             'pk',
             'name',
+            'origin',
             'producer',
             'grape_varieties',
             'type',
@@ -256,6 +261,7 @@ class WineSerializer(NewWineSerializer):
             'url',
             'pk',
             'name',
+            'origin',
             'producer',
             'grape_varieties',
             'type',

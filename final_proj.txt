@@ -29,7 +29,7 @@ to do:
 - token auth: (react) login -> token auth -> acesso à lista de vinhos
 ----
 - reviews: ...
-- cookies: last pages viewed (persistent)
+x cookies: last pages viewed (persistent)
 - throttling
 - amazon s3
 - novos models: bottle, taste
@@ -69,6 +69,9 @@ bugs:
 - wine/vintage detail view when no user is logged in (TypeError: 'AnonymousUser' object is not iterable)
 - grape body scale (current: light<->bold, vivino: light-bodied<->full-bodied)
 - advanced search (vintages): os nomes não aparecem!
+- WineFilter: with_reviews devia ser boolean
+- WineFilter: tentar fazer average_score com RangeFilter
+- producer regions (api)
 - (fixed) advanced wine search (hiding empty fields from the sent GET parameters)
 - (fixed) region_detail: remover "local producers" dos "other producers"
 - (fixed) region wines: adicionar field:origin em wine (com check constraint, deve estar incluído nas regiões do seu produtor)
