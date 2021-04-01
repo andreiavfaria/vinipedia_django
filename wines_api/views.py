@@ -7,6 +7,7 @@ from rest_framework.decorators import api_view
 from rest_framework.generics import get_object_or_404
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
+from rest_framework.throttling import ScopedRateThrottle
 
 from wines.models import Country, Region, ProducerRegion, Producer, Grape, WineGrape, Wine, Vintage, GrapeAlias, Review
 
@@ -57,12 +58,17 @@ class RegionList(generics.ListCreateAPIView):
         'name',
     )
 
+    throttle_scope = 'region'
+    throttle_classes = (ScopedRateThrottle,)
+
 
 class RegionDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Region.objects.all()
     serializer_class = RegionSerializer
     name = 'region-detail'
 
+    throttle_scope = 'region'
+    throttle_classes = (ScopedRateThrottle,)
 
 """ ***BUGGED***
     
@@ -139,10 +145,16 @@ class ProducerList(generics.ListCreateAPIView):
         'regions',
     )
 
+    throttle_scope = 'producer'
+    throttle_classes = (ScopedRateThrottle,)
+
 
 class ProducerDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Producer.objects.all()
     name = 'producer-detail'
+
+    throttle_scope = 'producer'
+    throttle_classes = (ScopedRateThrottle,)
 
     def get_serializer_class(self):
         if self.request.method in ('PUT', 'PATCH'):
@@ -297,11 +309,17 @@ class WineList(generics.ListCreateAPIView):
         'origin',
     )
 
+    throttle_scope = 'wine'
+    throttle_classes = (ScopedRateThrottle,)
+
 
 class WineDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Wine.objects.all()
     serializer_class = WineSerializer
     name = 'wine-detail'
+
+    throttle_scope = 'wine'
+    throttle_classes = (ScopedRateThrottle,)
 
     def get_serializer_class(self):
         if self.request.method in ('PUT', 'PATCH'):
@@ -351,10 +369,16 @@ class VintageList(generics.ListCreateAPIView):
         'alcohol_content',
     )
 
+    throttle_scope = 'vintage'
+    throttle_classes = (ScopedRateThrottle,)
+
 
 class VintageDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Vintage.objects.all()
     name = 'vintage-detail'
+
+    throttle_scope = 'vintage'
+    throttle_classes = (ScopedRateThrottle,)
 
     def get_serializer_class(self):
         if self.request.method in ('PUT', 'PATCH'):
