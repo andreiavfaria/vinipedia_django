@@ -245,6 +245,8 @@ class WineFilter(FilterSet):
     max_average_score = NumberFilter(field_name='reviews__score',
                                      method='filter_max_average_score',
                                      label='Maximum average score')
+    wine_type = ChoiceFilter(choices=Wine.WINE_TYPE_CHOICES,
+                             label='Wine type')
 
 
     def filter_with_reviews(self, queryset, name, value):
@@ -262,6 +264,7 @@ class WineFilter(FilterSet):
             'with_reviews',
             'min_average_score',
             'max_average_score',
+            'wine_type',
         )
 
 
