@@ -10,6 +10,8 @@ from django.urls import reverse
 class Country(models.Model):
     name = models.CharField(max_length=50, unique=True)
     image = models.ImageField(upload_to='countries/%Y/%m/%d/', null=True, blank=True)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
 
     def get_local_producers(self):
         regions = Region.objects.filter(country=self.pk)
@@ -50,6 +52,8 @@ class Region(models.Model):
                                 related_name='regions')
     description = models.TextField(blank=True)
     image = models.ImageField(upload_to='regions/%Y/%m/%d/', null=True, blank=True)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
 
     def get_other_producers(self):
         """ Returns the non-local producers that operate in the region.
@@ -83,7 +87,7 @@ class Region(models.Model):
 
 class Producer(models.Model):
     name = models.CharField(max_length=100, unique=True)
-    short_name = models.CharField(max_length=50, unique=True, null=True)
+    short_name = models.CharField(max_length=50, unique=True, null=True, blank=True)
     origin = models.ForeignKey(Region,
                                on_delete=models.RESTRICT,
                                related_name='local_producers')
@@ -94,6 +98,8 @@ class Producer(models.Model):
     image = models.ImageField(upload_to='producers/%Y/%m/%d/', null=True, blank=True)
     website = models.URLField(null=True, blank=True)
     email = models.EmailField(null=True, blank=True)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
     # phone
     # social media
 
@@ -135,6 +141,8 @@ class ProducerRegion(models.Model):
     region = models.ForeignKey(Region,
                                on_delete=models.CASCADE,
                                related_name='producers')
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
 
     class Meta:
         unique_together = (('producer', 'region',),)
@@ -190,6 +198,8 @@ class Grape(models.Model):
     acidity = models.IntegerField(choices=Acidity.choices, null=True)
     body = models.IntegerField(choices=Body.choices, null=True)
     # colour = models.IntegerField(choices=Colour.choices, null=True)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
 
     def get_average_rating(self):
         """ Returns the consolidated average review rating for wines with
@@ -278,6 +288,8 @@ class Wine(models.Model):
     origin = models.ForeignKey(Region,
                                on_delete=models.RESTRICT,
                                related_name='local_wines')
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
 
     def get_average_rating(self):
         """ Returns the consolidated average review rating for a wine
@@ -348,6 +360,8 @@ class WineGrape(models.Model):
     grape = models.ForeignKey(Grape,
                               on_delete=models.CASCADE,
                               related_name='wines')
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
 
     class Meta:
         unique_together = (('wine', 'grape',),)
@@ -372,6 +386,8 @@ class Vintage(models.Model):
     alcohol_content = models.FloatField(null=True, blank=True,
                                     validators=[MinValueValidator(0),
                                                 MaxValueValidator(100)])
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
     # production size
     # tasting notes
     # food pairings
@@ -426,6 +442,8 @@ class GrapeAlias(models.Model):
     grape = models.ForeignKey(Grape,
                               on_delete=models.CASCADE,
                               related_name='aliases')
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
     # region/country
 
     class Meta:
@@ -439,6 +457,7 @@ class GrapeAlias(models.Model):
 class Review(models.Model):
     """ Model for wine reviews. """
     validators = [MinValueValidator(1), MaxValueValidator(5)]
+
 
     class Sweetness(models.IntegerChoices):
         VERY_DRY = 1
