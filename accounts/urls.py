@@ -11,19 +11,6 @@ urlpatterns = [
     path('register/', views.register, name='register'),
     path('register_done/', views.register, name='register_done'),
     path('edit/', views.edit, name='edit'),
-    # path('my_profile/', views.my_profile, name='my_profile'),
     path('profile/<int:profile_id>/', views.profile, name='profile'),
     path('profile/<int:profile_id>/reviews', views.profile_reviews, name='profile_reviews'),
-
-    # reset password urls
-    # path('password_reset/', auth_views.PasswordResetView.as_view(), name='password_reset'),
-    # path('password_reset/done/', auth_views.PasswordResetDoneView.as_view(), name='password_reset_done'),
-    # path('reset/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(), name='password_reset_confirm'),
-    # path('reset/done/', auth_views.PasswordResetCompleteView.as_view(), name='password_reset_complete'),
-
-    # change password urls
-    # path('password_change/', auth_views.PasswordChangeView.as_view(), name='password_change'),
-    # path('password_change/done/', auth_views.PasswordChangeDoneView.as_view(),  name='password_change_done'),
-
-    # path('', views.dashboard, name='dashboard'),
 ]

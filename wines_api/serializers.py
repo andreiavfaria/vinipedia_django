@@ -10,6 +10,7 @@ class RegionShortSerializer(serializers.HyperlinkedModelSerializer):
         fields = (
             'url',
             'name',
+            'image',
         )
 
 
@@ -20,6 +21,7 @@ class ProducerShortSerializer(serializers.HyperlinkedModelSerializer):
         fields = (
             'url',
             'name',
+            'image',
         )
 
 
@@ -31,6 +33,7 @@ class GrapeShortSerializer(serializers.HyperlinkedModelSerializer):
             'url',
             'name',
             'type',
+            'image',
         )
 
 
@@ -45,10 +48,22 @@ class WineShortSerializer(serializers.HyperlinkedModelSerializer):
             'name',
             'type',
             'producer',
+            'image',
         )
 
 
 class VintageShortSerializer(serializers.HyperlinkedModelSerializer):
+
+    class Meta:
+        model = Vintage
+        fields = (
+            'url',
+            'year',
+            'image',
+        )
+
+
+class VintageWithWineShortSerializer(serializers.HyperlinkedModelSerializer):
 
     wine = WineShortSerializer()
 
@@ -58,14 +73,25 @@ class VintageShortSerializer(serializers.HyperlinkedModelSerializer):
             'url',
             'wine',
             'year',
+            'image',
         )
 
 
 class CountrySerializer(serializers.HyperlinkedModelSerializer):
 
-    region_list = serializers.HyperlinkedIdentityField(view_name='country-region-list', read_only=True)
     nr_regions = serializers.IntegerField(source='regions.count', read_only=True)
+    nr_producers = serializers.IntegerField(source='get_local_producers.count', read_only=True)
+    nr_wines = serializers.IntegerField(source='get_local_wines.count', read_only=True)
+    nr_grapes = serializers.IntegerField(source='get_local_grapes.count', read_only=True)
+    region_list = serializers.HyperlinkedIdentityField(view_name='country-region-list', read_only=True)
     regions = RegionShortSerializer(many=True, read_only=True)
+    producer_list = serializers.HyperlinkedIdentityField(view_name='country-producer-list', read_only=True)
+    producers = ProducerShortSerializer(source='get_local_producers', many=True, read_only=True)
+    wine_list = serializers.HyperlinkedIdentityField(view_name='country-wine-list', read_only=True)
+    wines = WineShortSerializer(source='get_local_wines', many=True, read_only=True)
+    grape_list = serializers.HyperlinkedIdentityField(view_name='country-grape-list', read_only=True)
+    grapes = GrapeShortSerializer(source='get_local_grapes', many=True, read_only=True)
+    average_wine_rating = serializers.FloatField(source='get_average_rating', read_only=True)
 
     class Meta:
         model = Country
@@ -75,20 +101,32 @@ class CountrySerializer(serializers.HyperlinkedModelSerializer):
             'name',
             'image',
             'nr_regions',
+            'nr_producers',
+            'nr_wines',
+            'nr_grapes',
+            'average_wine_rating',
             'region_list',
             'regions',
+            'producer_list',
+            'producers',
+            'wine_list',
+            'wines',
+            'grape_list',
+            'grapes',
         )
 
 
 class RegionSerializer(serializers.HyperlinkedModelSerializer):
 
-    wine_list = serializers.HyperlinkedIdentityField(view_name='region-wine-list', read_only=True)
-    producer_list = serializers.HyperlinkedIdentityField(view_name='region-producer-list', read_only=True)
-    grape_list = serializers.HyperlinkedIdentityField(view_name='region-grape-list', read_only=True)
-    # bugged: see views.region_wines note!
-    # nr_wines = serializers.IntegerField(source='wines.count')
     nr_producers = serializers.IntegerField(source='producers.count', read_only=True)
+    # local_producers = serializers.IntegerField(source='local_producers.count', read_only=True)
+    # other_producers = serializers.IntegerField(source='get_other_producers.count', read_only=True)
+    nr_wines = serializers.IntegerField(source='local_wines.count')
     nr_grapes = serializers.IntegerField(source='grapes.count', read_only=True)
+    producer_list = serializers.HyperlinkedIdentityField(view_name='region-producer-list', read_only=True)
+    wine_list = serializers.HyperlinkedIdentityField(view_name='region-wine-list', read_only=True)
+    grape_list = serializers.HyperlinkedIdentityField(view_name='region-grape-list', read_only=True)
+    average_wine_rating = serializers.FloatField(source='get_average_rating', read_only=True)
 
     class Meta:
         model = Region
@@ -99,13 +137,14 @@ class RegionSerializer(serializers.HyperlinkedModelSerializer):
             'country',
             'image',
             'description',
-            # 'nr_wines',
             'nr_producers',
-            # 'nr_producers_from',
-            # 'nr_producers_in_operation',
+            # 'local_producers',
+            # 'other_producers',
+            'nr_wines',
             'nr_grapes',
-            'wine_list',
+            'average_wine_rating',
             'producer_list',
+            'wine_list',
             'grape_list',
         )
 
@@ -134,8 +173,11 @@ class ProducerSerializer(NewProducerSerializer):
 
     origin = RegionShortSerializer()
     presence = RegionShortSerializer(many=True)
-    wine_list = serializers.HyperlinkedIdentityField(view_name='producer-wine-list', read_only=True)
     nr_wines = serializers.IntegerField(source='wines.count', read_only=True)
+    nr_vintages = serializers.IntegerField(source='get_producer_vintages.count', read_only=True)
+    wine_list = serializers.HyperlinkedIdentityField(view_name='producer-wine-list', read_only=True)
+    vintage_list = serializers.HyperlinkedIdentityField(view_name='producer-vintage-list', read_only=True)
+    average_wine_rating = serializers.FloatField(source='get_producer_average_rating', read_only=True)
 
     class Meta:
         model = Producer
@@ -151,7 +193,10 @@ class ProducerSerializer(NewProducerSerializer):
             'image',
             'description',
             'nr_wines',
+            'nr_vintages',
+            'average_wine_rating',
             'wine_list',
+            'vintage_list',
         )
 
 
@@ -204,8 +249,13 @@ class GrapeSerializer(NewGrapeSerializer):
 
     origin = RegionShortSerializer()
     aliases = serializers.SlugRelatedField(many=True, read_only=True, slug_field='name')
-    wine_list = serializers.HyperlinkedIdentityField(view_name='grape-wine-list', read_only=True)
     nr_wines = serializers.IntegerField(source='wines.count', read_only=True)
+    wine_list = serializers.HyperlinkedIdentityField(view_name='grape-wine-list', read_only=True)
+    average_wine_rating = serializers.FloatField(source='get_average_rating', read_only=True)
+    average_wine_acidity = serializers.FloatField(source='get_average_acidity', read_only=True)
+    average_wine_body = serializers.FloatField(source='get_average_body', read_only=True)
+    average_wine_sweetness = serializers.FloatField(source='get_average_sweetness', read_only=True)
+    average_wine_tannin = serializers.FloatField(source='get_average_tannin', read_only=True)
 
     class Meta:
         model = Grape
@@ -216,12 +266,17 @@ class GrapeSerializer(NewGrapeSerializer):
             'aliases',
             'origin',
             'type',
-            # 'colour',
-            'body',
             'acidity',
+            'body',
+            # 'colour',
             'image',
             'description',
             'nr_wines',
+            'average_wine_rating',
+            'average_wine_acidity',
+            'average_wine_body',
+            'average_wine_sweetness',
+            'average_wine_tannin',
             'wine_list',
         )
 
@@ -247,13 +302,18 @@ class NewWineSerializer(serializers.HyperlinkedModelSerializer):
 
 class WineSerializer(NewWineSerializer):
 
+    origin = RegionShortSerializer()
     producer = ProducerShortSerializer()
     grape_varieties = GrapeShortSerializer(many=True)
-    vintage_list = serializers.HyperlinkedIdentityField(view_name='wine-vintage-list', read_only=True)
-    review_list = serializers.HyperlinkedIdentityField(view_name='wine-review-list', read_only=True)
     nr_vintages = serializers.IntegerField(source='vintages.count', read_only=True)
     nr_reviews = serializers.IntegerField(source='reviews.count', read_only=True)
+    vintage_list = serializers.HyperlinkedIdentityField(view_name='wine-vintage-list', read_only=True)
+    review_list = serializers.HyperlinkedIdentityField(view_name='wine-review-list', read_only=True)
     average_score = serializers.FloatField(source='get_average_rating', read_only=True)
+    average_acidity = serializers.FloatField(source='get_average_acidity', read_only=True)
+    average_body = serializers.FloatField(source='get_average_body', read_only=True)
+    average_sweetness = serializers.FloatField(source='get_average_sweetness', read_only=True)
+    average_tannin = serializers.FloatField(source='get_average_tannin', read_only=True)
 
     class Meta:
         model = Wine
@@ -270,6 +330,10 @@ class WineSerializer(NewWineSerializer):
             'nr_vintages',
             'nr_reviews',
             'average_score',
+            'average_acidity',
+            'average_body',
+            'average_sweetness',
+            'average_tannin',
             'vintage_list',
             'review_list',
         )
@@ -323,6 +387,10 @@ class VintageSerializer(NewVintageSerializer):
     review_list = serializers.HyperlinkedIdentityField(view_name='vintage-review-list', read_only=True)
     nr_reviews = serializers.IntegerField(source='reviews.count', read_only=True)
     average_score = serializers.FloatField(source='get_average_rating', read_only=True)
+    average_acidity = serializers.FloatField(source='get_average_acidity', read_only=True)
+    average_body = serializers.FloatField(source='get_average_body', read_only=True)
+    average_sweetness = serializers.FloatField(source='get_average_sweetness', read_only=True)
+    average_tannin = serializers.FloatField(source='get_average_tannin', read_only=True)
 
     class Meta:
         model = Vintage
@@ -336,6 +404,10 @@ class VintageSerializer(NewVintageSerializer):
             'description',
             'nr_reviews',
             'average_score',
+            'average_acidity',
+            'average_body',
+            'average_sweetness',
+            'average_tannin',
             'review_list',
         )
 
@@ -380,9 +452,9 @@ class ReviewSerializer(serializers.HyperlinkedModelSerializer):
             'user',
             'text',
             'score',
-            'sweetness',
-            'body',
             'acidity',
+            'body',
+            'sweetness',
             'tannin',
             'published_on',
             'updated',
@@ -402,9 +474,9 @@ class NewWineReviewSerializer(serializers.HyperlinkedModelSerializer):
             'user',
             'text',
             'score',
-            'sweetness',
-            'body',
             'acidity',
+            'body',
+            'sweetness',
             'tannin',
             'published_on',
             'updated',
@@ -414,6 +486,7 @@ class NewWineReviewSerializer(serializers.HyperlinkedModelSerializer):
 class WineReviewSerializer(NewWineReviewSerializer):
 
     wine = WineShortSerializer()
+    vintage = VintageShortSerializer()
     user = serializers.ReadOnlyField(source='user.username')
 
     class Meta:
@@ -422,12 +495,13 @@ class WineReviewSerializer(NewWineReviewSerializer):
             'url',
             'pk',
             'wine',
+            'vintage',
             'user',
             'text',
             'score',
-            'sweetness',
-            'body',
             'acidity',
+            'body',
+            'sweetness',
             'tannin',
             'published_on',
             'updated',
@@ -447,9 +521,9 @@ class NewVintageReviewSerializer(serializers.HyperlinkedModelSerializer):
             'user',
             'text',
             'score',
-            'sweetness',
-            'body',
             'acidity',
+            'body',
+            'sweetness',
             'tannin',
             'published_on',
             'updated',
@@ -458,7 +532,7 @@ class NewVintageReviewSerializer(serializers.HyperlinkedModelSerializer):
 
 class VintageReviewSerializer(NewVintageReviewSerializer):
 
-    vintage = VintageShortSerializer()
+    vintage = VintageWithWineShortSerializer()
     user = serializers.ReadOnlyField(source='user.username')
 
     class Meta:
@@ -470,9 +544,9 @@ class VintageReviewSerializer(NewVintageReviewSerializer):
             'user',
             'text',
             'score',
-            'sweetness',
-            'body',
             'acidity',
+            'body',
+            'sweetness',
             'tannin',
             'published_on',
             'updated',

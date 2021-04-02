@@ -1,0 +1,120 @@
+{% extends "wines/base.html" %}
+{% load wine_tags %}
+
+{% block title %}Vinipedia home page{% endblock %}
+
+{% block content %}
+<h1>Vinipedia home page</h1>
+
+<!-- top rated wines -->
+<h2>Top rated wines</h2>
+<br>
+<div id="top_rated">
+{% for wine in top_rated_wines %}
+    <div class="wine_card">
+        <a href="{{ wine.get_absolute_url }}">
+            {% if wine.image %}
+            <img src="{{ wine.image.url }}" alt="{{ wine }}'s image">
+            {% else %}
+            <img src="generic wine image" alt="{{ wine }}'s image">
+            {% endif %}
+            {{ wine.name }}
+        </a>
+        {{ wine.avg_rating }}*
+    </div>
+{% endfor %}
+</div>
+
+<!-- top rated vintages -->
+<h2>Top rated vintages</h2>
+<br>
+<div id="top_rated">
+{% for vintage in top_rated_vintages %}
+    <div class="wine_card">
+        <a href="{{ vintage.get_absolute_url }}">
+            {% if vintage.image %}
+            <img src="{{ vintage.image.url }}" alt="{{ vintage }}'s image">
+            {% else %}
+            <img src="generic wine image" alt="{{ vintage }}'s image">
+            {% endif %}
+            {{ vintage.wine.name }} ({{ vintage.year }})
+        </a>
+        {{ vintage.avg_rating }}*
+    </div>
+{% endfor %}
+</div>
+
+<!-- recommended wines / vintages -->
+<h2>Recommended</h2>
+<br>
+<div id="recommended">
+</div>
+
+<!-- red wines / vintages -->
+<h2>Red wines</h2>
+<br>
+<div id="red_wines">
+{% for vintage in red_vintages %}
+    <div class="wine_card">
+        <a href="{{ vintage.get_absolute_url }}">
+            {% if vintage.image %}
+            <img src="{{ vintage.image.url }}" alt="{{ vintage }}'s image">
+            {% else %}
+            <img src="generic wine image" alt="{{ vintage }}'s image">
+            {% endif %}
+            {{ vintage.wine.name }} ({{ vintage.year }})
+        </a>
+    </div>
+{% endfor %}
+</div>
+
+<!-- white wines / vintages -->
+<h2>White wines</h2>
+<br>
+<div id="white_wines">
+{% for vintage in white_vintages %}
+    <div class="wine_card">
+        <a href="{{ vintage.get_absolute_url }}">
+            {% if vintage.image %}
+            <img src="{{ vintage.image.url }}" alt="{{ vintage }}'s image">
+            {% else %}
+            <img src="generic wine image" alt="{{ vintage }}'s image">
+            {% endif %}
+            {{ vintage.wine.name }} ({{ vintage.year }})
+        </a>
+    </div>
+{% endfor %}
+</div>
+
+<!-- fortified wines / vintages -->
+<h2>Fortified wines</h2>
+<br>
+<div id="fortified_wines">
+{% for vintage in fortified_vintages %}
+    <div class="wine_card">
+        <a href="{{ vintage.get_absolute_url }}">
+            {% if vintage.image %}
+            <img src="{{ vintage.image.url }}" alt="{{ vintage }}'s image">
+            {% else %}
+            <img src="generic wine image" alt="{{ vintage }}'s image">
+            {% endif %}
+            {{ vintage.wine.name }} ({{ vintage.year }})
+        </a>
+    </div>
+{% endfor %}
+</div>
+
+<!-- top rated wines / vintages -->
+<h2>Old school</h2>
+<br>
+<div id="old_school">
+</div>
+
+<!-- recently visited pages -->
+<h2>Last visited</h2>
+<br>
+{% show_last_visited_pages request %}
+<div id="last_seen">
+</div>
+
+{% endblock %}

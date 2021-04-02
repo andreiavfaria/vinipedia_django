@@ -38,12 +38,15 @@ def wine_detail(request, id):
             new_review.save()
             return redirect(wine)
     elif request.method == 'GET':
-        # Show review form only if no generic review for this wine has been
-        # written (i.e. show review form even if vintage specific reviews have
-        # been written... does that make sense?)
-        reviewed_already_by_this_user = Review.objects.filter(wine=wine,
-                                                              user=request.user,
-                                                              vintage=None).count()
+        if request.user.is_authenticated:
+            # Show review form only if no generic review for this wine has been
+            # written (i.e. show review form even if vintage specific reviews have
+            # been written... does that make sense?)
+            reviewed_already_by_this_user = Review.objects.filter(wine=wine,
+                                                                  user=request.user,
+                                                                  vintage=None).count()
+        else:
+            reviewed_already_by_this_user = None
         if not reviewed_already_by_this_user:
             review_form = ReviewForm()
         else:
@@ -53,7 +56,8 @@ def wine_detail(request, id):
                   'wines/wine/detail.html',
                   {'wine': wine,
                    'review_form': review_form,
-                   'reviewed_already_by_this_user': reviewed_already_by_this_user})
+                   'reviewed_already_by_this_user': reviewed_already_by_this_user,
+                   'new_review': new_review})
 
 
 def wines_per_type(request, type):
@@ -106,9 +110,12 @@ def vintage_detail(request, id):
             new_review.save()
             return redirect(vintage)
     elif request.method == 'GET':
-        # Show review form only if no review for this vintage has been written
-        reviewed_already_by_this_user = Review.objects.filter(vintage=vintage,
-                                                              user=request.user).count()
+        if request.user.is_authenticated:
+            # Show review form only if no review for this vintage has been written
+            reviewed_already_by_this_user = Review.objects.filter(vintage=vintage,
+                                                                  user=request.user).count()
+        else:
+            reviewed_already_by_this_user = None
         if not reviewed_already_by_this_user:
             review_form = ReviewForm()
         else:
@@ -117,7 +124,8 @@ def vintage_detail(request, id):
                   'wines/vintage/detail.html',
                   {'vintage': vintage,
                    'review_form': review_form,
-                   'reviewed_already_by_this_user': reviewed_already_by_this_user})
+                   'reviewed_already_by_this_user': reviewed_already_by_this_user,
+                   'new_review': new_review})
 
 
 def vintages_per_year(request, year):
@@ -283,10 +291,18 @@ def sitewide_search(request):
                    'producers': producers})
 
 
-def landing_page(request):
-    # # temporary hack
-    # return redirect('wines/')
+def homepage(request):
+    top_rated_wines = Wine.objects.annotate(avg_rating=Avg('reviews__score')).order_by('-avg_rating')[:5]
+    top_rated_vintages = Vintage.objects.annotate(avg_rating=Avg('reviews__score')).order_by('-avg_rating')[:5]
+    red_vintages = Vintage.objects.filter(wine__type='red').order_by('?')[:5]
+    white_vintages = Vintage.objects.filter(wine__type='white').order_by('?')[:5]
+    fortified_vintages = Vintage.objects.filter(wine__type__in=('port','moscatel','madeira')).order_by('?')[:5]
     return render(request,
-                  'wines/landing_page.html')
+                  'wines/homepage.html',
+                  {'top_rated_wines': top_rated_wines,
+                   'top_rated_vintages': top_rated_vintages,
+                   'red_vintages': red_vintages,
+                   'white_vintages': white_vintages,
+                   'fortified_vintages': fortified_vintages,})
 
 

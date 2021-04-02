@@ -11,6 +11,31 @@ class Country(models.Model):
     name = models.CharField(max_length=50, unique=True)
     image = models.ImageField(upload_to='countries/%Y/%m/%d/', null=True, blank=True)
 
+    def get_local_producers(self):
+        regions = Region.objects.filter(country=self.pk)
+        local_producers = Producer.objects.filter(origin__in=regions)
+        return local_producers
+
+    def get_local_wines(self):
+        regions = Region.objects.filter(country=self.pk)
+        local_wines = Wine.objects.filter(origin__in=regions)
+        return local_wines
+
+    def get_local_grapes(self):
+        regions = Region.objects.filter(country=self.pk)
+        local_grapes = Grape.objects.filter(origin__in=regions)
+        return local_grapes
+
+    def get_average_rating(self):
+        """ Returns the consolidated average review rating for a country's
+        wines (including every review for each of its vintages). """
+        regions = Region.objects.filter(country=self.pk)
+        wines = Wine.objects.filter(origin__in=regions)
+        average_rating = Review.objects.filter(wine__in=wines).aggregate(Avg('score'))['score__avg']
+        if average_rating:
+            return round(average_rating, 1)
+        return None
+
     class Meta:
         ordering = ('name',)
 
@@ -34,6 +59,15 @@ class Region(models.Model):
         """
         other_producers = Producer.objects.filter(presence=self.pk).exclude(origin=self.pk)
         return other_producers
+
+    def get_average_rating(self):
+        """ Returns the consolidated average review rating for a region's
+        wines (including every review for each of its vintages). """
+        wines = Wine.objects.filter(origin=self.pk)
+        average_rating = Review.objects.filter(wine__in=wines).aggregate(Avg('score'))['score__avg']
+        if average_rating:
+            return round(average_rating, 1)
+        return None
 
     class Meta:
         unique_together = (('name', 'country',),)
@@ -62,6 +96,20 @@ class Producer(models.Model):
     email = models.EmailField(null=True, blank=True)
     # phone
     # social media
+
+    def get_producer_vintages(self):
+        wines = Wine.objects.filter(producer=self.pk)
+        producer_vintages = Vintage.objects.filter(wine__in=wines)
+        return producer_vintages
+
+    def get_producer_average_rating(self):
+        """ Returns the consolidated average review rating for a producer's
+        wines (including every review for each of its vintages). """
+        wines = Wine.objects.filter(producer=self.pk)
+        average_rating = Review.objects.filter(wine__in=wines).aggregate(Avg('score'))['score__avg']
+        if average_rating:
+            return round(average_rating, 1)
+        return None
 
     class Meta:
         ordering = ('name',)
@@ -139,9 +187,59 @@ class Grape(models.Model):
     type = models.CharField(max_length=5, choices=GRAPE_TYPE_CHOICES)
     description = models.TextField(blank=True)
     image = models.ImageField(upload_to='grapes/%Y/%m/%d/', null=True, blank=True)
-    # colour = models.IntegerField(choices=Colour.choices, null=True)
-    body = models.IntegerField(choices=Body.choices, null=True)
     acidity = models.IntegerField(choices=Acidity.choices, null=True)
+    body = models.IntegerField(choices=Body.choices, null=True)
+    # colour = models.IntegerField(choices=Colour.choices, null=True)
+
+    def get_average_rating(self):
+        """ Returns the consolidated average review rating for wines with
+        a specific grape in its constitution (including every review for
+        each of its vintages). """
+        wines = Wine.objects.filter(grape_varieties=self.pk)
+        average_rating = Review.objects.filter(wine__in=wines).aggregate(Avg('score'))['score__avg']
+        if average_rating:
+            return round(average_rating, 1)
+        return None
+
+    def get_average_acidity(self):
+        """ Returns the consolidated average acidity rating for wines with
+        a specific grape in its constitution (including every review for each
+        of its vintages). """
+        wines = Wine.objects.filter(grape_varieties=self.pk)
+        average_acidity = Review.objects.filter(wine__in=wines).aggregate(Avg('acidity'))['acidity__avg']
+        if average_acidity:
+            return round(average_acidity, 1)
+        return None
+
+    def get_average_body(self):
+        """ Returns the consolidated average body rating for wines with
+        a specific grape in its constitution (including every review for each
+        of its vintages). """
+        wines = Wine.objects.filter(grape_varieties=self.pk)
+        average_body = Review.objects.filter(wine__in=wines).aggregate(Avg('body'))['body__avg']
+        if average_body:
+            return round(average_body, 1)
+        return None
+
+    def get_average_sweetness(self):
+        """ Returns the consolidated average sweetness rating for wines with
+        a specific grape in its constitution (including every review for each
+        of its vintages). """
+        wines = Wine.objects.filter(grape_varieties=self.pk)
+        average_sweetness = Review.objects.filter(wine__in=wines).aggregate(Avg('sweetness'))['sweetness__avg']
+        if average_sweetness:
+            return round(average_sweetness, 1)
+        return None
+
+    def get_average_tannin(self):
+        """ Returns the consolidated average tannin rating for wines with
+        a specific grape in its constitution (including every review for each
+        of its vintages). """
+        wines = Wine.objects.filter(grape_varieties=self.pk)
+        average_tannin = Review.objects.filter(wine__in=wines).aggregate(Avg('tannin'))['tannin__avg']
+        if average_tannin:
+            return round(average_tannin, 1)
+        return None
 
     class Meta:
         ordering = ('name',)
@@ -187,6 +285,38 @@ class Wine(models.Model):
         average_rating = Review.objects.filter(wine=self.pk).aggregate(Avg('score'))['score__avg']
         if average_rating:
             return round(average_rating, 1)
+        return None
+
+    def get_average_acidity(self):
+        """ Returns the consolidated average acidity rating for a wine
+        (including every review for each of its vintages). """
+        average_acidity = Review.objects.filter(wine=self.pk).aggregate(Avg('acidity'))['acidity__avg']
+        if average_acidity:
+            return round(average_acidity, 1)
+        return None
+
+    def get_average_body(self):
+        """ Returns the consolidated average body rating for a wine
+        (including every review for each of its vintages). """
+        average_body = Review.objects.filter(wine=self.pk).aggregate(Avg('body'))['body__avg']
+        if average_body:
+            return round(average_body, 1)
+        return None
+
+    def get_average_sweetness(self):
+        """ Returns the consolidated average sweetness rating for a wine
+        (including every review for each of its vintages). """
+        average_sweetness = Review.objects.filter(wine=self.pk).aggregate(Avg('sweetness'))['sweetness__avg']
+        if average_sweetness:
+            return round(average_sweetness, 1)
+        return None
+
+    def get_average_tannin(self):
+        """ Returns the consolidated average tannin rating for a wine
+        (including every review for each of its vintages). """
+        average_tannin = Review.objects.filter(wine=self.pk).aggregate(Avg('tannin'))['tannin__avg']
+        if average_tannin:
+            return round(average_tannin, 1)
         return None
 
     class Meta:
@@ -255,32 +385,28 @@ class Vintage(models.Model):
             return round(average_rating, 1)
         return None
 
+    def get_average_acidity(self):
+        average_acidity = Review.objects.filter(vintage=self.pk).aggregate(Avg('acidity'))['acidity__avg']
+        if average_acidity:
+            return round(average_acidity, 1)
+        return None
+
     def get_average_body(self):
-        reviews_with_body_score = Review.objects.filter(vintage=self.pk).exclude(body=None)
-        if reviews_with_body_score:
-            avg = Review.objects.filter(vintage=self.pk).aggregate(Avg('body'))['body__avg']
-            return round(avg, 1)
+        average_body = Review.objects.filter(vintage=self.pk).aggregate(Avg('body'))['body__avg']
+        if average_body:
+            return round(average_body, 1)
         return None
 
     def get_average_sweetness(self):
-        reviews_with_sweetness_score = Review.objects.filter(vintage=self.pk).exclude(sweetness=None)
-        if reviews_with_sweetness_score:
-            avg = Review.objects.filter(vintage=self.pk).aggregate(Avg('sweetness'))['sweetness__avg']
-            return round(avg, 1)
-        return None
-
-    def get_average_acidity(self):
-        reviews_with_acidity_score = Review.objects.filter(vintage=self.pk).exclude(acidity=None)
-        if reviews_with_acidity_score:
-            avg = Review.objects.filter(vintage=self.pk).aggregate(Avg('acidity'))['acidity__avg']
-            return round(avg, 1)
+        average_sweetness = Review.objects.filter(vintage=self.pk).aggregate(Avg('sweetness'))['sweetness__avg']
+        if average_sweetness:
+            return round(average_sweetness, 1)
         return None
 
     def get_average_tannin(self):
-        reviews_with_tannin_score = Review.objects.filter(vintage=self.pk).exclude(tannin=None)
-        if reviews_with_tannin_score:
-            avg = Review.objects.filter(vintage=self.pk).aggregate(Avg('tannin'))['tannin__avg']
-            return round(avg, 1)
+        average_tannin = Review.objects.filter(vintage=self.pk).aggregate(Avg('tannin'))['tannin__avg']
+        if average_tannin:
+            return round(average_tannin, 1)
         return None
 
     class Meta:
@@ -361,10 +487,10 @@ class Review(models.Model):
     )
     text = models.TextField()
     score = models.PositiveSmallIntegerField(default=3, validators=validators)
-    sweetness = models.IntegerField(choices=Sweetness.choices, null=True)
-    body = models.IntegerField(choices=Body.choices, null=True)
-    acidity = models.IntegerField(choices=Acidity.choices, null=True)
-    tannin = models.IntegerField(choices=Tannin.choices, null=True)
+    acidity = models.IntegerField(choices=Acidity.choices, null=True, blank=True)
+    body = models.IntegerField(choices=Body.choices, null=True, blank=True)
+    sweetness = models.IntegerField(choices=Sweetness.choices, null=True, blank=True)
+    tannin = models.IntegerField(choices=Tannin.choices, null=True, blank=True)
     published_on = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     active = models.BooleanField(default=True)

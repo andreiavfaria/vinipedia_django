@@ -22,13 +22,16 @@ app_name = "wines"
 
 urlpatterns = [
     # landing page
-    path('', views.landing_page, name='landing_page'),
+    path('', views.homepage, name='homepage'),
     # wines
     path('wines/', views.wine_list, name='wine_list'),
     path('wines/search/', views.wine_search, name='wine_search'),
     path('wines/advanced_search/', views.wine_advanced_search, name='wine_advanced_search'),
     path('wines/<int:id>', views.wine_detail, name='wine_detail'),
     path('wines/<str:type>/', views.wines_per_type, name='wines_per_type'),
+    # vintages
+    path('vintages/', views.vintage_list, name='vintage_list'),
+    path('vintages/<int:id>', views.vintage_detail, name='vintage_detail'),
     # grapes
     path('grapes/', views.grape_list, name='grape_list'),
     path('grapes/search/', views.grape_search, name='grape_search'),
@@ -49,10 +52,5 @@ urlpatterns = [
     path('year/<int:year>', views.vintages_per_year, name='vintages_per_year'),
     # search
     path('search/', views.sitewide_search, name='sitewide_search'),
-
-    # vintages: provisional
-    path('vintages/', views.vintage_list, name='vintage_list'),
-    path('vintages/<int:id>', views.vintage_detail, name='vintage_detail'),
-    #
 
 ]

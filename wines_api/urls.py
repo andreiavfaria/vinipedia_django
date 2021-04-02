@@ -10,6 +10,9 @@ urlpatterns = [
     path('countries/', views.CountryList.as_view(), name=views.CountryList.name),
     path('countries/<int:pk>', views.CountryDetail.as_view(), name=views.CountryDetail.name),
     path('countries/<int:pk>/regions', views.country_regions, name='country-region-list'),
+    path('countries/<int:pk>/producers', views.country_producers, name='country-producer-list'),
+    path('countries/<int:pk>/wines', views.country_wines, name='country-wine-list'),
+    path('countries/<int:pk>/grapes', views.country_grapes, name='country-grape-list'),
 
     path('regions/', views.RegionList.as_view(), name=views.RegionList.name),
     path('regions/<int:pk>', views.RegionDetail.as_view(), name=views.RegionDetail.name),
@@ -25,6 +28,7 @@ urlpatterns = [
     path('producers/', views.ProducerList.as_view(), name=views.ProducerList.name),
     path('producers/<int:pk>', views.ProducerDetail.as_view(), name=views.ProducerDetail.name),
     path('producers/<int:pk>/wines', views.producer_wines, name='producer-wine-list'),
+    path('producers/<int:pk>/vintages', views.producer_vintages, name='producer-vintage-list'),
 
     # path('grape-types/', views.grape_type_list.as_view(), name='grape-type-list'),
     # path('grape-types/<str:type>', views.grape_type_detail.as_view(), name='grape-type-detail'),
@@ -45,11 +49,11 @@ urlpatterns = [
     path('wines/', views.WineList.as_view(), name=views.WineList.name),
     path('wines/<int:pk>', views.WineDetail.as_view(), name=views.WineDetail.name),
     path('wines/<int:pk>/vintages', views.wine_vintages, name='wine-vintage-list'),
-    path('wines/<int:pk>/reviews', views.WineReviewList.as_view(), name=views.WineReviewList.name),
+    path('wines/<int:pk>/reviews', views.wine_reviews, name='wine-review-list'),
 
     path('vintages/', views.VintageList.as_view(), name=views.VintageList.name),
     path('vintages/<int:pk>', views.VintageDetail.as_view(), name=views.VintageDetail.name),
-    path('vintages/<int:pk>/reviews', views.VintageReviewList.as_view(), name=views.VintageReviewList.name),
+    path('vintages/<int:pk>/reviews', views.vintage_reviews, name='vintage-review-list'),
 
     path('grape-aliases/', views.GrapeAliasList.as_view(), name=views.GrapeAliasList.name),
     path('grape-aliases/<int:pk>', views.GrapeAliasDetail.as_view(), name=views.GrapeAliasDetail.name),
@@ -67,7 +71,5 @@ urlpatterns = [
     # path('user/<int:pk>/reviews/', ...),
     # path('reviews/user/', views.ReviewList.as_view(), name=views.ReviewList.name),
     # path('reviews/user/<int:pk>', views.ReviewList.as_view(), name=views.ReviewList.name),
-
-
 ]
 
