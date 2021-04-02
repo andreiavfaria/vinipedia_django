@@ -357,6 +357,7 @@ class VintageList(generics.ListCreateAPIView):
         'wine',
         'year',
         'alcohol_content',
+        'wine__type'
     )
 
     search_fields = (

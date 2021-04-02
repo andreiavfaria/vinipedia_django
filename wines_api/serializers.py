@@ -322,6 +322,7 @@ class VintageSerializer(NewVintageSerializer):
     wine = WineShortSerializer()
     review_list = serializers.HyperlinkedIdentityField(view_name='vintage-review-list', read_only=True)
     nr_reviews = serializers.IntegerField(source='reviews.count', read_only=True)
+    average_score = serializers.FloatField(source='get_average_rating', read_only=True)
 
     class Meta:
         model = Vintage
@@ -334,6 +335,7 @@ class VintageSerializer(NewVintageSerializer):
             'image',
             'description',
             'nr_reviews',
+            'average_score',
             'review_list',
         )
 

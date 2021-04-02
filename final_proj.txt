@@ -25,15 +25,13 @@ Etc
 
 to do:
 ------
-- django-filters: filter + sort
 - token auth: (react) login -> token auth -> acesso à lista de vinhos
 ----
-- reviews: ...
-x cookies: last pages viewed (persistent)
-- throttling
 - amazon s3
 - novos models: bottle, taste
 - rever o aspecto do site
+- (done) django-filters: filter + sort
+- (done) throttling
 - (done) add class integerchoice fields
 - (done) add class methods (avg_rating, avg_acidity, etc)
 - (done) session: last pages visited
@@ -43,7 +41,6 @@ x cookies: last pages viewed (persistent)
 
 notes:
 ------
-- missing fields (wine: style/type; grape:body,colour,acidity; etc)
 - @login_required (ou similar) nas views apropriadas
 - api: adicionar filters/permitir sorting e filtering nos pedidos à API (limit, offset, sort, etc)
 - usar crispy-forms e/ou bootstrap?
@@ -51,7 +48,8 @@ notes:
 - alterar debug=TRUE em settings.py, remover debug url_patterns de urls.py
 - ocultar todas as keys (p.ex., SECRET_KEY) e passwords (com config.json, etc)
 - bread crumbs
-- nav bar missing
+- (done) missing fields (wine: style/type; grape:body,colour,acidity; etc)
+- (done) nav bar missing
 - (done) add class integer choice fields (to review, grape, vintage/wine?)
 - (done) verificar se a "constraint" para wine origin não pode ser mesmo impelementada sem recurso a override do save()
 - (done) confirmar on delete/update cascade/restrict
@@ -61,6 +59,7 @@ notes:
 
 bugs:
 -----
+- api (vintage list): ordering=name retorna erro
 - review detail views (wine e vintage)
 - api (vintage): retornar N.V. em vez de null? (ver código e notas em baixo)
 - api (image): editing an instance deletes the current image field value
@@ -68,10 +67,9 @@ bugs:
 - review page login link shouldn't redirect to the landing page
 - wine/vintage detail view when no user is logged in (TypeError: 'AnonymousUser' object is not iterable)
 - grape body scale (current: light<->bold, vivino: light-bodied<->full-bodied)
-- advanced search (vintages): os nomes não aparecem!
 - WineFilter: with_reviews devia ser boolean
 - WineFilter: tentar fazer average_score com RangeFilter
-- producer regions (api)
+- (fixed) advanced search (vintages): os nomes não aparecem!
 - (fixed) advanced wine search (hiding empty fields from the sent GET parameters)
 - (fixed) region_detail: remover "local producers" dos "other producers"
 - (fixed) region wines: adicionar field:origin em wine (com check constraint, deve estar incluído nas regiões do seu produtor)
@@ -87,9 +85,9 @@ next:
 - (done) accounts
 - (done) reviews
 - adicionar todos os campos em falta às views
-- sessions / cookies
+- (done) sessions / cookies
 - accounts urls
-- pesquisa de vinhos por vários critérios
+- (done) pesquisa de vinhos por vários critérios
 - (done) pesquisa integral
 - api rest
     - (done) create app

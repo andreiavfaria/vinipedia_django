@@ -250,9 +250,9 @@ class Vintage(models.Model):
 
     def get_average_rating(self):
         """ Returns the average review rating for a vintage. """
-        if self.reviews:
-            avg = Review.objects.filter(vintage=self.pk).aggregate(Avg('score'))['score__avg']
-            return round(avg, 1)
+        average_rating = Review.objects.filter(vintage=self.pk).aggregate(Avg('score'))['score__avg']
+        if average_rating:
+            return round(average_rating, 1)
         return None
 
     def get_average_body(self):
