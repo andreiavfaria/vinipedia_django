@@ -5,7 +5,13 @@
 {% block content %}
 
 <!-- Name -->
+{% if producer.short_name %}
+<div id="wine_details"><h1>{{ producer.short_name }}</h1></div>
+<h4>Full name</h4>
+<p>{{ producer.name }}</p>
+{% else %}
 <div id="wine_details"><h1>{{ producer.name }}</h1></div>
+{% endif %}
 
 <!-- Description -->
 <h4>Description</h4>
@@ -33,12 +39,52 @@
 
 <!-- Wines -->
 <h4>Wines produced</h4>
-{% for wine in producer.wines.all %}
+{% if producer.wines.count > 0 %}
+    {% for wine in producer.wines.all|slice:":5" %}
+    <p>
+        <a href="{% url 'wines:wine_detail' wine.id %}">{{ wine.name|capfirst }}</a>
+    </p>
+    {% endfor %}
+    {% if producer.wines.count > 5 %}
+    <a href="{% url 'wines:wines_per_producer' producer.id %}">More wines from this producer...</a>
+    {% endif %}
+    <!-- Average rating -->
+    <h4>Average rating for wines from this producer</h4>
+    <p>{{ producer.get_producer_average_rating }}*</p>
+{% else %}
+    <p class="info">No wines have been registered for this producer.</p>
+{% endif %}
+
+<!-- Contacts -->
+<h4>Contacts</h4>
+{% if producer.website %}
+<p>Website: {{ producer.website }}</p>
+{% else %}
+<p>Website: N/A</p>
+{% endif %}
+{% if producer.email %}
+<p>Email: {{ producer.email }}</p>
+{% else %}
+<p>Email: N/A</p>
+{% endif %}
+{% if producer.phone %}
+<p>Phone: {{ producer.phone }}</p>
+{% else %}
+<p>Phone: N/A</p>
+{% endif %}
+{% if producer.address %}
+<p>Address: {{ producer.address }}</p>
+{% else %}
+<p>Address: N/A</p>
+{% endif %}
+
+<!-- More info -->
+<h4>Additional links</h4>
 <p>
-    <a href="{% url 'wines:wine_detail' wine.id %}">{{ wine.name|capfirst }}</a>
+    <a href="{% url 'wines:wines_per_producer' producer.id %}">All wines from {{ producer }}</a>
 </p>
-{% empty %}
-<p class="info">No wines were registered for this producer.</p>
-{% endfor %}
+<p>
+    <a href="{% url 'wines:vintages_per_producer' producer.id %}">All vintages from {{ producer }}</a>
+</p>
 
 {% endblock %}

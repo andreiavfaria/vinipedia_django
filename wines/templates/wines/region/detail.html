@@ -22,7 +22,7 @@
     <a href="{{ producer.get_absolute_url }}">{{ producer|capfirst }}</a>
 </p>
 {% empty %}
-<p class="info">No local producers were registered for this region.</p>
+<p class="info">No local producers have been registered for this region.</p>
 {% endfor %}
 
 <!-- Other producers operating in the region -->
@@ -32,7 +32,7 @@
     <a href="{{ region_producer.get_absolute_url }}">{{ region_producer|capfirst }}</a>
 </p>
 {% empty %}
-<p class="info">No additional producers were registered for this region.</p>
+<p class="info">No additional producers have been registered for this region.</p>
 {% endfor %}
 
 <!-- Local grape varieties -->
@@ -42,7 +42,37 @@
     <a href="{% url 'wines:grape_detail' grape.id %}">{{ grape.name|capfirst }}</a>
 </p>
 {% empty %}
-<p class="info">No grapes were registered as being native from this region.</p>
+<p class="info">No grapes have been registered as being native from this region.</p>
 {% endfor %}
+
+<!-- Local wines -->
+<h4>Wines produced in this region</h4>
+{% if region.local_wines.count > 0 %}
+    {% for wine in region.local_wines.all|slice:":5" %}
+    <p>
+        <a href="{{ wine.get_absolute_url }}">{{ wine|capfirst }}</a>
+    </p>
+    {% endfor %}
+    {% if region.local_wines.count > 5 %}
+    <a href="{% url 'wines:wines_per_region' region.id %}">More wines from this region...</a>
+    {% endif %}
+    <!-- Average rating -->
+    <h4>Average rating for wines from this region</h4>
+    <p>{{ region.get_average_rating }}*</p>
+{% else %}
+<p>No wines have been registered as being produced in this region.</p>
+{% endif %}
+
+<!-- Additional links -->
+<h4>Additional links</h4>
+<p>
+    <a href="{% url 'wines:producers_per_region' region.id %}">All producers from {{ region.name }}</a>
+</p>
+<p>
+    <a href="{% url 'wines:wines_per_region' region.id %}">All wines from {{ region.name }}</a>
+</p>
+<p>
+    <a href="{% url 'wines:vintages_per_region' region.id %}">All vintages from {{ region.name }}</a>
+</p>
 
 {% endblock %}

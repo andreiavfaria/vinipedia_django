@@ -1,7 +1,7 @@
 from django import template
 
 from ..forms import SearchForm, AdvancedWineSearchForm
-from ..models import Wine, Vintage, Grape, Producer
+from ..models import Wine, Vintage, Grape, Producer, Region
 
 register = template.Library()
 
@@ -80,6 +80,15 @@ def show_last_visited_pages(request):
             elif page['type'] == 'vintage':
                 vintage = Vintage.objects.get(id=id)
                 last_visited.append(vintage)
+            elif page['type'] == 'grape':
+                grape = Grape.objects.get(id=id)
+                last_visited.append(grape)
+            elif page['type'] == 'producer':
+                producer = Producer.objects.get(id=id)
+                last_visited.append(producer)
+            elif page['type'] == 'region':
+                region = Region.objects.get(id=id)
+                last_visited.append(region)
     return {"last_visited_pages": last_visited}
 
 

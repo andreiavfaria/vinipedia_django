@@ -28,6 +28,7 @@ urlpatterns = [
     path('wines/search/', views.wine_search, name='wine_search'),
     path('wines/advanced_search/', views.wine_advanced_search, name='wine_advanced_search'),
     path('wines/<int:id>', views.wine_detail, name='wine_detail'),
+    path('wines/<int:id>/vintages', views.vintages_per_wine, name='vintages_per_wine'),
     path('wines/<str:type>/', views.wines_per_type, name='wines_per_type'),
     # vintages
     path('vintages/', views.vintage_list, name='vintage_list'),
@@ -37,17 +38,20 @@ urlpatterns = [
     path('grapes/search/', views.grape_search, name='grape_search'),
     path('grapes/<int:id>', views.grape_detail, name='grape_detail'),
     path('grapes/<str:type>/', views.grapes_per_type, name='grapes_per_type'),
+    path('grapes/<int:id>/wines', views.wines_per_grape, name='wines_per_grape'),
+    path('grapes/<int:id>/vintages', views.vintages_per_grape, name='vintages_per_grape'),
     # producers
     path('producers/', views.producer_list, name='producer_list'),
     path('producers/search/', views.producer_search, name='producer_search'),
     path('producers/<int:id>', views.producer_detail, name='producer_detail'),
+    path('producers/<int:id>/wines', views.wines_per_producer, name='wines_per_producer'),
+    path('producers/<int:id>/vintages', views.vintages_per_producer, name='vintages_per_producer'),
     # regions
     path('regions/', views.region_list, name='region_list'),
     path('regions/<int:id>', views.region_detail, name='region_detail'),
-    # producers per region
     path('regions/<int:id>/producers', views.producers_per_region, name='producers_per_region'),
-    # wines per region
     path('regions/<int:id>/wines', views.wines_per_region, name='wines_per_region'),
+    path('regions/<int:id>/vintages', views.vintages_per_region, name='vintages_per_region'),
     # wines/vintages per year
     path('year/<int:year>', views.vintages_per_year, name='vintages_per_year'),
     # search

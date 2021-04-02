@@ -121,6 +121,8 @@ class Producer(models.Model):
         ordering = ('name',)
 
     def __str__(self):
+        if self.short_name:
+            return self.short_name
         return self.name
 
     def get_absolute_url(self):
@@ -391,8 +393,6 @@ class Vintage(models.Model):
     # production size
     # tasting notes
     # food pairings
-    # updated_on
-    # inserted_on
 
     def get_average_rating(self):
         """ Returns the average review rating for a vintage. """

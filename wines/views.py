@@ -24,8 +24,6 @@ def wine_detail(request, id):
     visited_page = {'type': 'wine', 'id': wine.id}
     session_updater(request, visited_page)
 
-    print (request.session["last_visited"])
-
     # review handling
     new_review = None
     if request.method == 'POST':
@@ -70,9 +68,29 @@ def wines_per_type(request, type):
 
 
 def wines_per_region(request, id):
-    regions = Region.objects.filter(id=id)
-    region_producers = Producer.objects.filter(Q(presence__in=regions) | Q(origin__in=regions))
+    region = get_object_or_404(Region, id=id)
+    region_producers = Producer.objects.filter(Q(presence=region) | Q(origin=region))
     object_list = Wine.objects.filter(Q(producer__in=region_producers))
+    paginator = Paginator(object_list, 10)
+    wines = paginator_helper(request, paginator)
+    return render(request,
+                  'wines/wine/list.html',
+                  {'wines': wines})
+
+
+def wines_per_grape(request, id):
+    grape = get_object_or_404(Grape, id=id)
+    object_list = Wine.objects.filter(grape_varieties=grape)
+    paginator = Paginator(object_list, 10)
+    wines = paginator_helper(request, paginator)
+    return render(request,
+                  'wines/wine/list.html',
+                  {'wines': wines})
+
+
+def wines_per_producer(request, id):
+    producer = get_object_or_404(Producer, id=id)
+    object_list = Wine.objects.filter(producer=producer)
     paginator = Paginator(object_list, 10)
     wines = paginator_helper(request, paginator)
     return render(request,
@@ -95,8 +113,6 @@ def vintage_detail(request, id):
     # update session data
     visited_page = {'type': 'vintage', 'id': vintage.id}
     session_updater(request, visited_page)
-
-    print (request.session["last_visited"])
 
     # review handling
     new_review = None
@@ -128,6 +144,46 @@ def vintage_detail(request, id):
                    'new_review': new_review})
 
 
+def vintages_per_wine(request, id):
+    wine = get_object_or_404(Wine, id=id)
+    object_list = Vintage.objects.filter(wine=wine)
+    paginator = Paginator(object_list, 10)
+    vintages = paginator_helper(request, paginator)
+    return render(request,
+                  'wines/vintage/list.html',
+                  {'vintages': vintages})
+
+
+def vintages_per_grape(request, id):
+    grape = get_object_or_404(Grape, id=id)
+    object_list = Vintage.objects.filter(wine__grape_varieties=grape)
+    paginator = Paginator(object_list, 10)
+    vintages = paginator_helper(request, paginator)
+    return render(request,
+                  'wines/vintage/list.html',
+                  {'vintages': vintages})
+
+
+def vintages_per_producer(request, id):
+    producer = get_object_or_404(Producer, id=id)
+    object_list = Vintage.objects.filter(wine__producer=producer)
+    paginator = Paginator(object_list, 10)
+    vintages = paginator_helper(request, paginator)
+    return render(request,
+                  'wines/vintage/list.html',
+                  {'vintages': vintages})
+
+
+def vintages_per_region(request, id):
+    region = get_object_or_404(Region, id=id)
+    object_list = Vintage.objects.filter(wine__origin=region)
+    paginator = Paginator(object_list, 10)
+    vintages = paginator_helper(request, paginator)
+    return render(request,
+                  'wines/vintage/list.html',
+                  {'vintages': vintages})
+
+
 def vintages_per_year(request, year):
     object_list = Vintage.objects.filter(year=year)
     paginator = Paginator(object_list, 10)
@@ -148,6 +204,11 @@ def grape_list(request):
 
 def grape_detail(request, id):
     grape = get_object_or_404(Grape, id=id)
+
+    # update session data
+    visited_page = {'type': 'grape', 'id': grape.id}
+    session_updater(request, visited_page)
+
     return render(request,
                   'wines/grape/detail.html',
                   {'grape': grape})
@@ -173,14 +234,22 @@ def producer_list(request):
 
 def producer_detail(request, id):
     producer = get_object_or_404(Producer, id=id)
+
+    # update session data
+    visited_page = {'type': 'producer', 'id': producer.id}
+    session_updater(request, visited_page)
+
     return render(request,
                   'wines/producer/detail.html',
                   {'producer': producer})
 
 
 def producers_per_region(request, id):
-    regions = Region.objects.filter(id=id)
-    object_list = Producer.objects.filter(Q(presence__in=regions) | Q(origin__in=regions))
+    region = get_object_or_404(Region, id=id)
+    # hack using distinct() to remove duplicates, since the following query is
+    # returning duplicate entries somehow:
+    # Producer.objects.filter(Q(origin=region) | Q(presence=region))
+    object_list = Producer.objects.filter(Q(presence=region) | Q(origin=region)).distinct()
     paginator = Paginator(object_list, 10)
     producers = paginator_helper(request, paginator)
     return render(request,
@@ -199,13 +268,17 @@ def region_list(request):
 
 def region_detail(request, id):
     region = get_object_or_404(Region, id=id)
+
+    # update session data
+    visited_page = {'type': 'region', 'id': region.id}
+    session_updater(request, visited_page)
+
     return render(request,
                   'wines/region/detail.html',
                   {'region': region})
 
 
 def wine_advanced_search(request):
-    print(request.GET)
     if not request.GET:
         results = None
     else:

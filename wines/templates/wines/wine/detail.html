@@ -37,27 +37,42 @@
 <p class="info">No grape information was registered for this wine.</p>
 {% endfor %}
 
-<!-- Available vintages -->
+<!-- Vintages -->
 <h4>Available vintages</h4>
-{% for vintage in wine.vintages.all %}
-<p>
-{% if vintage.year != None %}
-    <a href="{% url 'wines:vintage_detail' vintage.id %}">{{ vintage.year }}</a>
+{% if wine.vintages.count > 0 %}
+    {% for vintage in wine.vintages.all|slice:":5" %}
+    <p>
+        <a href="{% url 'wines:vintage_detail' vintage.id %}">{{ vintage.year }}</a>
+    </p>
+    {% endfor %}
+    {% if wine.vintages.count > 5 %}
+    <a href="{% url 'wines:vintages_per_wine' wine.id %}">More {{ wine.name }} vintages...</a>
+    {% endif %}
 {% else %}
-    <a href="{% url 'wines:vintage_detail' vintage.id %}">N.V.</a>
+    <p class="info">No vintages have been registered for this producer.</p>
 {% endif %}
-</p>
-{% empty %}
-<p class="info">No vintages were registered for this wine.</p>
-{% endfor %}
 
 <!-- Average rating -->
-<h4>Rating</h4>
+<h4>Average rating</h4>
 {% if wine.reviews.all %}
 <p>{{ wine.get_average_rating }}*</p>
 {% else %}
 <p>N/A</p>
 {% endif %}
+<!-- Average acidity -->
+<p>Average acidity: {{ wine.get_average_acidity|default_if_none:"N/A" }}</p>
+<!-- Average body -->
+<p>Average body: {{ wine.get_average_body|default_if_none:"N/A" }}</p>
+<!-- Average sweetness -->
+<p>Average sweetness: {{ wine.get_average_sweetness|default_if_none:"N/A" }}</p>
+<!-- Average tannin -->
+<p>Average tannin: {{ wine.get_average_tannin|default_if_none:"N/A" }}</p>
+
+<!-- More info -->
+<h4>Additional links</h4>
+<p>
+    <a href="{% url 'wines:vintages_per_wine' wine.id %}">All vintages for {{ wine.name }}</a>
+</p>
 
 <!-- Existing reviews -->
 {% with wine.reviews.count as total_reviews %}

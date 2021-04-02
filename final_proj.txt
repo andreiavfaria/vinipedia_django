@@ -48,6 +48,7 @@ notes:
 - tokenauth através de https?
 - alterar debug=TRUE em settings.py, remover debug url_patterns de urls.py
 - ocultar todas as keys (p.ex., SECRET_KEY) e passwords (com config.json, etc)
+- substituir if else endif nos templates por |default_if_none:"N/A"
 - (done) missing fields (wine: style/type; grape:body,colour,acidity; etc)
 - (done) nav bar missing
 - (done) add class integer choice fields (to review, grape, vintage/wine?)
@@ -59,16 +60,18 @@ notes:
 
 bugs:
 -----
+- site (list views): list views que herdam de outras list views apresentam quase sempre o header/title errado
 - api (vintage list): ordering=name retorna erro
 - api (vintage): retornar N.V. em vez de null? (ver código e notas em baixo)
 - api (image): editing an instance deletes the current image field value
-- review page login link shouldn't redirect to the landing page
+- review page login link shouldn't redirect to the landing page (how to add something like ?next=/wines/api/producers/3?)
 - grape body scale (current: light<->bold, vivino: light-bodied<->full-bodied)
 - new review bug (wine/vintage detail views): if new review.. "review added" não aparece!
 - WineFilter: with_reviews devia ser boolean
 - WineFilter: tentar fazer average_score com RangeFilter
 - api (review form): aparecem todas as vintages, independentemente do wine seleccionado
-- api (wine/reviews, vintage/reviews): mostrar review form?
+- api (wine/reviews, vintage/reviews): mostrar review form/per?
+- duplicates/distinct (hack)
 - (fixed) review detail views (wine e vintage)
 - (fixed) api (wine_reviews / vintage_reviews): mostra as reviews todas (em vez de mostrar apenas a do vinho seleccionado - ver views wine_reviews e vintage_reviews comentadas)
 - (fixed) wine/vintage detail view when no user is logged in (TypeError: 'AnonymousUser' object is not iterable)

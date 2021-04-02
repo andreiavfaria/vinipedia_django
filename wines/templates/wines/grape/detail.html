@@ -29,6 +29,11 @@
     <a href="{% url 'wines:grapes_per_type' grape.type %}">{{ grape.type|capfirst }}</a>
 </p>
 
+<!-- Properties -->
+<h4>Properties</h4>
+<p>Acidity: {{ grape.get_acidity_display|default_if_none:"N/A" }}</p>
+<p>Body: {{ grape.get_body_display|default_if_none:"N/A" }}</p>
+
 <!-- Origin -->
 <h4>Origin</h4>
 <p>
@@ -41,12 +46,41 @@
 
 <!-- Wines -->
 <h4>Wines</h4>
-{% for wine_grape in grape.wines.all %}
+{% if grape.wines.count > 0 %}
+    {% for wine_grape in grape.wines.all|slice:":5" %}
+    <p>
+        <a href="{% url 'wines:wine_detail' wine_grape.wine.id %}">{{ wine_grape.wine.name|capfirst }}</a>
+    </p>
+    {% endfor %}
+    {% if grape.wines.count > 5 %}
+    <a href="{% url 'wines:wines_per_grape' grape.id %}">More wines with {{ grape.name }}...</a>
+    {% endif %}
+    <!-- Average rating -->
+    <h4>Average rating for wines with this grape</h4>
+    {% if grape.get_average_rating %}
+    <p>{{ grape.get_average_rating }}</p>
+    {% else %}
+    <p>N/A</p>
+    {% endif %}
+    <!-- Average acidity -->
+    <p>Average acidity: {{ grape.get_average_acidity|default_if_none:"N/A" }}</p>
+    <!-- Average body -->
+    <p>Average body: {{ grape.get_average_body|default_if_none:"N/A" }}</p>
+    <!-- Average sweetness -->
+    <p>Average sweetness: {{ grape.get_average_sweetness|default_if_none:"N/A" }}</p>
+    <!-- Average tannin -->
+    <p>Average tannin: {{ grape.get_average_tannin|default_if_none:"N/A" }}</p>
+{% else %}
+    <p class="info">No wines have been registered as including this grape in its composition.</p>
+{% endif %}
+
+<!-- More info -->
+<h4>Additional links</h4>
 <p>
-    <a href="{% url 'wines:wine_detail' wine_grape.wine.id %}">{{ wine_grape.wine.name|capfirst }}</a>
+    <a href="{% url 'wines:wines_per_grape' grape.id %}">All wines with {{ grape }}</a>
 </p>
-{% empty %}
-<p class="info">No wine was registered as including this grape in its composition.</p>
-{% endfor %}
+<p>
+    <a href="{% url 'wines:vintages_per_grape' grape.id %}">All vintages with {{ grape }}</a>
+</p>
 
 {% endblock %}
