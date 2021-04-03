@@ -50,55 +50,55 @@
 <div id="recommended">
 </div>
 
-<!-- red wines / vintages -->
+<!-- red wines -->
 <h2>Red wines</h2>
 <br>
 <div id="red_wines">
-{% for vintage in red_vintages %}
+{% for wine in red_wines %}
     <div class="wine_card">
-        <a href="{{ vintage.get_absolute_url }}">
-            {% if vintage.image %}
-            <img src="{{ vintage.image.url }}" alt="{{ vintage }}'s image">
+        <a href="{{ wine.get_absolute_url }}">
+            {% if wine.image %}
+            <img src="{{ wine.image.url }}" alt="{{ wine }}'s image">
             {% else %}
-            <img src="generic wine image" alt="{{ vintage }}'s image">
+            <img src="generic wine image" alt="{{ wine }}'s image">
             {% endif %}
-            {{ vintage.wine.name }} ({{ vintage.year }})
+            {{ wine.name }}
         </a>
     </div>
 {% endfor %}
 </div>
 
-<!-- white wines / vintages -->
+<!-- white wines -->
 <h2>White wines</h2>
 <br>
 <div id="white_wines">
-{% for vintage in white_vintages %}
+{% for wine in white_wines %}
     <div class="wine_card">
-        <a href="{{ vintage.get_absolute_url }}">
-            {% if vintage.image %}
-            <img src="{{ vintage.image.url }}" alt="{{ vintage }}'s image">
+        <a href="{{ wine.get_absolute_url }}">
+            {% if wine.image %}
+            <img src="{{ wine.image.url }}" alt="{{ wine }}'s image">
             {% else %}
-            <img src="generic wine image" alt="{{ vintage }}'s image">
+            <img src="generic wine image" alt="{{ wine }}'s image">
             {% endif %}
-            {{ vintage.wine.name }} ({{ vintage.year }})
+            {{ wine.name }}
         </a>
     </div>
 {% endfor %}
 </div>
 
-<!-- fortified wines / vintages -->
+<!-- fortified wines -->
 <h2>Fortified wines</h2>
 <br>
 <div id="fortified_wines">
-{% for vintage in fortified_vintages %}
+{% for wine in fortified_wines %}
     <div class="wine_card">
-        <a href="{{ vintage.get_absolute_url }}">
-            {% if vintage.image %}
-            <img src="{{ vintage.image.url }}" alt="{{ vintage }}'s image">
+        <a href="{{ wine.get_absolute_url }}">
+            {% if wine.image %}
+            <img src="{{ wine.image.url }}" alt="{{ wine }}'s image">
             {% else %}
-            <img src="generic wine image" alt="{{ vintage }}'s image">
+            <img src="generic wine image" alt="{{ wine }}'s image">
             {% endif %}
-            {{ vintage.wine.name }} ({{ vintage.year }})
+            {{ wine.name }}
         </a>
     </div>
 {% endfor %}

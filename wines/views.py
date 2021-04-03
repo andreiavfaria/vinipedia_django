@@ -367,15 +367,15 @@ def sitewide_search(request):
 def homepage(request):
     top_rated_wines = Wine.objects.annotate(avg_rating=Avg('reviews__score')).order_by('-avg_rating')[:5]
     top_rated_vintages = Vintage.objects.annotate(avg_rating=Avg('reviews__score')).order_by('-avg_rating')[:5]
-    red_vintages = Vintage.objects.filter(wine__type='red').order_by('?')[:5]
-    white_vintages = Vintage.objects.filter(wine__type='white').order_by('?')[:5]
-    fortified_vintages = Vintage.objects.filter(wine__type__in=('port','moscatel','madeira')).order_by('?')[:5]
+    red_wines = Wine.objects.filter(type='red').order_by('?')[:5]
+    white_wines = Wine.objects.filter(type='white').order_by('?')[:5]
+    fortified_wines = Wine.objects.filter(type__in=('port', 'moscatel', 'madeira')).order_by('?')[:5]
     return render(request,
                   'wines/homepage.html',
                   {'top_rated_wines': top_rated_wines,
                    'top_rated_vintages': top_rated_vintages,
-                   'red_vintages': red_vintages,
-                   'white_vintages': white_vintages,
-                   'fortified_vintages': fortified_vintages,})
+                   'red_wines': red_wines,
+                   'white_wines': white_wines,
+                   'fortified_wines': fortified_wines})
 
 
