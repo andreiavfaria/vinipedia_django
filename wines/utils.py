@@ -25,3 +25,15 @@ def session_updater(request, visited_page):
     last_visited = last_visited[:10]
     request.session["last_visited"] = last_visited
     request.session.modified = True
+
+
+def get_slice_min_max(slice_object):
+    """ Gets the minimum and maximum values from a slice object. """
+    min = None
+    max = None
+    print(min, max)
+    if slice_object.start:
+        min = slice_object.start
+    if slice_object.stop:
+        max = slice_object.stop
+    return min, max
