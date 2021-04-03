@@ -87,18 +87,18 @@ WSGI_APPLICATION = 'vinipedia.wsgi.application'
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
     # 'default': {
-    #         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-    #         'NAME': 'vinipedia',
-    #         'USER': 'postgres',
-    #         'PASSWORD': 'admin',
-    #         'HOST': 'localhost',
-    #         'PORT': '5432',
+    #     'ENGINE': 'django.db.backends.sqlite3',
+    #     'NAME': BASE_DIR / 'db.sqlite3',
     # }
+    'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': 'vinipedia',
+            'USER': 'postgres',
+            'PASSWORD': 'admin',
+            'HOST': 'localhost',
+            'PORT': '5432',
+    }
 }
 
 
@@ -138,8 +138,8 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
-LOGIN_REDIRECT_URL = 'wines:landing_page'
-LOGOUT_REDIRECT_URL = 'wines:landing_page'
+LOGIN_REDIRECT_URL = 'wines:homepage'
+LOGOUT_REDIRECT_URL = 'wines:homepage'
 LOGIN_URL = 'login'
 LOGOUT_URL = 'logout'
 
@@ -176,12 +176,12 @@ REST_FRAMEWORK = {
     ),
 
     'DEFAULT_THROTTLE_RATES': {
-        'anon': '150/hour',
-        'user': '200/hour',
-        'region': '30/hour',
-        'producer': '30/hour',
-        'wine': '50/hour',
-        'vintage': '20/hour',
+        'anon': '600/hour',
+        'user': '2000/hour',
+        'region': '3000/hour',
+        'producer': '3000/hour',
+        'wine': '5000/hour',
+        'vintage': '2000/hour',
 
 
     }
