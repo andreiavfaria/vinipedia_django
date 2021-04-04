@@ -7,13 +7,14 @@
 <!-- Name -->
 <div id="wine_details"><h1>{{ wine.name }}</h1></div>
 
-<!-- Description -->
-<h4>Description</h4>
-{% if wine.description %}
-<p>{{ wine.description }}</p>
-{% else %}
-<p>No description available</p>
-{% endif %}
+<!-- Image -->
+<div>
+    {% if wine.image %}
+    <img src="{{ wine.image.url }}" alt="{{ wine }}'s image">
+    {% else %}
+    <img src="/media/{{ wine.type }}.png" alt="{{ wine }}'s image">
+    {% endif %}
+</div>
 
 <!-- Producer -->
 <h4>Produced by</h4>
@@ -36,6 +37,14 @@
 {% empty %}
 <p class="info">No grape information was registered for this wine.</p>
 {% endfor %}
+
+<!-- Description -->
+<h4>Description</h4>
+{% if wine.description %}
+<p>{{ wine.description }}</p>
+{% else %}
+<p>No description available</p>
+{% endif %}
 
 <!-- Vintages -->
 <h4>Available vintages</h4>

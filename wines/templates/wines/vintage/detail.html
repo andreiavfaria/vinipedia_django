@@ -13,13 +13,16 @@
 {% endif %}
 </div>
 
-<!-- Description -->
-<h4>Wine description</h4>
-{% if vintage.wine.description %}
-<p>{{ vintage.wine.description }}</p>
-{% else %}
-<p>No description available</p>
-{% endif %}
+<!-- Image -->
+<div>
+    {% if vintage.image %}
+    <img src="{{ vintage.image.url }}" alt="{{ vintage }}'s image">
+    {% elif vintage.wine.image %}
+    <img src="{{ vintage.wine.image.url }}" alt="{{ vintage }}'s image">
+    {% else %}
+    <img src="/media/{{ vintage.wine.type }}.png" alt="{{ vintage }}'s image">
+    {% endif %}
+</div>
 
 <!-- Wine -->
 <h4>Wine</h4>
@@ -52,6 +55,14 @@
 {% empty %}
 <p class="info">No grape information was registered for this wine.</p>
 {% endfor %}
+
+<!-- Description -->
+<h4>Description</h4>
+{% if vintage.wine.description %}
+<p>{{ vintage.wine.description }}</p>
+{% else %}
+<p>No description available</p>
+{% endif %}
 
 <!-- Alcohol content -->
 <h4>Alcohol content</h4>

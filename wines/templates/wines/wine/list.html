@@ -5,13 +5,50 @@
 {% block content %}
 <h1>Wine list</h1>
 {% for wine in wines %}
-<div>
-  <a href="{{ wine.get_absolute_url }}">
-    {{ wine.name }} /
-  </a>
-  <a href="{{ wine.producer.get_absolute_url }}">
-    {{ wine.producer }}
-  </a>
+<div class="wine_horizontal_card">
+    <a href="{{ wine.get_absolute_url }}">
+        {% if wine.image %}
+        <img src="{{ wine.image.url }}" alt="{{ wine }}'s image">
+        {% else %}
+        <img src="/media/{{ wine.type }}.png" alt="{{ wine }}'s image">
+        {% endif %}
+    </a>
+    <div class="details">
+        <div class="producer">
+          <a href="{{ wine.producer.get_absolute_url }}">
+            {{ wine.producer }}
+          </a>
+        </div>
+        <div class="wine">
+          <a href="{{ wine.get_absolute_url }}">
+            {{ wine.name }}
+          </a>
+        </div>
+        <div class="type">{{wine.type}}</div>
+        <div class="region">
+          <a href="{{ wine.origin.get_absolute_url }}">
+            {{ wine.origin.name }}
+          </a>
+        </div>
+        {% if wine.reviews.all|length > 0 %}
+            <div class="reviews">
+                <div class="rating">{{wine.get_average_rating}}</div>
+                <div class="info">
+                    <div class="stars">
+                        *****
+                        <div class="mantinha"></div>
+                    </div>
+                    {% with wine.reviews.count as total_reviews %}
+                    <div class="nr_reviews">
+                      {{ total_reviews }} review{{ total_reviews|pluralize }}
+                    </div>
+                    {% endwith %}
+                </div>
+            </div>
+        {% else %}
+            <div class="reviews">Be the first to review this vintage</div>
+        {% endif %}
+        </div>
 </div>
 {% empty %}
 <p>

@@ -7,6 +7,15 @@
 <!-- Name -->
 <div id="wine_details"><h1>{{ grape.name }}</h1></div>
 
+<!-- Image -->
+<div>
+    {% if grape.image %}
+    <img src="{{ grape.image.url }}" alt="{{ grape }}'s image">
+    {% else %}
+    <img src="/media/generic_grape.png" alt="{{ grape }}'s image">
+    {% endif %}
+</div>
+
 <!-- Description -->
 <h4>Description</h4>
 {% if grape.description %}

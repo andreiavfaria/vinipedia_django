@@ -229,18 +229,192 @@ input[type=submit] {
     display: flex;
     flex-direction: row;
     align-items: flex-start;
-    justify-content: space-evenly;
+    justify-content: flex-start;
+    margin-top: 15pt;
+    margin-bottom: 60pt;
 }
 
 .wine_card,
 .person_card {
     display: flex;
     flex-direction: column;
-    height: 30%;
-    width: 20%;
+    justify-content: flex-start;
+    /*height: 200pt;*/
+    flex-basis: 20%;
+    max-width: 20%;
+    padding-top: 20pt;
+}
+
+.wine_card a {
+    align-self: center;
 }
 
 .wine_card img,
 .person_card img {
-    width: 95%; /* should be consistent with the height of the parent container in order for the img to maintain the size ratio */
+    /*object-fit: contain;*/
+    height: 150pt;
+    margin-bottom: 20pt;
+}
+
+.wine_card .wine,
+.wine_card .producer,
+.wine_card .rating {
+    text-align: center;
+}
+
+.wine_card .wine a,
+.wine_card .producer a {
+    text-decoration: none;
+    color: black;
+}
+
+.wine_card .wine a {
+    color: black;
+}
+
+.wine_card .wine {
+    font-family: "Roboto", sans-serif;
+    font-size: 14pt;
+    font-weight: normal;
+    text-transform: capitalize;
+    color: darkred;
+    text-decoration: none;
+    margin-bottom: 6pt;
+}
+
+.wine_card .producer {
+    font-family: "Roboto",sans-serif;
+    font-size: 8pt;
+    font-weight: lighter;
+    margin-bottom: 3pt;
+    text-transform: uppercase;
+}
+
+/* wine list */
+
+.wine_horizontal_card {
+    display: flex;
+    /* flex-direction: column; */
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    flex-basis: 100%;
+    max-width: 100%;
+    height: 150pt;
+    padding: 0.5rem;
+    margin: 0.5rem 1rem;
+    background-color: #fff;
+    border-radius: 0.5rem;
+    box-shadow: 0px 2px 15px 2px #ccc;
+}
+
+.wine_horizontal_card a {
+    height: 100%;
+    flex-basis: 20%;
+    color: black;
+}
+
+.wine_horizontal_card a img {
+    height: 150pt;
+    margin-bottom: 20pt;
+}
+
+.wine_horizontal_card .details {
+    height: 100%;
+    width: 100%;
+    flex-basis: 40%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    padding-top: 0.5rem;
+}
+
+.wine_horizontal_card .details .producer {
+    font-family: "Roboto", sans-serif;
+    font-size: 8pt;
+    font-weight: lighter;
+    margin-bottom: 3pt;
+    text-transform: uppercase;
+}
+
+.wine_horizontal_card .details .wine {
+        font-family: "Roboto", sans-serif;
+        font-size: 14pt;
+        font-weight: normal;
+        text-transform: capitalize;
+        font-weight: bold;
+    }
+
+.wine_horizontal_card .details .type {
+        font-family: "Roboto", sans-serif;
+        font-size: 14pt;
+        font-weight: normal;
+        text-transform: capitalize;
+    }
+
+.wine_horizontal_card .details .region {
+        font-family: "Roboto", sans-serif;
+        font-size: 10pt;
+        font-weight: normal;
+        text-transform: capitalize;
+    }
+
+.wine_horizontal_card .details .reviews {
+        display: flex;
+        align-items: flex-end;
+        margin: auto 0;
+        margin-bottom: 10%;
+        font-family: "Roboto", sans-serif;
+        font-size: 10pt;
+        }
+
+.wine_horizontal_card .details .reviews .rating {
+            font-family: "Roboto", sans-serif;
+            font-size: 34pt;
+            margin-right: 0.5rem;
+        }
+
+.wine_horizontal_card .details .reviews .info {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            height: 34pt;
+            }
+
+.wine_horizontal_card .details .reviews .info .stars {
+                white-space: nowrap;
+                }
+
+.wine_horizontal_card .details .reviews .info .stars svg {
+                    color: darkred;
+                }
+
+.wine_horizontal_card .details .reviews .info .stars .mantinha {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    height: 16px;
+                    width: 100%;
+                    background-color: #ffffffbb;
+                    z-index: 3;
+                }
+
+.wine_horizontal_card .details .reviews .info .nr_reviews {
+                font-family: "Roboto", sans-serif;
+                font-size: 9pt;
+                font-weight: lighter;
+                text-transform: uppercase;
+                padding-left: 1pt;
+            }
+
+.wine_horizontal_card .extra {
+    height: 100%;
+    width: 100%;
+    flex-basis: 40%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
 }

@@ -478,13 +478,13 @@ class VintageFilter(FilterSet):
                                          to_field_name='name',
                                          label='Producer')
     grape = ModelMultipleChoiceFilter(queryset=Grape.objects.all(),
-                                         field_name='wine__grapes__grape__name',
-                                         to_field_name='name',
-                                         label='Grape varieties')
+                                      field_name='wine__grapes__grape__name',
+                                      to_field_name='name',
+                                      label='Grape varieties')
     origin = ModelMultipleChoiceFilter(queryset=Region.objects.all(),
-                                         field_name='wine__origin__name',
-                                         to_field_name='name',
-                                         label='Origin')
+                                       field_name='wine__origin__name',
+                                       to_field_name='name',
+                                       label='Origin')
     alcohol_content = RangeFilter(method='filter_alcohol_content',
                                   label='Alcohol content')
     with_reviews = BooleanFilter(field_name='reviews',
@@ -588,6 +588,7 @@ class VintageFilter(FilterSet):
     class Meta:
         model = Vintage
         fields = (
+            'year',
             'type',
             'producer',
             'grape',
@@ -615,7 +616,7 @@ class VintageList(generics.ListCreateAPIView):
     )
 
     search_fields = (
-        '^name',
+        'wine__name',
     )
 
     ordering_fields = (

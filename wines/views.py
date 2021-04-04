@@ -370,12 +370,14 @@ def homepage(request):
     red_wines = Wine.objects.filter(type='red').order_by('?')[:5]
     white_wines = Wine.objects.filter(type='white').order_by('?')[:5]
     fortified_wines = Wine.objects.filter(type__in=('port', 'moscatel', 'madeira')).order_by('?')[:5]
+    other_wines = Wine.objects.filter(type__in=('rosé', 'sparkling')).order_by('?')[:5]
     return render(request,
                   'wines/homepage.html',
                   {'top_rated_wines': top_rated_wines,
                    'top_rated_vintages': top_rated_vintages,
                    'red_wines': red_wines,
                    'white_wines': white_wines,
-                   'fortified_wines': fortified_wines})
+                   'fortified_wines': fortified_wines,
+                   'other_wines': other_wines})
 
 

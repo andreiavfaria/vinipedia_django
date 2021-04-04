@@ -7,6 +7,15 @@
 <!-- Name -->
 <div id="wine_details"><h1>{{ region.name }}</h1></div>
 
+<!-- Image -->
+<div>
+    {% if region.image %}
+    <img src="{{ region.image.url }}" alt="{{ region }}'s image">
+    {% else %}
+    <img src="/media/generic_region.png" alt="{{ region }}'s image">
+    {% endif %}
+</div>
+
 <!-- Description -->
 <h4>Description</h4>
 {% if region.description %}

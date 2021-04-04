@@ -13,6 +13,15 @@
 <div id="wine_details"><h1>{{ producer.name }}</h1></div>
 {% endif %}
 
+<!-- Image -->
+<div>
+    {% if producer.image %}
+    <img src="{{ producer.image.url }}" alt="{{ producer }}'s image">
+    {% else %}
+    <img src="/media/generic_producer.png" alt="{{ producer }}'s image">
+    {% endif %}
+</div>
+
 <!-- Description -->
 <h4>Description</h4>
 {% if producer.description %}

@@ -13,6 +13,8 @@
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
   -->
   <link href="{% static 'css/wines.css' %}" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
   <!-- Links for navigation -->
@@ -58,7 +60,7 @@
     <h2>
       <a href="/">Vinipedia</a>
     </h2>
-    <p>All about the Portuguese wine industry since 1893.</p>
+    <p>All about the Portuguese wine industry.</p>
 
     <!-- Search -->
     <br>
@@ -79,9 +81,10 @@
 
     <br><br>
     <h4>Database status</h4>
-    <p>There are {% total_wines_registered %} wines (and {% total_vintages_registered %} different vintages) in the DB.</p>
-    <p>There are {% total_grapes_registered %} grape varieties in the DB.</p>
-    <p>There are {% total_producers_registered %} producers in the DB.</p>
+    <p>Producers: {% total_producers_registered %}</p>
+    <p>Wines: {% total_wines_registered %}</p>
+    <p>Vintages: {% total_vintages_registered %}</p>
+    <p>Grape varieties: {% total_grapes_registered %}</p>
 
 
     <!-- Info regarding the latest DB activity on the website -->
@@ -92,10 +95,6 @@
     <!-- Info regarding the latest reviews the website -->
     <br><br>
     <h3>Latest reviews</h3>
-
-    <!-- Info regarding the latest DB activity on the website -->
-    <br><br>
-    <h3>Latest Wines/Grapes/Producers added</h3>
 
   </div>
 <!-- Optional JavaScript -->

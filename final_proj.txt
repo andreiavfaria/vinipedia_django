@@ -2,10 +2,10 @@
 ---------------------------------------------------------------------------
 Plataforma/site
 ---------------------------------------------------------------------------
-- Permitir a visualização de info sobre vinhos, produtores e castas
-- Permitir a pesquisa de vinhos por diversos critérios
+- Permite a visualização de info sobre vinhos, produtores e castas
+- Permite a pesquisa de vinhos por diversos critérios
 - Permite o registo e autenticação de utilizadores
-- Permitir a avaliação dos vinhos por utilizadores autenticados
+- Permite a avaliação dos vinhos por utilizadores autenticados
 ---------------------------------------------------------------------------
 API RESTful
 ---------------------------------------------------------------------------
@@ -25,11 +25,11 @@ Etc
 
 to do:
 ------
-- token auth: (react) login -> token auth -> acesso à lista de vinhos
-----
 - amazon s3
-- novos models: bottle, taste
 - rever o aspecto do site
+----
+- token auth: (react) login -> token auth -> acesso à lista de vinhos
+- novos models: bottle, taste
 - (done) django-filters: filter + sort
 - (done) throttling
 - (done) add class integerchoice fields
@@ -41,16 +41,18 @@ to do:
 
 notes:
 ------
+- alterar debug=TRUE em settings.py, remover debug url_patterns de urls.py
+- alterar urls da api (de localhost para endereço do server heroku)
+- ocultar todas as keys (p.ex., SECRET_KEY) e passwords (com config.json, etc)
+- adicionar ordering p/critérios não incluídos nos models (avg_rating, nr_reviews, etc)
+----
+- mover filters para um filters.py?
+- usar crispy-forms e/ou bootstrap?
 - bread crumbs
 - @login_required (ou similar) nas views apropriadas
-- api: adicionar filters/permitir sorting e filtering nos pedidos à API (limit, offset, sort, etc)
-- usar crispy-forms e/ou bootstrap?
 - tokenauth através de https?
-- alterar debug=TRUE em settings.py, remover debug url_patterns de urls.py
-- ocultar todas as keys (p.ex., SECRET_KEY) e passwords (com config.json, etc)
 - substituir if else endif nos templates por |default_if_none:"N/A"
-- mover filters para um filters.py?
-- adicionar ordering p/critérios não incluídos nos models (avg_rating, nr_reviews, etc)
+- (done) api: adicionar filters/permitir sorting e filtering nos pedidos à API (limit, offset, sort, etc)
 - (done) missing fields (wine: style/type; grape:body,colour,acidity; etc)
 - (done) nav bar missing
 - (done) add class integer choice fields (to review, grape, vintage/wine?)
@@ -62,17 +64,20 @@ notes:
 
 bugs:
 -----
+- api (vintage): (RESOLVER com |default_if_none:"N/A" nos templates!) retornar N.V. em vez de null? (ver código e notas em baixo)
 - site (list views): list views que herdam de outras list views apresentam quase sempre o header/title errado
 - api (vintage list): ordering=name retorna erro
-- api (vintage): retornar N.V. em vez de null? (ver código e notas em baixo)
 - api (image): editing an instance deletes the current image field value
 - review page login link shouldn't redirect to the landing page (how to add something like ?next=/wines/api/producers/3?)
 - grape body scale (current: light<->bold, vivino: light-bodied<->full-bodied)
 - new review bug (wine/vintage detail views): if new review.. "review added" não aparece!
-- WineFilter: tentar fazer average_score com RangeFilter
 - api (review form): aparecem todas as vintages, independentemente do wine seleccionado
 - api (wine/reviews, vintage/reviews): mostrar review form/per?
 - duplicates/distinct (hack)
+- api (vintage/wine filters): filtros numéricos "abafam" os restantes filtros
+- react: remover year/average_rating não faz reset ao hasMore e estraga o infinite scroll!
+- react: reset filters não limpa os campos de texto/numéricos
+- (fixed) WineFilter: tentar fazer average_score com RangeFilter
 - (fixed) WineFilter: with_reviews devia ser boolean
 - (fixed) review detail views (wine e vintage)
 - (fixed) api (wine_reviews / vintage_reviews): mostra as reviews todas (em vez de mostrar apenas a do vinho seleccionado - ver views wine_reviews e vintage_reviews comentadas)

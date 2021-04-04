@@ -21,6 +21,7 @@ class ProducerShortSerializer(serializers.HyperlinkedModelSerializer):
         fields = (
             'url',
             'name',
+            'short_name',
             'image',
         )
 
@@ -40,6 +41,7 @@ class GrapeShortSerializer(serializers.HyperlinkedModelSerializer):
 class WineShortSerializer(serializers.HyperlinkedModelSerializer):
 
     producer = ProducerShortSerializer()
+    origin = RegionShortSerializer()
 
     class Meta:
         model = Wine
@@ -48,6 +50,7 @@ class WineShortSerializer(serializers.HyperlinkedModelSerializer):
             'name',
             'type',
             'producer',
+            'origin',
             'image',
         )
 

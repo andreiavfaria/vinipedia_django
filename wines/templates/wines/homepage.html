@@ -16,11 +16,22 @@
             {% if wine.image %}
             <img src="{{ wine.image.url }}" alt="{{ wine }}'s image">
             {% else %}
-            <img src="generic wine image" alt="{{ wine }}'s image">
+            <img src="/media/{{ wine.type }}.png" alt="{{ wine }}'s image">
             {% endif %}
-            {{ wine.name }}
         </a>
-        {{ wine.avg_rating }}*
+        <div class="producer">
+            <a href="{{ wine.producer.get_absolute_url }}">
+                {{ wine.producer.short_name|default_if_none:wine.producer.name }}
+            </a>
+        </div>
+        <div class="wine">
+            <a href="{{ wine.get_absolute_url }}">
+                {{ wine.name }}
+            </a>
+        </div>
+        <div class="rating">
+            {{ wine.avg_rating|floatformat:1 }}*
+        </div>
     </div>
 {% endfor %}
 </div>
@@ -34,20 +45,27 @@
         <a href="{{ vintage.get_absolute_url }}">
             {% if vintage.image %}
             <img src="{{ vintage.image.url }}" alt="{{ vintage }}'s image">
+            {% elif vintage.wine.image %}
+            <img src="{{ vintage.wine.image.url }}" alt="{{ vintage }}'s image">
             {% else %}
-            <img src="generic wine image" alt="{{ vintage }}'s image">
+            <img src="/media/{{ vintage.wine.type }}.png" alt="{{ vintage }}'s image">
             {% endif %}
-            {{ vintage.wine.name }} ({{ vintage.year }})
         </a>
-        {{ vintage.avg_rating }}*
+        <div class="producer">
+            <a href="{{ vintage.wine.producer.get_absolute_url }}">
+                {{ vintage.wine.producer.short_name|default_if_none:vintage.wine.producer.name }}
+            </a>
+        </div>
+        <div class="wine">
+            <a href="{{ vintage.wine.get_absolute_url }}">
+                {{ vintage.wine.name }} {{ vintage.year|default_if_none:"N.V." }}
+            </a>
+        </div>
+        <div class="rating">
+            {{ vintage.avg_rating|floatformat:1 }}*
+        </div>
     </div>
 {% endfor %}
-</div>
-
-<!-- recommended wines / vintages -->
-<h2>Recommended</h2>
-<br>
-<div id="recommended">
 </div>
 
 <!-- red wines -->
@@ -60,10 +78,19 @@
             {% if wine.image %}
             <img src="{{ wine.image.url }}" alt="{{ wine }}'s image">
             {% else %}
-            <img src="generic wine image" alt="{{ wine }}'s image">
+            <img src="/media/{{ wine.type }}.png" alt="{{ wine }}'s image">
             {% endif %}
-            {{ wine.name }}
         </a>
+        <div class="producer">
+            <a href="{{ wine.producer.get_absolute_url }}">
+                {{ wine.producer.short_name|default_if_none:wine.producer.name }}
+            </a>
+        </div>
+        <div class="wine">
+            <a href="{{ wine.get_absolute_url }}">
+                {{ wine.name }}
+            </a>
+        </div>
     </div>
 {% endfor %}
 </div>
@@ -78,10 +105,19 @@
             {% if wine.image %}
             <img src="{{ wine.image.url }}" alt="{{ wine }}'s image">
             {% else %}
-            <img src="generic wine image" alt="{{ wine }}'s image">
+            <img src="/media/{{ wine.type }}.png" alt="{{ wine }}'s image">
             {% endif %}
-            {{ wine.name }}
         </a>
+        <div class="producer">
+            <a href="{{ wine.producer.get_absolute_url }}">
+                {{ wine.producer.short_name|default_if_none:wine.producer.name }}
+            </a>
+        </div>
+        <div class="wine">
+            <a href="{{ wine.get_absolute_url }}">
+                {{ wine.name }}
+            </a>
+        </div>
     </div>
 {% endfor %}
 </div>
@@ -96,25 +132,48 @@
             {% if wine.image %}
             <img src="{{ wine.image.url }}" alt="{{ wine }}'s image">
             {% else %}
-            <img src="generic wine image" alt="{{ wine }}'s image">
+            <img src="/media/{{ wine.type }}.png" alt="{{ wine }}'s image">
             {% endif %}
-            {{ wine.name }}
         </a>
+        <div class="producer">
+            <a href="{{ wine.producer.get_absolute_url }}">
+                {{ wine.producer.short_name|default_if_none:wine.producer.name }}
+            </a>
+        </div>
+        <div class="wine">
+            <a href="{{ wine.get_absolute_url }}">
+                {{ wine.name }}
+            </a>
+        </div>
     </div>
 {% endfor %}
 </div>
 
-<!-- top rated wines / vintages -->
-<h2>Old school</h2>
+<!-- other wines -->
+<h2>Other wines</h2>
 <br>
-<div id="old_school">
-</div>
-
-<!-- recently visited pages -->
-<h2>Last visited</h2>
-<br>
-{% show_last_visited_pages request %}
-<div id="last_seen">
+<div id="other_wines">
+{% for wine in other_wines %}
+    <div class="wine_card">
+        <a href="{{ wine.get_absolute_url }}">
+            {% if wine.image %}
+            <img src="{{ wine.image.url }}" alt="{{ wine }}'s image">
+            {% else %}
+            <img src="/media/{{ wine.type }}.png" alt="{{ wine }}'s image">
+            {% endif %}
+        </a>
+        <div class="producer">
+            <a href="{{ wine.producer.get_absolute_url }}">
+                {{ wine.producer.short_name|default_if_none:wine.producer.name }}
+            </a>
+        </div>
+        <div class="wine">
+            <a href="{{ wine.get_absolute_url }}">
+                {{ wine.name }}
+            </a>
+        </div>
+    </div>
+{% endfor %}
 </div>
 
 {% endblock %}
