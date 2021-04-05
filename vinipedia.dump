@@ -1,0 +1,2368 @@
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 13.2
+-- Dumped by pg_dump version 13.2
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET xmloption = content;
+SET client_min_messages = warning;
+SET row_security = off;
+
+SET default_tablespace = '';
+
+SET default_table_access_method = heap;
+
+--
+-- Name: accounts_profile; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.accounts_profile (
+    id integer NOT NULL,
+    date_of_birth date,
+    photo character varying(100) NOT NULL,
+    user_id integer NOT NULL
+);
+
+
+ALTER TABLE public.accounts_profile OWNER TO postgres;
+
+--
+-- Name: accounts_profile_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.accounts_profile_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.accounts_profile_id_seq OWNER TO postgres;
+
+--
+-- Name: accounts_profile_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.accounts_profile_id_seq OWNED BY public.accounts_profile.id;
+
+
+--
+-- Name: auth_group; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.auth_group (
+    id integer NOT NULL,
+    name character varying(150) NOT NULL
+);
+
+
+ALTER TABLE public.auth_group OWNER TO postgres;
+
+--
+-- Name: auth_group_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.auth_group_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.auth_group_id_seq OWNER TO postgres;
+
+--
+-- Name: auth_group_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.auth_group_id_seq OWNED BY public.auth_group.id;
+
+
+--
+-- Name: auth_group_permissions; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.auth_group_permissions (
+    id integer NOT NULL,
+    group_id integer NOT NULL,
+    permission_id integer NOT NULL
+);
+
+
+ALTER TABLE public.auth_group_permissions OWNER TO postgres;
+
+--
+-- Name: auth_group_permissions_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.auth_group_permissions_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.auth_group_permissions_id_seq OWNER TO postgres;
+
+--
+-- Name: auth_group_permissions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.auth_group_permissions_id_seq OWNED BY public.auth_group_permissions.id;
+
+
+--
+-- Name: auth_permission; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.auth_permission (
+    id integer NOT NULL,
+    name character varying(255) NOT NULL,
+    content_type_id integer NOT NULL,
+    codename character varying(100) NOT NULL
+);
+
+
+ALTER TABLE public.auth_permission OWNER TO postgres;
+
+--
+-- Name: auth_permission_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.auth_permission_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.auth_permission_id_seq OWNER TO postgres;
+
+--
+-- Name: auth_permission_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.auth_permission_id_seq OWNED BY public.auth_permission.id;
+
+
+--
+-- Name: auth_user; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.auth_user (
+    id integer NOT NULL,
+    password character varying(128) NOT NULL,
+    last_login timestamp with time zone,
+    is_superuser boolean NOT NULL,
+    username character varying(150) NOT NULL,
+    first_name character varying(150) NOT NULL,
+    last_name character varying(150) NOT NULL,
+    email character varying(254) NOT NULL,
+    is_staff boolean NOT NULL,
+    is_active boolean NOT NULL,
+    date_joined timestamp with time zone NOT NULL
+);
+
+
+ALTER TABLE public.auth_user OWNER TO postgres;
+
+--
+-- Name: auth_user_groups; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.auth_user_groups (
+    id integer NOT NULL,
+    user_id integer NOT NULL,
+    group_id integer NOT NULL
+);
+
+
+ALTER TABLE public.auth_user_groups OWNER TO postgres;
+
+--
+-- Name: auth_user_groups_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.auth_user_groups_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.auth_user_groups_id_seq OWNER TO postgres;
+
+--
+-- Name: auth_user_groups_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.auth_user_groups_id_seq OWNED BY public.auth_user_groups.id;
+
+
+--
+-- Name: auth_user_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.auth_user_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.auth_user_id_seq OWNER TO postgres;
+
+--
+-- Name: auth_user_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.auth_user_id_seq OWNED BY public.auth_user.id;
+
+
+--
+-- Name: auth_user_user_permissions; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.auth_user_user_permissions (
+    id integer NOT NULL,
+    user_id integer NOT NULL,
+    permission_id integer NOT NULL
+);
+
+
+ALTER TABLE public.auth_user_user_permissions OWNER TO postgres;
+
+--
+-- Name: auth_user_user_permissions_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.auth_user_user_permissions_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.auth_user_user_permissions_id_seq OWNER TO postgres;
+
+--
+-- Name: auth_user_user_permissions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.auth_user_user_permissions_id_seq OWNED BY public.auth_user_user_permissions.id;
+
+
+--
+-- Name: authtoken_token; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.authtoken_token (
+    key character varying(40) NOT NULL,
+    created timestamp with time zone NOT NULL,
+    user_id integer NOT NULL
+);
+
+
+ALTER TABLE public.authtoken_token OWNER TO postgres;
+
+--
+-- Name: django_admin_log; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.django_admin_log (
+    id integer NOT NULL,
+    action_time timestamp with time zone NOT NULL,
+    object_id text,
+    object_repr character varying(200) NOT NULL,
+    action_flag smallint NOT NULL,
+    change_message text NOT NULL,
+    content_type_id integer,
+    user_id integer NOT NULL,
+    CONSTRAINT django_admin_log_action_flag_check CHECK ((action_flag >= 0))
+);
+
+
+ALTER TABLE public.django_admin_log OWNER TO postgres;
+
+--
+-- Name: django_admin_log_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.django_admin_log_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.django_admin_log_id_seq OWNER TO postgres;
+
+--
+-- Name: django_admin_log_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.django_admin_log_id_seq OWNED BY public.django_admin_log.id;
+
+
+--
+-- Name: django_content_type; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.django_content_type (
+    id integer NOT NULL,
+    app_label character varying(100) NOT NULL,
+    model character varying(100) NOT NULL
+);
+
+
+ALTER TABLE public.django_content_type OWNER TO postgres;
+
+--
+-- Name: django_content_type_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.django_content_type_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.django_content_type_id_seq OWNER TO postgres;
+
+--
+-- Name: django_content_type_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.django_content_type_id_seq OWNED BY public.django_content_type.id;
+
+
+--
+-- Name: django_migrations; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.django_migrations (
+    id integer NOT NULL,
+    app character varying(255) NOT NULL,
+    name character varying(255) NOT NULL,
+    applied timestamp with time zone NOT NULL
+);
+
+
+ALTER TABLE public.django_migrations OWNER TO postgres;
+
+--
+-- Name: django_migrations_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.django_migrations_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.django_migrations_id_seq OWNER TO postgres;
+
+--
+-- Name: django_migrations_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.django_migrations_id_seq OWNED BY public.django_migrations.id;
+
+
+--
+-- Name: django_session; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.django_session (
+    session_key character varying(40) NOT NULL,
+    session_data text NOT NULL,
+    expire_date timestamp with time zone NOT NULL
+);
+
+
+ALTER TABLE public.django_session OWNER TO postgres;
+
+--
+-- Name: wines_country; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.wines_country (
+    id integer NOT NULL,
+    name character varying(50) NOT NULL,
+    image character varying(100),
+    created timestamp with time zone NOT NULL,
+    updated timestamp with time zone NOT NULL
+);
+
+
+ALTER TABLE public.wines_country OWNER TO postgres;
+
+--
+-- Name: wines_country_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.wines_country_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.wines_country_id_seq OWNER TO postgres;
+
+--
+-- Name: wines_country_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.wines_country_id_seq OWNED BY public.wines_country.id;
+
+
+--
+-- Name: wines_grape; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.wines_grape (
+    id integer NOT NULL,
+    name character varying(100) NOT NULL,
+    origin_id integer,
+    type character varying(5) NOT NULL,
+    description text NOT NULL,
+    image character varying(100),
+    acidity integer,
+    body integer,
+    created timestamp with time zone NOT NULL,
+    updated timestamp with time zone NOT NULL
+);
+
+
+ALTER TABLE public.wines_grape OWNER TO postgres;
+
+--
+-- Name: wines_grape_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.wines_grape_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.wines_grape_id_seq OWNER TO postgres;
+
+--
+-- Name: wines_grape_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.wines_grape_id_seq OWNED BY public.wines_grape.id;
+
+
+--
+-- Name: wines_grapealias; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.wines_grapealias (
+    id integer NOT NULL,
+    name character varying(100) NOT NULL,
+    grape_id integer NOT NULL,
+    created timestamp with time zone NOT NULL,
+    updated timestamp with time zone NOT NULL
+);
+
+
+ALTER TABLE public.wines_grapealias OWNER TO postgres;
+
+--
+-- Name: wines_grapealias_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.wines_grapealias_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.wines_grapealias_id_seq OWNER TO postgres;
+
+--
+-- Name: wines_grapealias_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.wines_grapealias_id_seq OWNED BY public.wines_grapealias.id;
+
+
+--
+-- Name: wines_producer; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.wines_producer (
+    id integer NOT NULL,
+    name character varying(100) NOT NULL,
+    origin_id integer NOT NULL,
+    description text NOT NULL,
+    email character varying(254),
+    image character varying(100),
+    short_name character varying(50),
+    website character varying(200),
+    created timestamp with time zone NOT NULL,
+    updated timestamp with time zone NOT NULL
+);
+
+
+ALTER TABLE public.wines_producer OWNER TO postgres;
+
+--
+-- Name: wines_producer_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.wines_producer_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.wines_producer_id_seq OWNER TO postgres;
+
+--
+-- Name: wines_producer_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.wines_producer_id_seq OWNED BY public.wines_producer.id;
+
+
+--
+-- Name: wines_producerregion; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.wines_producerregion (
+    id integer NOT NULL,
+    producer_id integer NOT NULL,
+    region_id integer NOT NULL,
+    created timestamp with time zone NOT NULL,
+    updated timestamp with time zone NOT NULL
+);
+
+
+ALTER TABLE public.wines_producerregion OWNER TO postgres;
+
+--
+-- Name: wines_producerregion_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.wines_producerregion_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.wines_producerregion_id_seq OWNER TO postgres;
+
+--
+-- Name: wines_producerregion_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.wines_producerregion_id_seq OWNED BY public.wines_producerregion.id;
+
+
+--
+-- Name: wines_region; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.wines_region (
+    id integer NOT NULL,
+    name character varying(100) NOT NULL,
+    country_id integer NOT NULL,
+    description text NOT NULL,
+    image character varying(100),
+    created timestamp with time zone NOT NULL,
+    updated timestamp with time zone NOT NULL
+);
+
+
+ALTER TABLE public.wines_region OWNER TO postgres;
+
+--
+-- Name: wines_region_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.wines_region_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.wines_region_id_seq OWNER TO postgres;
+
+--
+-- Name: wines_region_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.wines_region_id_seq OWNED BY public.wines_region.id;
+
+
+--
+-- Name: wines_review; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.wines_review (
+    id integer NOT NULL,
+    text text NOT NULL,
+    score smallint NOT NULL,
+    sweetness integer,
+    body integer,
+    acidity integer,
+    published_on timestamp with time zone NOT NULL,
+    updated timestamp with time zone NOT NULL,
+    active boolean NOT NULL,
+    user_id integer NOT NULL,
+    vintage_id integer,
+    wine_id integer NOT NULL,
+    tannin integer,
+    CONSTRAINT wines_review_score_check CHECK ((score >= 0))
+);
+
+
+ALTER TABLE public.wines_review OWNER TO postgres;
+
+--
+-- Name: wines_review_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.wines_review_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.wines_review_id_seq OWNER TO postgres;
+
+--
+-- Name: wines_review_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.wines_review_id_seq OWNED BY public.wines_review.id;
+
+
+--
+-- Name: wines_vintage; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.wines_vintage (
+    id integer NOT NULL,
+    year smallint,
+    wine_id integer NOT NULL,
+    description text NOT NULL,
+    alcohol_content double precision,
+    image character varying(100),
+    created timestamp with time zone NOT NULL,
+    updated timestamp with time zone NOT NULL
+);
+
+
+ALTER TABLE public.wines_vintage OWNER TO postgres;
+
+--
+-- Name: wines_vintage_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.wines_vintage_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.wines_vintage_id_seq OWNER TO postgres;
+
+--
+-- Name: wines_vintage_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.wines_vintage_id_seq OWNED BY public.wines_vintage.id;
+
+
+--
+-- Name: wines_wine; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.wines_wine (
+    id integer NOT NULL,
+    name character varying(100) NOT NULL,
+    producer_id integer NOT NULL,
+    description text NOT NULL,
+    type character varying(9) NOT NULL,
+    image character varying(100),
+    origin_id integer NOT NULL,
+    created timestamp with time zone NOT NULL,
+    updated timestamp with time zone NOT NULL
+);
+
+
+ALTER TABLE public.wines_wine OWNER TO postgres;
+
+--
+-- Name: wines_wine_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.wines_wine_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.wines_wine_id_seq OWNER TO postgres;
+
+--
+-- Name: wines_wine_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.wines_wine_id_seq OWNED BY public.wines_wine.id;
+
+
+--
+-- Name: wines_winegrape; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.wines_winegrape (
+    id integer NOT NULL,
+    grape_id integer NOT NULL,
+    wine_id integer NOT NULL,
+    created timestamp with time zone NOT NULL,
+    updated timestamp with time zone NOT NULL
+);
+
+
+ALTER TABLE public.wines_winegrape OWNER TO postgres;
+
+--
+-- Name: wines_winegrape_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.wines_winegrape_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.wines_winegrape_id_seq OWNER TO postgres;
+
+--
+-- Name: wines_winegrape_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.wines_winegrape_id_seq OWNED BY public.wines_winegrape.id;
+
+
+--
+-- Name: accounts_profile id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.accounts_profile ALTER COLUMN id SET DEFAULT nextval('public.accounts_profile_id_seq'::regclass);
+
+
+--
+-- Name: auth_group id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.auth_group ALTER COLUMN id SET DEFAULT nextval('public.auth_group_id_seq'::regclass);
+
+
+--
+-- Name: auth_group_permissions id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.auth_group_permissions ALTER COLUMN id SET DEFAULT nextval('public.auth_group_permissions_id_seq'::regclass);
+
+
+--
+-- Name: auth_permission id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.auth_permission ALTER COLUMN id SET DEFAULT nextval('public.auth_permission_id_seq'::regclass);
+
+
+--
+-- Name: auth_user id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.auth_user ALTER COLUMN id SET DEFAULT nextval('public.auth_user_id_seq'::regclass);
+
+
+--
+-- Name: auth_user_groups id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.auth_user_groups ALTER COLUMN id SET DEFAULT nextval('public.auth_user_groups_id_seq'::regclass);
+
+
+--
+-- Name: auth_user_user_permissions id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.auth_user_user_permissions ALTER COLUMN id SET DEFAULT nextval('public.auth_user_user_permissions_id_seq'::regclass);
+
+
+--
+-- Name: django_admin_log id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.django_admin_log ALTER COLUMN id SET DEFAULT nextval('public.django_admin_log_id_seq'::regclass);
+
+
+--
+-- Name: django_content_type id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.django_content_type ALTER COLUMN id SET DEFAULT nextval('public.django_content_type_id_seq'::regclass);
+
+
+--
+-- Name: django_migrations id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.django_migrations ALTER COLUMN id SET DEFAULT nextval('public.django_migrations_id_seq'::regclass);
+
+
+--
+-- Name: wines_country id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.wines_country ALTER COLUMN id SET DEFAULT nextval('public.wines_country_id_seq'::regclass);
+
+
+--
+-- Name: wines_grape id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.wines_grape ALTER COLUMN id SET DEFAULT nextval('public.wines_grape_id_seq'::regclass);
+
+
+--
+-- Name: wines_grapealias id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.wines_grapealias ALTER COLUMN id SET DEFAULT nextval('public.wines_grapealias_id_seq'::regclass);
+
+
+--
+-- Name: wines_producer id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.wines_producer ALTER COLUMN id SET DEFAULT nextval('public.wines_producer_id_seq'::regclass);
+
+
+--
+-- Name: wines_producerregion id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.wines_producerregion ALTER COLUMN id SET DEFAULT nextval('public.wines_producerregion_id_seq'::regclass);
+
+
+--
+-- Name: wines_region id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.wines_region ALTER COLUMN id SET DEFAULT nextval('public.wines_region_id_seq'::regclass);
+
+
+--
+-- Name: wines_review id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.wines_review ALTER COLUMN id SET DEFAULT nextval('public.wines_review_id_seq'::regclass);
+
+
+--
+-- Name: wines_vintage id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.wines_vintage ALTER COLUMN id SET DEFAULT nextval('public.wines_vintage_id_seq'::regclass);
+
+
+--
+-- Name: wines_wine id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.wines_wine ALTER COLUMN id SET DEFAULT nextval('public.wines_wine_id_seq'::regclass);
+
+
+--
+-- Name: wines_winegrape id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.wines_winegrape ALTER COLUMN id SET DEFAULT nextval('public.wines_winegrape_id_seq'::regclass);
+
+
+--
+-- Data for Name: accounts_profile; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.accounts_profile (id, date_of_birth, photo, user_id) FROM stdin;
+1	2000-04-01		1
+\.
+
+
+--
+-- Data for Name: auth_group; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.auth_group (id, name) FROM stdin;
+\.
+
+
+--
+-- Data for Name: auth_group_permissions; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.auth_group_permissions (id, group_id, permission_id) FROM stdin;
+\.
+
+
+--
+-- Data for Name: auth_permission; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.auth_permission (id, name, content_type_id, codename) FROM stdin;
+1	Can add profile	1	add_profile
+2	Can change profile	1	change_profile
+3	Can delete profile	1	delete_profile
+4	Can view profile	1	view_profile
+5	Can add log entry	2	add_logentry
+6	Can change log entry	2	change_logentry
+7	Can delete log entry	2	delete_logentry
+8	Can view log entry	2	view_logentry
+9	Can add permission	3	add_permission
+10	Can change permission	3	change_permission
+11	Can delete permission	3	delete_permission
+12	Can view permission	3	view_permission
+13	Can add group	4	add_group
+14	Can change group	4	change_group
+15	Can delete group	4	delete_group
+16	Can view group	4	view_group
+17	Can add user	5	add_user
+18	Can change user	5	change_user
+19	Can delete user	5	delete_user
+20	Can view user	5	view_user
+21	Can add content type	6	add_contenttype
+22	Can change content type	6	change_contenttype
+23	Can delete content type	6	delete_contenttype
+24	Can view content type	6	view_contenttype
+25	Can add session	7	add_session
+26	Can change session	7	change_session
+27	Can delete session	7	delete_session
+28	Can view session	7	view_session
+29	Can add Token	8	add_token
+30	Can change Token	8	change_token
+31	Can delete Token	8	delete_token
+32	Can view Token	8	view_token
+33	Can add token	9	add_tokenproxy
+34	Can change token	9	change_tokenproxy
+35	Can delete token	9	delete_tokenproxy
+36	Can view token	9	view_tokenproxy
+37	Can add country	10	add_country
+38	Can change country	10	change_country
+39	Can delete country	10	delete_country
+40	Can view country	10	view_country
+41	Can add grape	11	add_grape
+42	Can change grape	11	change_grape
+43	Can delete grape	11	delete_grape
+44	Can view grape	11	view_grape
+45	Can add producer	12	add_producer
+46	Can change producer	12	change_producer
+47	Can delete producer	12	delete_producer
+48	Can view producer	12	view_producer
+49	Can add wine	13	add_wine
+50	Can change wine	13	change_wine
+51	Can delete wine	13	delete_wine
+52	Can view wine	13	view_wine
+53	Can add wine grape	14	add_winegrape
+54	Can change wine grape	14	change_winegrape
+55	Can delete wine grape	14	delete_winegrape
+56	Can view wine grape	14	view_winegrape
+57	Can add region	15	add_region
+58	Can change region	15	change_region
+59	Can delete region	15	delete_region
+60	Can view region	15	view_region
+61	Can add vintage	16	add_vintage
+62	Can change vintage	16	change_vintage
+63	Can delete vintage	16	delete_vintage
+64	Can view vintage	16	view_vintage
+65	Can add grape alias	17	add_grapealias
+66	Can change grape alias	17	change_grapealias
+67	Can delete grape alias	17	delete_grapealias
+68	Can view grape alias	17	view_grapealias
+69	Can add producer region	18	add_producerregion
+70	Can change producer region	18	change_producerregion
+71	Can delete producer region	18	delete_producerregion
+72	Can view producer region	18	view_producerregion
+73	Can add review	19	add_review
+74	Can change review	19	change_review
+75	Can delete review	19	delete_review
+76	Can view review	19	view_review
+\.
+
+
+--
+-- Data for Name: auth_user; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.auth_user (id, password, last_login, is_superuser, username, first_name, last_name, email, is_staff, is_active, date_joined) FROM stdin;
+1	pbkdf2_sha256$216000$MwxmQmUXrDvg$JiIizhoLTL9BEOQC/ouv21IddIPoxEd8vhk8VEayBwk=	2021-04-05 11:09:29.420063+01	t	admin				t	t	2021-04-01 12:26:22.57871+01
+\.
+
+
+--
+-- Data for Name: auth_user_groups; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.auth_user_groups (id, user_id, group_id) FROM stdin;
+\.
+
+
+--
+-- Data for Name: auth_user_user_permissions; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.auth_user_user_permissions (id, user_id, permission_id) FROM stdin;
+\.
+
+
+--
+-- Data for Name: authtoken_token; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.authtoken_token (key, created, user_id) FROM stdin;
+\.
+
+
+--
+-- Data for Name: django_admin_log; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.django_admin_log (id, action_time, object_id, object_repr, action_flag, change_message, content_type_id, user_id) FROM stdin;
+1	2021-04-01 12:44:12.374381+01	1	Profile for user admin	1	[{"added": {}}]	1	1
+2	2021-04-02 17:08:42.038754+01	8	Bacalhôa Vinhos de Portugal	2	[{"changed": {"fields": ["Name", "Short name"]}}]	12	1
+3	2021-04-02 19:43:13.450153+01	4	Adega de Cantanhede	2	[{"changed": {"fields": ["Image"]}}]	12	1
+4	2021-04-02 19:44:06.795945+01	7	Blandy's	2	[{"changed": {"fields": ["Image"]}}]	12	1
+5	2021-04-02 19:46:06.070198+01	1	Esporão	2	[{"changed": {"fields": ["Image"]}}]	12	1
+6	2021-04-02 19:47:41.524715+01	3	Herdade Barranco do Vale	2	[{"changed": {"fields": ["Short name"]}}]	12	1
+7	2021-04-02 19:48:14.06406+01	5	Quinta das Marias	2	[{"changed": {"fields": ["Image"]}}]	12	1
+8	2021-04-02 19:48:55.940697+01	6	Vidigal Wines	2	[{"changed": {"fields": ["Image"]}}]	12	1
+9	2021-04-05 17:50:25.769759+01	6	Alandra (red) (2015)	3		16	1
+10	2021-04-05 17:50:25.773449+01	7	Alandra (red) (2017)	3		16	1
+11	2021-04-05 17:50:25.774449+01	8	Alandra (red) (2018)	3		16	1
+12	2021-04-05 17:51:07.62104+01	26	simulacro (white)	3		13	1
+13	2021-04-05 17:51:07.623035+01	27	simulacro2 (white)	3		13	1
+\.
+
+
+--
+-- Data for Name: django_content_type; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.django_content_type (id, app_label, model) FROM stdin;
+1	accounts	profile
+2	admin	logentry
+3	auth	permission
+4	auth	group
+5	auth	user
+6	contenttypes	contenttype
+7	sessions	session
+8	authtoken	token
+9	authtoken	tokenproxy
+10	wines	country
+11	wines	grape
+12	wines	producer
+13	wines	wine
+14	wines	winegrape
+15	wines	region
+16	wines	vintage
+17	wines	grapealias
+18	wines	producerregion
+19	wines	review
+\.
+
+
+--
+-- Data for Name: django_migrations; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.django_migrations (id, app, name, applied) FROM stdin;
+1	contenttypes	0001_initial	2021-03-29 11:36:27.367365+01
+2	auth	0001_initial	2021-03-29 11:36:27.403269+01
+3	accounts	0001_initial	2021-03-29 11:36:27.456127+01
+4	admin	0001_initial	2021-03-29 11:36:27.47009+01
+5	admin	0002_logentry_remove_auto_add	2021-03-29 11:36:27.484054+01
+6	admin	0003_logentry_add_action_flag_choices	2021-03-29 11:36:27.490037+01
+7	contenttypes	0002_remove_content_type_name	2021-03-29 11:36:27.504997+01
+8	auth	0002_alter_permission_name_max_length	2021-03-29 11:36:27.512975+01
+9	auth	0003_alter_user_email_max_length	2021-03-29 11:36:27.519967+01
+10	auth	0004_alter_user_username_opts	2021-03-29 11:36:27.527943+01
+11	auth	0005_alter_user_last_login_null	2021-03-29 11:36:27.535914+01
+12	auth	0006_require_contenttypes_0002	2021-03-29 11:36:27.537909+01
+13	auth	0007_alter_validators_add_error_messages	2021-03-29 11:36:27.54489+01
+14	auth	0008_alter_user_username_max_length	2021-03-29 11:36:27.559849+01
+15	auth	0009_alter_user_last_name_max_length	2021-03-29 11:36:27.56683+01
+16	auth	0010_alter_group_name_max_length	2021-03-29 11:36:27.573812+01
+17	auth	0011_update_proxy_permissions	2021-03-29 11:36:27.581796+01
+18	auth	0012_alter_user_first_name_max_length	2021-03-29 11:36:27.59015+01
+19	authtoken	0001_initial	2021-03-29 11:36:27.605111+01
+20	authtoken	0002_auto_20160226_1747	2021-03-29 11:36:27.642012+01
+21	authtoken	0003_tokenproxy	2021-03-29 11:36:27.644034+01
+22	sessions	0001_initial	2021-03-29 11:36:27.65398+01
+23	wines	0001_initial	2021-03-29 11:36:27.73277+01
+24	wines	0002_auto_20210322_2020	2021-03-29 11:36:27.781805+01
+25	wines	0003_grape_grape_type	2021-03-29 11:36:27.795369+01
+26	wines	0004_auto_20210322_2145	2021-03-29 11:36:27.829894+01
+27	wines	0005_auto_20210322_2154	2021-03-29 11:36:27.842859+01
+28	wines	0006_auto_20210322_2155	2021-03-29 11:36:27.854828+01
+29	wines	0007_auto_20210322_2156	2021-03-29 11:36:27.866801+01
+30	wines	0008_auto_20210323_2147	2021-03-29 11:36:27.905734+01
+31	wines	0009_auto_20210323_2209	2021-03-29 11:36:27.935527+01
+32	wines	0010_auto_20210323_2302	2021-03-29 11:36:27.960246+01
+33	wines	0011_review	2021-03-29 11:36:27.979245+01
+34	wines	0012_auto_20210324_1756	2021-03-29 11:36:27.996728+01
+35	wines	0013_auto_20210324_1802	2021-03-29 11:36:28.001711+01
+36	wines	0014_auto_20210324_1813	2021-03-29 11:36:28.018736+01
+37	wines	0015_auto_20210324_1915	2021-03-29 11:36:28.062616+01
+38	wines	0016_auto_20210324_2014	2021-03-29 11:36:28.09605+01
+39	wines	0017_country_image	2021-03-29 11:36:28.101035+01
+40	wines	0018_region_image	2021-03-29 11:36:28.106022+01
+41	wines	0019_auto_20210327_1426	2021-03-29 11:36:28.128289+01
+42	wines	0020_grape_image	2021-03-29 11:36:28.13527+01
+43	wines	0021_vintage_alcohol_content	2021-03-29 11:36:28.141255+01
+44	wines	0022_auto_20210327_1859	2021-03-29 11:36:28.192592+01
+45	wines	0023_wine_image	2021-03-29 11:36:28.199574+01
+46	wines	0024_vintage_image	2021-03-29 11:36:28.205938+01
+47	wines	0025_auto_20210328_1627	2021-03-29 11:36:28.236888+01
+48	wines	0026_auto_20210328_1649	2021-03-29 11:36:28.256836+01
+49	wines	0027_auto_20210328_1709	2021-03-29 11:36:28.276891+01
+50	wines	0028_grape_tannin	2021-03-29 11:36:28.282876+01
+51	wines	0029_review_tannin	2021-03-29 11:36:28.296429+01
+52	wines	0030_remove_review_tannin	2021-03-29 11:36:28.306405+01
+53	wines	0031_auto_20210329_1721	2021-04-01 12:24:28.673048+01
+54	wines	0032_remove_grape_tannin	2021-04-01 12:24:28.691+01
+55	wines	0033_auto_20210329_2208	2021-04-01 12:24:28.700973+01
+56	wines	0034_auto_20210402_1939	2021-04-02 19:39:32.728717+01
+\.
+
+
+--
+-- Data for Name: django_session; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.django_session (session_key, session_data, expire_date) FROM stdin;
+i16bzt15woqluvsakfattl3clxnrk09v	.eJxtjs0OgjAQhN-lZ0IoP1vw6N0nMIZsu4tUTTG0aAzh3S0JB024ft_MZGbR4hT6dvI8tpbEQUiR_DKN5s5uFXRDdx1SM7gwWp2ukXSzPj0NxI_jlv0b6NH3sY0do1EVMdVEjQFVA0AOHZSaAE1BsoBOK87Q6Ay0LLpSyRpMpiqI0SaOPtCH9mW9DRz_nGcRPk-O02_rOOr1fbEkexj2sdzH-XJZvpGgWp8:1lS62o:LXo1WGzU5EHJVeDq9__VVGvS4hz-txU8MF7FLzbJc2g	2021-04-15 23:44:06.592081+01
+gx7oinp3rn0hhgpvlip5idgpsrp5euz1	.eJxVjkEOgjAQRe_StSFUYAou3XsCY5ppZypVUwwtGkO4uyVhodt5b17-LDROqddT5FF7Egchxe73ZtDeOayAbhiuQ2GHkEZvilUpNhqL00D8OG7uX6DH2OdvdIxWNcTUEnUWVAsAe3BQGwK0FckKnFFcojUlGFm5WskWbKkayGqXow-MSb989InznvMs0ufJOf32gTNe13fLZfkC96VFlg:1lSOiK:p4DM3mW_ggYqWpNQfXQKxGzc0ORVqxOENNIatHyWots	2021-04-16 19:40:12.973395+01
+mg1knvt2acsukl8phjchckbfxhvlhr7h	.eJx9jsFKxDAURf8l66Ekbeel49L9fIFIecl7baNDUpJUkaH_bgpVKqjbe-493LvocclTvySOvSPxIJQ4HTOD9pX9BugF_RgqG3yOzlRbpdppqq6B-Pa4d38IJkxTWePAaPWZmDqiiwXdAUANA7SGAG1DqoHBaJZojQSjmqHVqgMr9RlK9VKkN0y5f3PJZS5_nu4if8xc1O_Oc8Hb-1qup99y1RzyMeL8PTiCOQZaLMevUXtgkUcX_E7aP2yq_scm1-f1E_Nodbw:1lSkTC:DiKd6V2-QO8lC0Owhn0vfxXxMXf5BT3attitlb0WZSs	2021-04-17 18:54:02.442583+01
+zlzsbfv975ylqszllbiyp0brqfumwp7r	.eJyrVspJLC6JL8sszixJTVGyiq5WKqksSFWyUirPzEtV0lHKBAqa1epgEzbGLmyIS9wQu7iREQ5xXOoNsIub18bWAgCfDEAt:1lT7nB:kQIyeyYC4gEgBv8oAfunKGHqcLUd-r_WH6trL2F967E	2021-04-18 19:48:13.566549+01
+cf27umkupo38mqe0wyu3d7yyg2kx4gop	.eJx9zk1uwyAQBeC7sI4s45_B6bL7nKCqrIEZ27QRRIBTVZHvXiy5lbuIt_M9Hu8hepzT1M-RQ29JvAgpTvubRvPJbgX6QDf6wniXgtXFGik2jcXFE19ft-y_ggnjlF_jwGhUS0wd0dmA6gCgggEaTYCmJlnDoBWXaHQJWtZDo2QHplQt5Og5l14xpv5uo02c97w9RPq-ca4OPFrvcmDd3yynP7gFT7PhsJGEnd2tSzjyRu1Ovqz7PVfVk7s8-OXIDuhoePXc1PK-_ADn9JIa:1lTTXq:rjBx3vUkYGy1uHXXQ_GnHInoRkv6o4qlTb-tRqbHKwg	2021-04-19 19:01:50.588705+01
+\.
+
+
+--
+-- Data for Name: wines_country; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.wines_country (id, name, image, created, updated) FROM stdin;
+1	Portugal		2021-04-02 19:39:32.590852+01	2021-04-02 19:39:32.602706+01
+2	Spain		2021-04-02 19:39:32.590852+01	2021-04-02 19:39:32.602706+01
+3	France		2021-04-02 19:39:32.590852+01	2021-04-02 19:39:32.602706+01
+4	Italy		2021-04-02 19:39:32.590852+01	2021-04-02 19:39:32.602706+01
+\.
+
+
+--
+-- Data for Name: wines_grape; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.wines_grape (id, name, origin_id, type, description, image, acidity, body, created, updated) FROM stdin;
+1	Alvarinho	2	white	This northern grape is one of Portugal's finest and most characterful. It was one of the first Portuguese grape varieties to be bottled as a single variety. Its full-bodied, subtly fragrant white wines are easy to recognise, their complex but delicate aromas reminiscent of peach, lemon, passion fruit, lychee, orange zest, jasmin, orange blossom and lemon balm.	grapes/2021/04/01/U_alvarinho.jpg	2	4	2021-04-02 19:39:32.607692+01	2021-04-02 19:39:32.612679+01
+2	Fernão Pires	14	white	This is one of Portugal's most planted grapes. It grows more or less all over the country, but is particularly important in the regions of Tejo, Lisboa and Bairrada. It's an aromatic variety - you might detect scents and flavours of lime, lemon, roses and other flowers, tangerines, oranges... and it's best drunk young.	grapes/2021/04/01/U_fernao_pires.jpg	3	2	2021-04-02 19:39:32.607692+01	2021-04-02 19:39:32.612679+01
+3	Loureiro	2	white		grapes/2021/04/01/U_Loureiro.jpg	3	1	2021-04-02 19:39:32.607692+01	2021-04-02 19:39:32.612679+01
+4	Arinto	9	white	The Arinto variety exists in almost all of the wine-producing areas, but it is in the area of Bucelas that is considered queen, where wine 100% Arinto is produced, marked by the acidity and citrine color. The bunch, of yellowish color, is compact and composed of small berries. Usually, the production is for wines with more than a breed or sparkling wines.	grapes/2021/04/01/U_Arinto.jpg	4	2	2021-04-02 19:39:32.607692+01	2021-04-02 19:39:32.612679+01
+5	Avesso	2	white	The Avesso variety is cultivated in the Vinho Verde's area which is close to the region of Douro, therefore this breed prefers conditions of drier and less fertile soil. The bunches, green-yellowish, are medium in size and the berries are big. The wines produced with Avesso are characterized aromatic and tasty.		3	4	2021-04-02 19:39:32.607692+01	2021-04-02 19:39:32.612679+01
+6	Chardonnay	3	white	Chardonnay is planted in almost every wine-producing region. In Portugal, it spreads for the whole country, but with larger incidence in the area of Beiras, Estremadura and Trás-os-Montes. This is the favourite variety of Champagne area and it is for that very used in foamy and white sweet wines. The berries are green yellowish and they mature precocious. The wines, balanced and reasonably acid, full bodied and fruity, adapt well to aging. The aromas are toasted and fruity.		3	4	2021-04-02 19:39:32.607692+01	2021-04-02 19:39:32.612679+01
+7	Vital	9	white	The Vital variety is resistant, being shown fertile even when pruned in the stub. It is still sensitive to rottenness when planted in lands where there are a lot of water. In times of drought, the berry has a tendency to wrinkle, and that can keep it from reaching the maturation. It produces alcoholic wines, balanced and harmonious. The bunch is big and compact, and of green-yellowish colour.		3	2	2021-04-02 19:39:32.607692+01	2021-04-02 19:39:32.612679+01
+9	Moscatel Graúdo	13	white	Original of the Middle East, the Moscatel variety will have been brought to Portugal at the time of the Roman Empire. Nowadays, there are three varieties of Moscatel in Portugal. The more cultivated is Moscatel of Setúbal, in the area of Península of Setúbal. The mild climate allows the ideal maturation for this variety. Besides the famous Moscatel of Setúbal, this variety is also used to enrich scents in other white wines. It is also considered a primary variety because it marks the palate and perfumes the wines.		5	2	2021-04-02 19:39:32.607692+01	2021-04-02 19:39:32.612679+01
+8	Gouveio	4	white	This variety is cultivated in the Douro region where it is also known by Verdelho. It is characterized by the good ripening and good production. The wines produced from Gouveio are quite balanced in terms of acidity and sugar, they reveal high graduation level and intense aromas.\r\nThe bunches are of medium and compact size and the small berries of green-yellowish colour. These wines possess excellent conditions to age in the bottle.	grapes/2021/04/01/U_gouveio.jpg	4	5	2021-04-02 19:39:32.607692+01	2021-04-02 19:39:32.612679+01
+10	Códega do Larinho	4	white	Códega of Larinho is one of the least known varieties. It is characterized with an average productivity with big and compact bunches, and with medium berries of a yellowish color. Medium maturation, with a medium alcoholic graduation and low acidity.\r\nThe wine presents citrine colour, plenty and complex aromas of fruits and flowers. Not very acid in the palate and great persistence.		5	2	2021-04-02 19:39:32.607692+01	2021-04-02 19:39:32.612679+01
+11	Viosinho	3	white	This variety is just cultivated in the Douro region and Trás-os-Montes since the XIX century. It is considered a good quality grape and it is indicated for the production of still wines and port wine. In spite of that, it presents a weak production and it is for that, less cultivated. The bunches are small, just as the berries, sensitive to rottenness, and the maturation is precocious. The Viosinho variety prefers not very dry soils. The wines are well structured, fresh, with floral and complex aromas. Alcohol graduation a little high and with capacity to stay in bottle during some years.	grapes/2021/04/01/U_viosinho.jpg	1	4	2021-04-02 19:39:32.607692+01	2021-04-02 19:39:32.612679+01
+12	Antão Vaz	14	white	The Antão Vaz variety is considered one of the most important in the area of Alentejo. Its origin is in Vidigueira, south of Alentejo. The bunches are medium and the berries small and uniform of yellowed green color that then passes to yellow after maturation. Antão Vaz is quite resistant to dry seasons and diseases. The wines are aromatic, of tropical aroma and they usually have citrine color.	grapes/2021/04/01/U_antao_vaz.jpg	3	2	2021-04-02 19:39:32.607692+01	2021-04-02 19:39:32.612679+01
+13	Malvasia Fina	4	white	Planted essentially in the interior north of Portugal, in the Douro region and sub-region of Távora Varosa. It is also possible to find this variety in Portalegre, where it’s called Arinto Galego, in Dão region it is known by Assario Branco, and in Madeira the name Boal. This variety does not tolerate very high temperatures and for that it is necessary to evaluate the ideal time for the harvest, in way to avoid the deterioration of the berries. Malvasia Fina is sensitive to rottenness and to diseases. The bunches are of medium size. It produces wines with moderate acidity, delicate aromas and little complex.	grapes/2021/04/01/U_malvasia_fina.jpg	3	4	2021-04-02 19:39:32.607692+01	2021-04-02 19:39:32.612679+01
+14	Bical	7	white	Typical of the Beira region, namely of the area of Bairrada and Dão where they call it “Blurry of the Flies” thanks to the small brown stains in the ripe berries. It is also known as Maria Gomes and Fernão Pires, the Bical variety is of the most important of Bairrada.\r\nThe maturation is precocious and for that the berries conserve plenty of acidity. It is quite resistant to rottenness, but sensitive to fungus. This variety produces very aromatic, fresh wines and well structured. The variety is also very used in the production of sparkling wines.	grapes/2021/04/01/U_bical.jpg	5	2	2021-04-02 19:39:32.607692+01	2021-04-02 19:39:32.612679+01
+15	Síria	7	white	The Síria variety is mainly found in the north and south of the country’s interior, next to Spain. It is also known by the name of Roupeiro in the Alentejo area where it is considered the most planted white grape variety in the region. Syria is a very productive variety of small bunches and berries. It presents diverse aromas from orange to lemon, peach, melon, laurel and wild flowers.\r\nIt easily oxidizes, what causes the loss of the aromas so it has to be a wine consumed quickly. The regions of Beiras are indicated for their cultivation because they are high and fresh, climate where it grows better than in the heat of Ribatejo and Alentejo. The area of Pinhel is the region of excellence of this breed.	grapes/2021/04/01/U__siria.jpg	3	4	2021-04-02 19:39:32.607692+01	2021-04-02 19:39:32.612679+01
+16	Fonte Cal	8	white	The Fonte Cal variety originates from Beira Interior, in the Pinhel area, where its qualities are more explicit.\r\nModerately productive, late maturation, medium and fairly compact bunches. The berries are yellow- green and result in high-alcoholic wines. The monovarietal wines of the Fonte Cal variety are well structured and dense, but lack acidity. For this reason, this variety is most commonly used in mixes.	grapes/2021/04/01/U_fonte_cal.jpg	3	4	2021-04-02 19:39:32.607692+01	2021-04-02 19:39:32.612679+01
+17	Syrah	14	red	Among the present foreign varieties in national soil, Syrah is the variety that better adapted to the rigorous climate of Alentejo, being adjusted easily to the heats of Summer. In the hot and poor soils of Alentejo, the Syrah variety presents enormous wines in the dimension and quantity, with a lot of fruit, pepper, body and robust, powerful and alcoholic. Wines approachable from very early, soft and inviting, with high guard potential.	grapes/2021/04/01/U_syrah.jpg	3	3	2021-04-02 19:39:32.607692+01	2021-04-02 19:39:32.612679+01
+18	Aragonez	4	red	The Aragonez variety is one of the most known in the Iberian Peninsula. Original from Spain, where it has the name of "Tempranillo", it is also known as Tinta Roriz in the Douro region. This variety is very adaptable to different climates and soils, and for that its cultivation has been increasing. The ideal conditions for the variety are sandy soils and argilo-limestones in hot and dry climates. This grape originates wines with high alcoholic content, low acidity, suitable to age and very resistant to oxidation.	grapes/2021/04/01/U_aragonez.jpg	2	4	2021-04-02 19:39:32.607692+01	2021-04-02 19:39:32.612679+01
+19	Castelão	13	red	Castelão it is one of the most cultivated varieties in the south of the country, particularly in the area of Península of Setúbal. This variety grows better in hot climates and sandy and dry soils, because when it is planted in humid and fertile soils, it produces weak quality wines. The wines produced by the Castelão variety are concentrated, aromatic and with good conditions to age. The area of the Península of Setúbal produces the best wines of Castelão.	grapes/2021/04/01/U_castelao.jpg	2	3	2021-04-02 19:39:32.607692+01	2021-04-02 19:39:32.612679+01
+20	Touriga Franca	4	red	Touriga Franca is one of the most planted variety in the Douro region and Trás-os-Montes. It is considered one of the best for the production of port wine Douro wines, but its cultivation was already enlarged for more areas like Bairrada, Ribatejo, Setúbal and Estremadura. Touriga França has regular productions along the year and it is quite resistant to diseases. Their bunches are medium or big with medium and round berries. The wines produced by Touriga Franca are of intense color and very fruity. In port wines, Touriga França integrates the lots with Tinta Roriz and Touriga Nacional.	grapes/2021/04/01/U_touriga_franca.jpg	3	5	2021-04-02 19:39:32.607692+01	2021-04-02 19:39:32.612679+01
+21	Touriga Nacional	4	red	This is a noble and much appreciated variety in Portugal. Initially planted in the area of Dão, quickly it expanded to Douro region to be used in port wine production. Recently, the producers discovered the value of Touriga Nacional in the production of table wines and its cultivation was enlarged for other areas such as Alentejo. It is a variety of little production: it possesses abundant bunches, but small. The berries have a high concentration of sugar, color and aromas. The wines produced by Touriga Nacional are quite balanced and with good aging capacity	grapes/2021/04/01/U_touriga_nacional.jpg	2	4	2021-04-02 19:39:32.607692+01	2021-04-02 19:39:32.612679+01
+22	Baga	4	red	Predominant in Bairrada, being also planted in Dão, Estremadura and in some areas of Ribatejo. It is a high production variety, with bunches with small berries and of late maturation. In clay soils and with good solar exhibition, the Baga variety gets to ripen conveniently and to produce very dark wines, concentrated, of aroma, and that can age in the bottle for many years. In fertile soils, the maturation of the breed is more difficult by the high production of bunches and the wines produced have few alcoholic graduation and plenty acids.	grapes/2021/04/01/U_baga.jpg	3	3	2021-04-02 19:39:32.607692+01	2021-04-02 19:39:32.612679+01
+23	Cabernet Sauvignon	4	red	It is probably the most famous variety in the world. Cabernet Sauvignon originates in Bordeaux, but has already expanded to the whole wine world. The variety is characterized by deep color, good tannins, a slight acidity and aromas of tomato leaf, spices and cedar wood. It is a productive grape, of late maturation. The bunch is small just like the berries that have a dark blue color. Thanks to the high content of tannins, the grape variety is suitable for guard wines and lots with softer grape varieties.		4	3	2021-04-02 19:39:32.607692+01	2021-04-02 19:39:32.612679+01
+24	Alicante Bouschet	4	red	The Alicante Bouschet variety originates in France, but is considered to be the most Portuguese of foreign varieties in Portugal. It is more abundant in Alentejo because of the hot and dry climates, the amount of sunlight and drought conditions. It is used with other wines to give volume, structure, concentration and potential of aging. The aromas are fruits of wild, cocoa and olives.	grapes/2021/04/01/U_alicante_bouschet.jpg	3	4	2021-04-02 19:39:32.607692+01	2021-04-02 19:39:32.612679+01
+25	Trincadeira	4	red	Trincadeira is a variety that is especially cultivated in the areas of Alentejo and Douro (where is designated by Tinta Amarela). The variety presents medium and compact bunches and medium and round berries. It is sensitive to diseases and rottenness (if the berries get soaked will deteriorate easily), for that it grows better in dry and very hot climates. The produced wines are rich in colour and aromas, lightly alcoholic and with good ageing conditions.	grapes/2021/04/01/U_trincadeira.jpg	3	4	2021-04-02 19:39:32.607692+01	2021-04-02 19:39:32.612679+01
+26	Tinta Barroca	4	red	The Tinta Barroca variety is planted almost exclusively in the Douro region and it is very used in the production of lot wines. It is used in some ports, however monovarietal wines are not very famous. Tinta Barroca is quite popular among the producers, because it is easy to cultivate and very productive. The production is very regular and grapes are resistant to diseases. Besides, it has a precocious maturation and their concentrated berries originate wines with high alcoholic concentration. The wines produced from Tinta Barroca are easy to drink and with soft tannins. However, most of the times, they are not very balanced nor concentrated.	grapes/2021/04/01/U_tinta_barroca.jpg	4	2	2021-04-02 19:39:32.607692+01	2021-04-02 19:39:32.612679+01
+27	Rufete	8	red	Also known as Tinta Pinheira, the Rufete variety is mostly cultivated in the Douro and Dão regions, with a higher incidence in Pinhel, Figueiro de Castelo Rodrigo and Cova da Beira sub-regions. It is a productive variety and has medium-sized bunches and berries, but it is sensitive to powdery mildew. When it reaches the ideal maturation time, the Rufete grape variety gives rise to full-bodied, aromatic wines with aging potential.	grapes/2021/04/01/U_rufete.jpg	2	4	2021-04-02 19:39:32.607692+01	2021-04-02 19:39:32.612679+01
+28	Vinhão	8	red	Unlike most red grapes, where practically all the colour comes from the skins, Vinhão also has red flesh and therefore instant red juice, which then darkens further once the blue-black skins have time to macerate. This is an especial advantage in the case of port production, where colour needs to be extracted very quickly. In the Douro Valley it goes by the name of Souzão, and it is currently being quite widely replanted. Vinhão originated in the Vinho Verde/Minho region, and only later migrated to the Douro.	grapes/2021/04/01/U_vinhao.jpg	3	4	2021-04-02 19:39:32.607692+01	2021-04-02 19:39:32.612679+01
+\.
+
+
+--
+-- Data for Name: wines_grapealias; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.wines_grapealias (id, name, grape_id, created, updated) FROM stdin;
+1	Maria Gomes	2	2021-04-02 19:39:32.616669+01	2021-04-02 19:39:32.620658+01
+2	Loureira	3	2021-04-02 19:39:32.616669+01	2021-04-02 19:39:32.620658+01
+3	Pedernã	4	2021-04-02 19:39:32.616669+01	2021-04-02 19:39:32.620658+01
+4	Verdelho	8	2021-04-02 19:39:32.616669+01	2021-04-02 19:39:32.620658+01
+5	Tinta Roriz	18	2021-04-02 19:39:32.616669+01	2021-04-02 19:39:32.620658+01
+6	Tinta Amarela	25	2021-04-02 19:39:32.616669+01	2021-04-02 19:39:32.620658+01
+7	Souzão	28	2021-04-02 19:39:32.616669+01	2021-04-02 19:39:32.620658+01
+8	Tinta Pinheira	27	2021-04-02 19:39:32.616669+01	2021-04-02 19:39:32.620658+01
+\.
+
+
+--
+-- Data for Name: wines_producer; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.wines_producer (id, name, origin_id, description, email, image, short_name, website, created, updated) FROM stdin;
+3	Herdade Barranco do Vale	15	Herdade Barranco do Vale is located in São Bartolomeu de Messines, in a place called Campilhos, between the sea and the mountains of Monchique and Caldeirão, Algarve (south of Portugal).\r\n\r\nThe property extends for about 100ha of real natural beauty, where in addition to the vineyards there are cork, carob, olive and pine trees.\r\n\r\nIt is a project driven by love: to the previous generations and to the local culture.	info@hbv.pt		Barranco do Vale	https://hbv.pt/en/hbv/	2021-04-02 19:39:32.6239+01	2021-04-02 19:47:41.523717+01
+8	Bacalhôa Vinhos de Portugal	13	Bacalhôa Vinhos de Portugal, S.A., one of the biggest and most innovative wine-making companies in Portugal. We have developed a range of wines throughout the years that has ensured us a solid reputation and the preference of national and international wine lovers. Present in 7 Portuguese wine regions, with a total of 1200 ha of vines from 40 different grape varieties and 3 wine-producing centers, our market presence relies on the strengths of our dimension and of the autonomy in 70% of the production process. Each of the entities that compose Bacalhôa Vinhos de Portugal, S.A. - Aliança Vinhos de Portugal, Quinta do Carmo and Quinta dos Loridos - has its own distinctive production center, placed within a setting with intrinsic cultural value. The dynamics generated by the intersection of these various identities, explored using the latest technology and the knowledge of a renowned team of experts, guarantees our ability, unrivalled in the competitive Portuguese market, to offer the perfect wine for any occasion.	geral@bacalhoa.pt	producers/2021/04/02/LOGO_BACALHOA_YVES_KLEIN_NI2018_RGB.png	Bacalhôa	https://www.bacalhoa.pt/	2021-04-02 19:39:32.6239+01	2021-04-02 19:39:32.628888+01
+9	Casa de Vinhago	5	The project of Casa de Vinhago starts with the rebuilding, replantation and expansion of the vineyards initially planted by Carlos Fernandes Teixeira (Julião) and Vitória Pombeiro de Gouveia, on the slopes of São Cosmado, Armamar.\r\n\r\nThe Vinhago Estate, located In the small Village of Lapinha, was originally a chestnut field. After deep ripping of the soil in the 1950s the first vineyard was plated and was considered for many years as one of the most balanced and better for producing wine between the different family sites, which at that time totalled around 12 hectares of vineyards.\r\n\r\nIn these times, it was common to have a diversity of different crops in the same estate and the Vinhago followed this trend. Therefore, at the same time it was also plated different fruit trees, olive trees around the vineyard and half of the property was rented to a caretaker who paid rent in corn bushels, dried fruits and half of all remaining tree crops.	geral@casadevinhago.pt	producers/2021/04/02/logo_fundo_branco.webp	\N	https://en.casadevinhago.com/	2021-04-02 19:39:32.6239+01	2021-04-02 19:39:32.628888+01
+10	Adega Cooperativa do Cartaxo	11	Founded in 1954 by a group of 22 partners, Adega Cooperativa do Cartaxo is rooted in a region with a strong wine-growing tradition where historical references to the practice date back to before the tenth century.\r\n\r\nUntil 1974, Adega was based at the facilities of the former Junta Nacional do Vinho (currently the IVV, or the Instituto da Vinha e do Vinho). Since then, it has operated out of its current facilities, always investing in ways of strengthening its human and technological resources to improve the quality of its wine.\r\n\r\nContinually investing in its human and technological resources to improve the quality of its wine, Adega do Cartaxo occupies an area of around 700 hectares and produces around 7 million litres per year. Red wines represent around 70% of this output, forming part of a vast and varied range of bottled wines.	geral@adegacartaxo.pt	producers/2021/04/02/adega-logo2x.png	Adega do Cartaxo	https://adegacartaxo.pt/	2021-04-02 19:39:32.6239+01	2021-04-02 19:39:32.628888+01
+11	Cooperativa Vitivinícola Ilha do Pico	16	The largest and oldest wine producer in the Azores continues to respect and preserve the way our ancestors made wine. It is this culture of respect for our history and traditions, combined with the irreverence of new knowledge, that makes our wines the best of the Azores.	geral@picowines.com	producers/2021/04/02/logo-pico-wines.jpg	Pico Wines	https://www.picowines.com/	2021-04-02 19:39:32.6239+01	2021-04-02 19:39:32.628888+01
+12	Calçada Wines	2		geral@calcadawines.com	producers/2021/04/02/LOGOTIPO_CALCADA_2019.png	\N	https://www.calcadawines.com/	2021-04-02 19:39:32.6239+01	2021-04-02 19:39:32.628888+01
+7	Blandy's	17	The Blandy family is unique in being the only family of all the original founders of the Madeira wine trade that still own and manage their own original wine company. Throughout its long history on the island the family has played a leading role in the development of Madeira wine and members of the family continue to live in Madeira maintaining a tradition that goes back to 1811: Two centuries of fine wine production.	geral@blandys.com	producers/2021/04/02/blandys-logo-.png	\N	https://www.blandys.com/en/	2021-04-02 19:39:32.6239+01	2021-04-02 19:44:06.793951+01
+1	Esporão	14	Part of the Alentejo’s montado ecosystem (cork oak forests), in Portugal, Herdade do Esporão has extraordinary conditions for agriculture – large thermal amplitudes, poor and various soils and extraordinary biodiversity that helps us produce in balance with the environment. With 691,9 hectars of vineyards, olive groves and the other crops we grow using organic methods. Here are planted around 40 grape varieties, 4 types of olives, orchards and kitchen gardens.	comercial@esporao.com	producers/2021/04/02/logo-s.png	\N	https://www.esporao.com/en/	2021-04-02 19:39:32.6239+01	2021-04-02 19:46:06.068203+01
+5	Quinta das Marias	7	Over the last three decades and with the greatest care we have established Quinta das Marias as an exclusive winery planted solely with indigenous grape varieties. Our wines reflect the elegance, profundity and finesse, which can only be found in the Dão thanks to its outstanding climate  and its extraordinary terroir. As a family business, we value uncompromising quality above all else. It is because of precisely this that we can compete for the preference of the most demanding wine lovers in the global market.	geral@quintadasmarias.com	producers/2021/04/02/Quinta-das-Marias-Logo-144.jpg	\N	https://www.quintadasmarias.com/en/	2021-04-02 19:39:32.6239+01	2021-04-02 19:48:14.063063+01
+6	Vidigal Wines	9	Vidigal Wines is a family run, medium size wine company that produces Still and Dessert Wines.\r\nLocated in the center of Portugal, nearby the city of Leiria. Vidigal was established in the beginning of the 20th Century in a winery founded by a Church Canon.\r\nThroughout the last century the company had several owners. Acquired in the 90’s by the current Managing Director, António Mendes Lopes, Vidigal went trough great managing and technological advances that allow us to currently produce over 3 million bottles of wine annually.	geral@vidigalwines.com	producers/2021/04/02/vidigal-wines-blue.png	\N	https://www.vidigalwines.com/portal/eng/	2021-04-02 19:39:32.6239+01	2021-04-02 19:48:55.939699+01
+4	Adega de Cantanhede	6	Adega Cooperativa de Cantanhede, founded in 1954, is one of the most reputed wine-producing companies of Portugal, located in the demarcated wine-growing region of Bairrada, in the city of Cantanhede.\r\n\r\nWith about 500 active associated wine-growers and harvesting about 6-8 million kilos of grapes per year, this firm is the biggest producer of its region (representing around 40% of the total production) and certifies about 80% of its production with with the BAIRRADA DOC and BEIRA ATLÂNTICO IGP designations. For the last seven years, it has been the market leader concerning sales of wines and sparkling wines with those classifications.	geral@cantanhede.com	producers/2021/04/02/logo.png	\N	https://www.cantanhede.com	2021-04-02 19:39:32.6239+01	2021-04-02 19:43:13.445168+01
+13	Symington Family Estates	4	Symington Family Estates is one of the world's leading producers of premium port, the leading vineyard owner in the Douro Valley and one of the top Portuguese wine producers.\r\n\r\nWe are a family of British and Portuguese origin that has lived and worked in Portugal since the 19th century. Our family business - run by the 4th and 5th generation - is founded on a deep commitment to Portugal's people, its lands and its wines. Today there are 10 family members working across the business, committed to producing the finest ports and wines and building on the achievements of the previous generations.\r\n\r\nWe own and run four of the leading port houses, Graham's, Dow's, Warre's, and Cockburn's, as well as a portfolio of Douro wines consisting of Quinta do Vesuvio, Quinta do Ataíde, Altano, and Prats & Symington (a widely acclaimed joint venture that produces Chryseia and Post Scriptum). We have recently launched a new project, Quinta da Fonte Souto, in the Alto Alentejo sub-region of Portalegre.	geral@symington.com	producers/2021/04/02/the-symington-family-have-been-_photo_59_1554126688.png	Symington	https://www.symington.com/	2021-04-02 19:56:17.240156+01	2021-04-02 19:56:17.240156+01
+14	Casa Ermelinda Freitas	13	Freitas, Ermelinda took on the running of the company. In this she was helped by her only child, her daughter Leonor, who although untrained in the art of wine making took charge of the company, consolidating the already firmly female profile of the existing management structure.\r\n\r\nThe company has, from its very beginnings, made the quality of its vineyards and wines a top priority. When the company first started, wines were produced and sold wholesale and unbranded. It was the current management that decided to take on the challenge that is involved in creating an own brand wine. 1997 was the year of the company's new beginning in wine making, with red wine "Terras do Pó tinto", being the first to be produced and bottled on the premises of the Ermelinda Freitas winery.	geral@ermelindafreitas.com	producers/2021/04/02/logoce.png	Ermelinda Freitas	https://www.ermelindafreitas.pt/	2021-04-02 20:11:22.984088+01	2021-04-02 20:11:22.984088+01
+15	Monte da Ravasqueira	14	We are a family-owned company, creating value for our stakeholders and supported by a culture based on the promotion of sustainability and the values of innovation, competence and human development, which produces and sells wines of a unique identity and quality.	geral@avasqueira.com	producers/2021/04/02/logo_ravasqueira_barra.png		https://www.ravasqueira.com/	2021-04-02 20:18:59.590055+01	2021-04-02 20:18:59.590055+01
+16	Casa Mateus Rosé	4	In 1942, the Portuguese company Sogrape and its founder Fernando Van Zeller Guedes, launched one of the world’s most innovative wines. Its striking image, unique flavour and curious bottle have brought it fame worldwide. The unique and iconic bottle (inspired by the flasks used by soldiers in the First World War) has contributed to the wine’s enormous success.	geral@mateusrose.com	producers/2021/04/03/casamateus.png	Mateus Rosé	https://www.mateusrose.com/	2021-04-03 17:52:20.263914+01	2021-04-03 17:52:20.263914+01
+\.
+
+
+--
+-- Data for Name: wines_producerregion; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.wines_producerregion (id, producer_id, region_id, created, updated) FROM stdin;
+2	1	14	2021-04-02 19:39:32.635869+01	2021-04-02 19:39:32.639627+01
+3	1	4	2021-04-02 19:39:32.635869+01	2021-04-02 19:39:32.639627+01
+5	3	15	2021-04-02 19:39:32.635869+01	2021-04-02 19:39:32.639627+01
+6	4	6	2021-04-02 19:39:32.635869+01	2021-04-02 19:39:32.639627+01
+7	5	7	2021-04-02 19:39:32.635869+01	2021-04-02 19:39:32.639627+01
+8	6	9	2021-04-02 19:39:32.635869+01	2021-04-02 19:39:32.639627+01
+9	7	17	2021-04-02 19:39:32.635869+01	2021-04-02 19:39:32.639627+01
+10	8	2	2021-04-02 19:39:32.635869+01	2021-04-02 19:39:32.639627+01
+11	8	4	2021-04-02 19:39:32.635869+01	2021-04-02 19:39:32.639627+01
+12	8	6	2021-04-02 19:39:32.635869+01	2021-04-02 19:39:32.639627+01
+13	8	7	2021-04-02 19:39:32.635869+01	2021-04-02 19:39:32.639627+01
+14	8	8	2021-04-02 19:39:32.635869+01	2021-04-02 19:39:32.639627+01
+15	8	9	2021-04-02 19:39:32.635869+01	2021-04-02 19:39:32.639627+01
+16	8	13	2021-04-02 19:39:32.635869+01	2021-04-02 19:39:32.639627+01
+17	8	14	2021-04-02 19:39:32.635869+01	2021-04-02 19:39:32.639627+01
+18	9	5	2021-04-02 19:39:32.635869+01	2021-04-02 19:39:32.639627+01
+19	10	11	2021-04-02 19:39:32.635869+01	2021-04-02 19:39:32.639627+01
+20	11	16	2021-04-02 19:39:32.635869+01	2021-04-02 19:39:32.639627+01
+21	12	2	2021-04-02 19:39:32.635869+01	2021-04-02 19:39:32.639627+01
+22	13	4	2021-04-02 19:56:17.251128+01	2021-04-02 19:56:17.251128+01
+23	13	14	2021-04-02 19:56:17.251128+01	2021-04-02 19:56:17.251128+01
+24	14	13	2021-04-02 20:11:22.994045+01	2021-04-02 20:11:22.994045+01
+25	15	14	2021-04-02 20:18:59.598385+01	2021-04-02 20:18:59.598385+01
+26	16	4	2021-04-03 17:52:20.271892+01	2021-04-03 17:52:20.271892+01
+\.
+
+
+--
+-- Data for Name: wines_region; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.wines_region (id, name, country_id, description, image, created, updated) FROM stdin;
+2	Vinho Verde	1	Vinho Verde is the biggest wine producing region in Portugal, located up in the cool, rainy, verdant north west. The vines grow in fertile, granite soils along rivers that flow from the mountains of the east to burst out into the ocean between golden surfing beaches.	regions/2021/04/01/R_vinhoVerde_IdJxFY0.png	2021-04-02 19:39:32.644832+01	2021-04-02 19:39:32.651811+01
+3	Trás-os-Montes	1	In the remote north east of Portugal, cut off from the coast by a series of mountain ranges, Trás-os-Montes is wild, high country, its soils poor and unproductive, granite with here and there the odd patch of schist. The extreme continental climate brings long, hot summers followed by long, icy winters.	regions/2021/04/01/R_trasosmontes.jpg	2021-04-02 19:39:32.644832+01	2021-04-02 19:39:32.651811+01
+5	Távora-Varosa	1	This is a small, remote, mountainous region in the north of the VR Beiras, bordering on the Douro to the north, and the Dão region to the south.	regions/2021/04/01/R_tavoraVarosa_aOiF4gz.jpg	2021-04-02 19:39:32.644832+01	2021-04-02 19:39:32.651811+01
+4	Porto and Douro	1	Long famous as the source of port wine, the Douro is now also renowned for its fine, rich unfortified wines, both red and white.	regions/2021/04/01/R_portoedouro_aYHl7Ij.jpg	2021-04-02 19:39:32.644832+01	2021-04-02 19:39:32.651811+01
+6	Bairrada	1	In the western part of the Beiras, between the mountainous Dão region and the surf-washed Atlantic beaches, Bairrada has a mild, maritime climate with abundant rainfall.	regions/2021/04/01/R_bairrada.jpg	2021-04-02 19:39:32.644832+01	2021-04-02 19:39:32.651811+01
+7	Dão	1	Surrounded on all sides by mountains, the Dão region is protected both from the direct influence of the continental climate and from the chill and rains from the ocean.	regions/2021/04/01/R_dao.jpg	2021-04-02 19:39:32.644832+01	2021-04-02 19:39:32.651811+01
+8	Beira Interior	1	These high, granite uplands over by the Spanish border include some of Portugal's highest and most impressive mountains.	regions/2021/04/01/R_beirainterior.jpg	2021-04-02 19:39:32.644832+01	2021-04-02 19:39:32.651811+01
+9	Lisboa	1	West and north of the city of Lisbon, the Lisboa wine region was until recently known as Estremadura. A lot of wine is made here, much of it in co-operatives, in a very wide variety of styles and qualities. This region where the "vinho regional" Lisboa is predominant also has nine DOC.	regions/2021/04/01/R_lisboa.png	2021-04-02 19:39:32.644832+01	2021-04-02 19:39:32.651811+01
+11	Tejo	1	DOC Do Tejo occupies almost the same large area as VR Tejo, on either side of the River Tagus (Tejo in Portuguese) as it flows gently along in a south-westerly direction towards its estuary at Lisbon. Until recently the DOC was called Ribatejo and the "vinho regional Ribatejano".	regions/2021/04/01/R_tejo.jpg	2021-04-02 19:39:32.644832+01	2021-04-02 19:39:32.651811+01
+13	Setúbal Peninsula	1	The Setúbal Peninsula lies across the estuary of the River Tagus directly south of Lisbon, and linked to Lisbon by two bridges.	regions/2021/04/01/R_setubalpen_erih86M.jpg	2021-04-02 19:39:32.644832+01	2021-04-02 19:39:32.651811+01
+14	Alentejo	1	The Alentejo region covers about a third of Portugal, and winemakers in the remaining two-thirds can often be heard to complain about the popularity of Alentejo wines.	regions/2021/04/01/R_alentejo.jpg	2021-04-02 19:39:32.644832+01	2021-04-02 19:39:32.651811+01
+15	Algarve	1	Vines love Portugal's southernmost region for the same reason the tourists do - it's never too hot, never too cold, and they can be sure to enjoy more than 3,000 hours of sunshine every year.	regions/2021/04/01/R_algarve.jpg	2021-04-02 19:39:32.644832+01	2021-04-02 19:39:32.651811+01
+16	The Azores	1	The Azores are an archipelago of nine islands about a third of the way out into the Atlantic on a line between Lisbon and New Jersey.	regions/2021/04/01/R_acores.jpg	2021-04-02 19:39:32.644832+01	2021-04-02 19:39:32.651811+01
+17	Madeira	1	Madeira's fortified wines keep practically for ever - they have been known to survive for more than two centuries.	regions/2021/04/01/R_madeira.jpg	2021-04-02 19:39:32.644832+01	2021-04-02 19:39:32.651811+01
+\.
+
+
+--
+-- Data for Name: wines_review; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.wines_review (id, text, score, sweetness, body, acidity, published_on, updated, active, user_id, vintage_id, wine_id, tannin) FROM stdin;
+\.
+
+
+--
+-- Data for Name: wines_vintage; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.wines_vintage (id, year, wine_id, description, alcohol_content, image, created, updated) FROM stdin;
+1	2019	1	This wine has a limpid look, and a ruby color. It features an aroma of red berries and wild berries, well wrapped in subtle notes of fresh spices. In the mouth it is intense and rich, with solid structure and persistent finish.	13	vintages/2021/04/03/100177.png	2021-04-03 18:03:19.13526+01	2021-04-03 18:03:19.13526+01
+2	2018	18	This Altano Douro red wine is made by the Symington family, entirely from grapes grown in their own vineyards, located along the length of the Douro Valley of Northern Portugal. The family is now into its fifth generation of Douro winemakers, although its involvement with the wines of the Douro can be traced back 14 generations to the mid 17th Century.	14	vintages/2021/04/03/100803-4.jpg	2021-04-03 18:04:47.076459+01	2021-04-03 18:04:47.076459+01
+3	2017	11	It is a pale pink wine with an intense, rich and complex aroma, with citric and very fresh notes. In the mouth these aromatic sensations are enhanced and intensified, which together with a good natural acidity, very mineral and fresh and Original wine. Very accentuated finish.	13	vintages/2021/04/03/105506-1-1.png	2021-04-03 18:11:51.767576+01	2021-04-03 18:11:51.767576+01
+4	2016	21	Golden coloured wine, rich and complex, with aromas reminiscent of "wet earth" and some honey typical of this type of wine. In the mouth it is full and sweet revealing good acidity that gives it freshness. End of good persistent and very prolonged.	14	vintages/2021/04/03/105187.jpg	2021-04-03 18:16:44.249683+01	2021-04-03 18:16:44.249683+01
+5	2017	8		14.5	vintages/2021/04/03/105598-1-1.png	2021-04-03 18:20:40.773855+01	2021-04-03 18:20:40.773855+01
+\.
+
+
+--
+-- Data for Name: wines_wine; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.wines_wine (id, name, producer_id, description, type, image, origin_id, created, updated) FROM stdin;
+1	Monte Velho	1	This wine has a limpid look, and a ruby color. It features an aroma of red berries and wild berries, well wrapped in subtle notes of fresh spices. In the mouth it is intense and rich, with solid structure and persistent finish.	red	wines/2021/04/01/100177.png	14	2021-04-02 19:39:32.669874+01	2021-04-02 19:39:32.676858+01
+2	Monte Velho	1	Crystal clear, citrine colour. With notes of ripe white fruit and citric notes, enveloping and fresh. Firm, intense and balanced with a long and elegant finish.	white	wines/2021/04/01/100176.png	14	2021-04-02 19:39:32.669874+01	2021-04-02 19:39:32.676858+01
+3	Alandra	1	Colour: Bright ruby. Aroma: Vibrant, youthful fruit, wild berry aromas. Palate: Elegant palate with good texture and fine tannins.	red	wines/2021/04/01/100149.png	14	2021-04-02 19:39:32.669874+01	2021-04-02 19:39:32.676858+01
+4	Assobio	1		red	wines/2021/04/01/100818.png	4	2021-04-02 19:39:32.669874+01	2021-04-02 19:39:32.676858+01
+5	Defesa	1	This wine presents a clean aspect and intense ruby colour. It has an aroma of blackberry and fresh cocoa, delicately wrapped in notes of French oak toast. In the mouth it has a creamy and solid texture, with elegant and well turned tannins, a firm and intense finish.	red	wines/2021/04/01/100199.png	14	2021-04-02 19:39:32.669874+01	2021-04-02 19:39:32.676858+01
+6	Herdade Barranco do Vale	3	Citrus notes, melon and some green apple. Palate marked by an excellent natural acidity, spicy, fresh and fruity with a persistent and vibrant finish.	white	wines/2021/04/01/HBV-chardonnay-reserva-2019.png	15	2021-04-02 19:39:32.669874+01	2021-04-02 19:39:32.676858+01
+7	Moinho de Sula	4	Crystalline. Defined pink colour. Intense nose of fresh red fruit like cassis, strawberry and redcurrant. Fruity, soft, elegant and harmonious.	rosé	wines/2021/04/01/907296878511Y.png	6	2021-04-02 19:39:32.669874+01	2021-04-02 19:39:32.676858+01
+8	Quinta das Marias	5		red	wines/2021/04/02/105594.png	7	2021-04-02 19:39:32.669874+01	2021-04-02 19:39:32.676858+01
+9	Coragem	6	Bright ruby with shades of purple. Powerful and complex, with notes of nuts, fruits, mint and raspberry, in good harmony with the toast that oak ageing has given it.	red	wines/2021/04/02/105020.jpg	9	2021-04-02 19:39:32.669874+01	2021-04-02 19:39:32.676858+01
+10	Blandy's	7	Clear, golden brown with a greenish halo on top. Complex and intense bouquet of V. Wood, with notes of toffee, wood, vanilla and chocolate. Full-bodied and half-sweet, with ripe fruit that provides a long and pleasant aftertaste.	madeira	wines/2021/04/02/104768.jpg	17	2021-04-02 19:39:32.669874+01	2021-04-02 19:39:32.676858+01
+11	Bacalhôa	8	This rare wine, with a pale pink colour, presents an intense, rich and complex aroma, with floral and fruity notes such as blueberries and raspberries. In the mouth these aromatic sensations are enhanced and intensified, which together with a good natural acidity, originate a wine with a full, very mineral, dry and fresh finish. Given its rarity we can define it as Elegant, Rare and Original.	rosé	wines/2021/04/02/105507.png	13	2021-04-02 19:39:32.669874+01	2021-04-02 19:39:32.676858+01
+12	Bacalhôa	8	It has a very light greenish-yellow colour and an aroma of ﬂôr with hints of orange tree and citrus; in the mouth it is enveloping and surprisingly full, dry and long in the mouth.	white	wines/2021/04/02/105505.png	13	2021-04-02 19:39:32.669874+01	2021-04-02 19:39:32.676858+01
+13	Bacalhôa	8	Deep Violet colour. In the mouth it is very pleasant being in perfect harmony with the aromas felt. Freshness, body, elegance and persistence. Aromatic intensity absolutely characteristic of the variety with notes of violets and ripe berries but revealing an olfactory freshness.	red	wines/2021/04/02/105504.png	7	2021-04-02 19:39:32.669874+01	2021-04-02 19:39:32.676858+01
+14	Terras de Lava	11	Greenish yellow colour. The aroma highlights the notes of tropical and citric fruits involved in a beautiful volcanic ensemble. In the mouth it has volume, great freshness and minerality. It has an involving, salty and persistent finish.	white	wines/2021/04/02/105089.jpg	16	2021-04-02 19:39:32.669874+01	2021-04-02 19:39:32.676858+01
+15	Terras de Lava	11	Light ruby colour. Aroma to red fruits, wild berries wrapped with notes of volcanic sulfur and slight vanilla. In the mouth it is very elegant and smooth with medium body. It ends with a pleasant and persistent salty taste.	red	wines/2021/04/02/105088.jpg	16	2021-04-02 19:39:32.669874+01	2021-04-02 19:39:32.676858+01
+16	Terras de Lava	11	Light salmon colour. Elegant aroma, combining notes of raspberry and fresh strawberries, with seaweed. In the mouth it presents a very captivating freshness and proves that the aromatic notes are involving and soft. The finish is long and smooth.	rosé	wines/2021/04/02/105087.jpg	16	2021-04-02 19:39:32.669874+01	2021-04-02 19:39:32.676858+01
+17	Portal da Calçada	12	Light salmon colour. It expresses the characteristic of the Vinho Verde region with a fruity aroma and slight floral notes with a lively acidity. It results in a very fresh, attractive and gastronomic wine.	rosé	wines/2021/04/02/105112.jpg	2	2021-04-02 19:39:32.669874+01	2021-04-02 19:39:32.676858+01
+18	Altano	13	An intense and retinto wine in colour. It presents aromas of forest floor, with notes of eucalyptus and resin and suggestions of pepper. On the palate, red fruit flavours but at the same time round with polished tannins to cut and balance the whole	red	wines/2021/04/02/105349.jpg	4	2021-04-02 20:01:35.409784+01	2021-04-02 20:01:35.409784+01
+19	Altano	13	Subtle vanilla flavours are combined with a good expression of citrus fruit - lime and lemon. In the mouth, the wine presents a very pronounced acidity that gives a beautiful balance to the creamy and greasy body. White plum and apricot flavours complement each other.	white	wines/2021/04/02/105048-2.jpg	4	2021-04-02 20:04:57.674815+01	2021-04-02 20:04:57.674815+01
+20	Graham's	13	It's a deep tawny color. On the nose, it shows complex nut aromas combined with notes of honey and figs. On the palate, rich ripe fruit flavors, beautifully ripened with a delicious, long taste.	port	wines/2021/04/02/105018.jpg	4	2021-04-02 20:08:06.628994+01	2021-04-02 20:08:06.628994+01
+21	Casa Ermelinda Freitas	14	Wine with a greenish yellow colour, intense aroma with tropical fruit notes and some floral. In the mouth it is refreshing, elegant and with good acidity. Persistent and pleasant finish.	white	wines/2021/04/02/105192.jpg	13	2021-04-02 20:13:49.382125+01	2021-04-02 20:13:49.382125+01
+22	Casa Ermelinda Freitas	14	Golden amber coloured wine, concentrated, rich and very complex, with aromas reminiscent of honey and orange peel well combined with wood. In the mouth it is full and sweet revealing good acidity that gives it freshness. Persistent and very long finish.	moscatel	wines/2021/04/02/105189.jpg	13	2021-04-02 20:15:13.425757+01	2021-04-02 20:15:13.425757+01
+23	Monte da Ravasqueira	15	Dark red color, dense and opaque. Complex and intense nose with direction of end of fermentation in barrel. Peat, cedar, light iodine, black olives, cocoa and an intense mix of black and red fruit and dried figs. Spicy, with black pepper, thyme and mineral extension. In the tasting there are cut, fine and growing tannins with concentration in the tasting medium, balsamic freshness, meat, plums, blackberries and blueberries, a finish full of strength and mineral. It can and should be decanted. To drink between 2018 and 2034.	red	wines/2021/04/02/104534_1.jpg	14	2021-04-02 20:20:12.646841+01	2021-04-02 20:20:12.646841+01
+24	Mateus	16		sparkling	wines/2021/04/03/100111_1.jpg	4	2021-04-03 17:57:52.872931+01	2021-04-03 17:57:52.872931+01
+25	Mateus	16		rosé	wines/2021/04/03/100556.jpg	4	2021-04-03 17:58:46.757984+01	2021-04-03 17:58:46.757984+01
+\.
+
+
+--
+-- Data for Name: wines_winegrape; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.wines_winegrape (id, grape_id, wine_id, created, updated) FROM stdin;
+1	17	1	2021-04-02 19:39:32.683837+01	2021-04-02 19:39:32.68885+01
+2	18	1	2021-04-02 19:39:32.683837+01	2021-04-02 19:39:32.68885+01
+3	21	1	2021-04-02 19:39:32.683837+01	2021-04-02 19:39:32.68885+01
+4	25	1	2021-04-02 19:39:32.683837+01	2021-04-02 19:39:32.68885+01
+5	12	2	2021-04-02 19:39:32.683837+01	2021-04-02 19:39:32.68885+01
+6	21	3	2021-04-02 19:39:32.683837+01	2021-04-02 19:39:32.68885+01
+7	20	4	2021-04-02 19:39:32.683837+01	2021-04-02 19:39:32.68885+01
+8	21	4	2021-04-02 19:39:32.683837+01	2021-04-02 19:39:32.68885+01
+9	17	5	2021-04-02 19:39:32.683837+01	2021-04-02 19:39:32.68885+01
+10	18	5	2021-04-02 19:39:32.683837+01	2021-04-02 19:39:32.68885+01
+11	22	7	2021-04-02 19:39:32.683837+01	2021-04-02 19:39:32.68885+01
+12	26	8	2021-04-02 19:39:32.683837+01	2021-04-02 19:39:32.68885+01
+13	21	8	2021-04-02 19:39:32.683837+01	2021-04-02 19:39:32.68885+01
+14	21	9	2021-04-02 19:39:32.683837+01	2021-04-02 19:39:32.68885+01
+15	13	10	2021-04-02 19:39:32.683837+01	2021-04-02 19:39:32.68885+01
+16	20	11	2021-04-02 19:39:32.683837+01	2021-04-02 19:39:32.68885+01
+17	20	12	2021-04-02 19:39:32.683837+01	2021-04-02 19:39:32.68885+01
+18	21	13	2021-04-02 19:39:32.683837+01	2021-04-02 19:39:32.68885+01
+19	6	14	2021-04-02 19:39:32.683837+01	2021-04-02 19:39:32.68885+01
+20	17	15	2021-04-02 19:39:32.683837+01	2021-04-02 19:39:32.68885+01
+21	17	16	2021-04-02 19:39:32.683837+01	2021-04-02 19:39:32.68885+01
+22	28	17	2021-04-02 19:39:32.683837+01	2021-04-02 19:39:32.68885+01
+23	26	18	2021-04-02 20:01:35.419881+01	2021-04-02 20:01:35.420387+01
+24	11	19	2021-04-02 20:04:57.682794+01	2021-04-02 20:04:57.682794+01
+25	13	19	2021-04-02 20:04:57.682794+01	2021-04-02 20:04:57.682794+01
+26	26	20	2021-04-02 20:08:06.63862+01	2021-04-02 20:08:06.63862+01
+27	20	20	2021-04-02 20:08:06.63862+01	2021-04-02 20:08:06.63862+01
+28	21	20	2021-04-02 20:08:06.63862+01	2021-04-02 20:08:06.63862+01
+29	23	21	2021-04-02 20:13:49.390402+01	2021-04-02 20:13:49.390402+01
+30	9	22	2021-04-02 20:15:13.438155+01	2021-04-02 20:15:13.438155+01
+31	17	23	2021-04-02 20:20:12.656812+01	2021-04-02 20:20:12.656812+01
+32	21	23	2021-04-02 20:20:12.656812+01	2021-04-02 20:20:12.656812+01
+33	17	24	2021-04-03 17:57:52.878915+01	2021-04-03 17:57:52.878915+01
+34	22	24	2021-04-03 17:57:52.878915+01	2021-04-03 17:57:52.878915+01
+35	18	25	2021-04-03 17:58:46.766961+01	2021-04-03 17:58:46.766961+01
+\.
+
+
+--
+-- Name: accounts_profile_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.accounts_profile_id_seq', 1, true);
+
+
+--
+-- Name: auth_group_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.auth_group_id_seq', 1, false);
+
+
+--
+-- Name: auth_group_permissions_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.auth_group_permissions_id_seq', 1, false);
+
+
+--
+-- Name: auth_permission_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.auth_permission_id_seq', 76, true);
+
+
+--
+-- Name: auth_user_groups_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.auth_user_groups_id_seq', 1, false);
+
+
+--
+-- Name: auth_user_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.auth_user_id_seq', 1, true);
+
+
+--
+-- Name: auth_user_user_permissions_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.auth_user_user_permissions_id_seq', 1, false);
+
+
+--
+-- Name: django_admin_log_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.django_admin_log_id_seq', 13, true);
+
+
+--
+-- Name: django_content_type_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.django_content_type_id_seq', 19, true);
+
+
+--
+-- Name: django_migrations_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.django_migrations_id_seq', 56, true);
+
+
+--
+-- Name: wines_country_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.wines_country_id_seq', 4, true);
+
+
+--
+-- Name: wines_grape_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.wines_grape_id_seq', 28, true);
+
+
+--
+-- Name: wines_grapealias_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.wines_grapealias_id_seq', 8, true);
+
+
+--
+-- Name: wines_producer_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.wines_producer_id_seq', 16, true);
+
+
+--
+-- Name: wines_producerregion_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.wines_producerregion_id_seq', 26, true);
+
+
+--
+-- Name: wines_region_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.wines_region_id_seq', 17, true);
+
+
+--
+-- Name: wines_review_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.wines_review_id_seq', 1, false);
+
+
+--
+-- Name: wines_vintage_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.wines_vintage_id_seq', 8, true);
+
+
+--
+-- Name: wines_wine_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.wines_wine_id_seq', 27, true);
+
+
+--
+-- Name: wines_winegrape_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.wines_winegrape_id_seq', 41, true);
+
+
+--
+-- Name: accounts_profile accounts_profile_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.accounts_profile
+    ADD CONSTRAINT accounts_profile_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: accounts_profile accounts_profile_user_id_key; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.accounts_profile
+    ADD CONSTRAINT accounts_profile_user_id_key UNIQUE (user_id);
+
+
+--
+-- Name: auth_group auth_group_name_key; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.auth_group
+    ADD CONSTRAINT auth_group_name_key UNIQUE (name);
+
+
+--
+-- Name: auth_group_permissions auth_group_permissions_group_id_permission_id_0cd325b0_uniq; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.auth_group_permissions
+    ADD CONSTRAINT auth_group_permissions_group_id_permission_id_0cd325b0_uniq UNIQUE (group_id, permission_id);
+
+
+--
+-- Name: auth_group_permissions auth_group_permissions_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.auth_group_permissions
+    ADD CONSTRAINT auth_group_permissions_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: auth_group auth_group_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.auth_group
+    ADD CONSTRAINT auth_group_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: auth_permission auth_permission_content_type_id_codename_01ab375a_uniq; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.auth_permission
+    ADD CONSTRAINT auth_permission_content_type_id_codename_01ab375a_uniq UNIQUE (content_type_id, codename);
+
+
+--
+-- Name: auth_permission auth_permission_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.auth_permission
+    ADD CONSTRAINT auth_permission_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: auth_user_groups auth_user_groups_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.auth_user_groups
+    ADD CONSTRAINT auth_user_groups_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: auth_user_groups auth_user_groups_user_id_group_id_94350c0c_uniq; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.auth_user_groups
+    ADD CONSTRAINT auth_user_groups_user_id_group_id_94350c0c_uniq UNIQUE (user_id, group_id);
+
+
+--
+-- Name: auth_user auth_user_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.auth_user
+    ADD CONSTRAINT auth_user_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: auth_user_user_permissions auth_user_user_permissions_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.auth_user_user_permissions
+    ADD CONSTRAINT auth_user_user_permissions_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: auth_user_user_permissions auth_user_user_permissions_user_id_permission_id_14a6b632_uniq; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.auth_user_user_permissions
+    ADD CONSTRAINT auth_user_user_permissions_user_id_permission_id_14a6b632_uniq UNIQUE (user_id, permission_id);
+
+
+--
+-- Name: auth_user auth_user_username_key; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.auth_user
+    ADD CONSTRAINT auth_user_username_key UNIQUE (username);
+
+
+--
+-- Name: authtoken_token authtoken_token_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.authtoken_token
+    ADD CONSTRAINT authtoken_token_pkey PRIMARY KEY (key);
+
+
+--
+-- Name: authtoken_token authtoken_token_user_id_key; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.authtoken_token
+    ADD CONSTRAINT authtoken_token_user_id_key UNIQUE (user_id);
+
+
+--
+-- Name: django_admin_log django_admin_log_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.django_admin_log
+    ADD CONSTRAINT django_admin_log_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: django_content_type django_content_type_app_label_model_76bd3d3b_uniq; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.django_content_type
+    ADD CONSTRAINT django_content_type_app_label_model_76bd3d3b_uniq UNIQUE (app_label, model);
+
+
+--
+-- Name: django_content_type django_content_type_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.django_content_type
+    ADD CONSTRAINT django_content_type_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: django_migrations django_migrations_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.django_migrations
+    ADD CONSTRAINT django_migrations_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: django_session django_session_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.django_session
+    ADD CONSTRAINT django_session_pkey PRIMARY KEY (session_key);
+
+
+--
+-- Name: wines_review wine_vintage_user_constraint; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.wines_review
+    ADD CONSTRAINT wine_vintage_user_constraint UNIQUE (wine_id, vintage_id, user_id);
+
+
+--
+-- Name: wines_country wines_country_name_key; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.wines_country
+    ADD CONSTRAINT wines_country_name_key UNIQUE (name);
+
+
+--
+-- Name: wines_country wines_country_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.wines_country
+    ADD CONSTRAINT wines_country_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: wines_grape wines_grape_name_key; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.wines_grape
+    ADD CONSTRAINT wines_grape_name_key UNIQUE (name);
+
+
+--
+-- Name: wines_grape wines_grape_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.wines_grape
+    ADD CONSTRAINT wines_grape_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: wines_grapealias wines_grapealias_name_grape_id_e6a53e14_uniq; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.wines_grapealias
+    ADD CONSTRAINT wines_grapealias_name_grape_id_e6a53e14_uniq UNIQUE (name, grape_id);
+
+
+--
+-- Name: wines_grapealias wines_grapealias_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.wines_grapealias
+    ADD CONSTRAINT wines_grapealias_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: wines_producer wines_producer_name_key; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.wines_producer
+    ADD CONSTRAINT wines_producer_name_key UNIQUE (name);
+
+
+--
+-- Name: wines_producer wines_producer_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.wines_producer
+    ADD CONSTRAINT wines_producer_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: wines_producer wines_producer_short_name_key; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.wines_producer
+    ADD CONSTRAINT wines_producer_short_name_key UNIQUE (short_name);
+
+
+--
+-- Name: wines_producerregion wines_producerregion_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.wines_producerregion
+    ADD CONSTRAINT wines_producerregion_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: wines_producerregion wines_producerregion_producer_id_region_id_8ef4bfc7_uniq; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.wines_producerregion
+    ADD CONSTRAINT wines_producerregion_producer_id_region_id_8ef4bfc7_uniq UNIQUE (producer_id, region_id);
+
+
+--
+-- Name: wines_region wines_region_name_country_id_7ffbb3c8_uniq; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.wines_region
+    ADD CONSTRAINT wines_region_name_country_id_7ffbb3c8_uniq UNIQUE (name, country_id);
+
+
+--
+-- Name: wines_region wines_region_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.wines_region
+    ADD CONSTRAINT wines_region_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: wines_review wines_review_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.wines_review
+    ADD CONSTRAINT wines_review_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: wines_vintage wines_vintage_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.wines_vintage
+    ADD CONSTRAINT wines_vintage_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: wines_vintage wines_vintage_wine_id_year_9db686d7_uniq; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.wines_vintage
+    ADD CONSTRAINT wines_vintage_wine_id_year_9db686d7_uniq UNIQUE (wine_id, year);
+
+
+--
+-- Name: wines_wine wines_wine_name_type_producer_id_c598af23_uniq; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.wines_wine
+    ADD CONSTRAINT wines_wine_name_type_producer_id_c598af23_uniq UNIQUE (name, type, producer_id);
+
+
+--
+-- Name: wines_wine wines_wine_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.wines_wine
+    ADD CONSTRAINT wines_wine_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: wines_winegrape wines_winegrape_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.wines_winegrape
+    ADD CONSTRAINT wines_winegrape_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: wines_winegrape wines_winegrape_wine_id_grape_id_86ce1df8_uniq; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.wines_winegrape
+    ADD CONSTRAINT wines_winegrape_wine_id_grape_id_86ce1df8_uniq UNIQUE (wine_id, grape_id);
+
+
+--
+-- Name: auth_group_name_a6ea08ec_like; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX auth_group_name_a6ea08ec_like ON public.auth_group USING btree (name varchar_pattern_ops);
+
+
+--
+-- Name: auth_group_permissions_group_id_b120cbf9; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX auth_group_permissions_group_id_b120cbf9 ON public.auth_group_permissions USING btree (group_id);
+
+
+--
+-- Name: auth_group_permissions_permission_id_84c5c92e; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX auth_group_permissions_permission_id_84c5c92e ON public.auth_group_permissions USING btree (permission_id);
+
+
+--
+-- Name: auth_permission_content_type_id_2f476e4b; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX auth_permission_content_type_id_2f476e4b ON public.auth_permission USING btree (content_type_id);
+
+
+--
+-- Name: auth_user_groups_group_id_97559544; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX auth_user_groups_group_id_97559544 ON public.auth_user_groups USING btree (group_id);
+
+
+--
+-- Name: auth_user_groups_user_id_6a12ed8b; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX auth_user_groups_user_id_6a12ed8b ON public.auth_user_groups USING btree (user_id);
+
+
+--
+-- Name: auth_user_user_permissions_permission_id_1fbb5f2c; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX auth_user_user_permissions_permission_id_1fbb5f2c ON public.auth_user_user_permissions USING btree (permission_id);
+
+
+--
+-- Name: auth_user_user_permissions_user_id_a95ead1b; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX auth_user_user_permissions_user_id_a95ead1b ON public.auth_user_user_permissions USING btree (user_id);
+
+
+--
+-- Name: auth_user_username_6821ab7c_like; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX auth_user_username_6821ab7c_like ON public.auth_user USING btree (username varchar_pattern_ops);
+
+
+--
+-- Name: authtoken_token_key_10f0b77e_like; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX authtoken_token_key_10f0b77e_like ON public.authtoken_token USING btree (key varchar_pattern_ops);
+
+
+--
+-- Name: django_admin_log_content_type_id_c4bce8eb; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX django_admin_log_content_type_id_c4bce8eb ON public.django_admin_log USING btree (content_type_id);
+
+
+--
+-- Name: django_admin_log_user_id_c564eba6; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX django_admin_log_user_id_c564eba6 ON public.django_admin_log USING btree (user_id);
+
+
+--
+-- Name: django_session_expire_date_a5c62663; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX django_session_expire_date_a5c62663 ON public.django_session USING btree (expire_date);
+
+
+--
+-- Name: django_session_session_key_c0390e0f_like; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX django_session_session_key_c0390e0f_like ON public.django_session USING btree (session_key varchar_pattern_ops);
+
+
+--
+-- Name: wine_user_vintagenull_constraint; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE UNIQUE INDEX wine_user_vintagenull_constraint ON public.wines_review USING btree (wine_id, user_id) WHERE (vintage_id IS NULL);
+
+
+--
+-- Name: wines_country_name_eb684385_like; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX wines_country_name_eb684385_like ON public.wines_country USING btree (name varchar_pattern_ops);
+
+
+--
+-- Name: wines_grape_name_721ee2b8_like; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX wines_grape_name_721ee2b8_like ON public.wines_grape USING btree (name varchar_pattern_ops);
+
+
+--
+-- Name: wines_grape_origin_id_d8d1668d; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX wines_grape_origin_id_d8d1668d ON public.wines_grape USING btree (origin_id);
+
+
+--
+-- Name: wines_grapealias_grape_id_41ec43f4; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX wines_grapealias_grape_id_41ec43f4 ON public.wines_grapealias USING btree (grape_id);
+
+
+--
+-- Name: wines_producer_name_3d6e78bc_like; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX wines_producer_name_3d6e78bc_like ON public.wines_producer USING btree (name varchar_pattern_ops);
+
+
+--
+-- Name: wines_producer_origin_id_4f326a15; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX wines_producer_origin_id_4f326a15 ON public.wines_producer USING btree (origin_id);
+
+
+--
+-- Name: wines_producer_short_name_66e286a4_like; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX wines_producer_short_name_66e286a4_like ON public.wines_producer USING btree (short_name varchar_pattern_ops);
+
+
+--
+-- Name: wines_producerregion_producer_id_801633c9; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX wines_producerregion_producer_id_801633c9 ON public.wines_producerregion USING btree (producer_id);
+
+
+--
+-- Name: wines_producerregion_region_id_c4cdf747; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX wines_producerregion_region_id_c4cdf747 ON public.wines_producerregion USING btree (region_id);
+
+
+--
+-- Name: wines_region_country_id_b208f4fa; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX wines_region_country_id_b208f4fa ON public.wines_region USING btree (country_id);
+
+
+--
+-- Name: wines_review_user_id_94699ef9; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX wines_review_user_id_94699ef9 ON public.wines_review USING btree (user_id);
+
+
+--
+-- Name: wines_review_vintage_id_f8f0b92a; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX wines_review_vintage_id_f8f0b92a ON public.wines_review USING btree (vintage_id);
+
+
+--
+-- Name: wines_review_wine_id_6783ce19; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX wines_review_wine_id_6783ce19 ON public.wines_review USING btree (wine_id);
+
+
+--
+-- Name: wines_vintage_wine_id_44186337; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX wines_vintage_wine_id_44186337 ON public.wines_vintage USING btree (wine_id);
+
+
+--
+-- Name: wines_wine_origin_id_96652b31; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX wines_wine_origin_id_96652b31 ON public.wines_wine USING btree (origin_id);
+
+
+--
+-- Name: wines_wine_producer_id_a39b5e76; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX wines_wine_producer_id_a39b5e76 ON public.wines_wine USING btree (producer_id);
+
+
+--
+-- Name: wines_winegrape_grape_id_df14d0ab; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX wines_winegrape_grape_id_df14d0ab ON public.wines_winegrape USING btree (grape_id);
+
+
+--
+-- Name: wines_winegrape_wine_id_57b2699d; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX wines_winegrape_wine_id_57b2699d ON public.wines_winegrape USING btree (wine_id);
+
+
+--
+-- Name: accounts_profile accounts_profile_user_id_49a85d32_fk_auth_user_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.accounts_profile
+    ADD CONSTRAINT accounts_profile_user_id_49a85d32_fk_auth_user_id FOREIGN KEY (user_id) REFERENCES public.auth_user(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: auth_group_permissions auth_group_permissio_permission_id_84c5c92e_fk_auth_perm; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.auth_group_permissions
+    ADD CONSTRAINT auth_group_permissio_permission_id_84c5c92e_fk_auth_perm FOREIGN KEY (permission_id) REFERENCES public.auth_permission(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: auth_group_permissions auth_group_permissions_group_id_b120cbf9_fk_auth_group_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.auth_group_permissions
+    ADD CONSTRAINT auth_group_permissions_group_id_b120cbf9_fk_auth_group_id FOREIGN KEY (group_id) REFERENCES public.auth_group(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: auth_permission auth_permission_content_type_id_2f476e4b_fk_django_co; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.auth_permission
+    ADD CONSTRAINT auth_permission_content_type_id_2f476e4b_fk_django_co FOREIGN KEY (content_type_id) REFERENCES public.django_content_type(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: auth_user_groups auth_user_groups_group_id_97559544_fk_auth_group_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.auth_user_groups
+    ADD CONSTRAINT auth_user_groups_group_id_97559544_fk_auth_group_id FOREIGN KEY (group_id) REFERENCES public.auth_group(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: auth_user_groups auth_user_groups_user_id_6a12ed8b_fk_auth_user_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.auth_user_groups
+    ADD CONSTRAINT auth_user_groups_user_id_6a12ed8b_fk_auth_user_id FOREIGN KEY (user_id) REFERENCES public.auth_user(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: auth_user_user_permissions auth_user_user_permi_permission_id_1fbb5f2c_fk_auth_perm; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.auth_user_user_permissions
+    ADD CONSTRAINT auth_user_user_permi_permission_id_1fbb5f2c_fk_auth_perm FOREIGN KEY (permission_id) REFERENCES public.auth_permission(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: auth_user_user_permissions auth_user_user_permissions_user_id_a95ead1b_fk_auth_user_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.auth_user_user_permissions
+    ADD CONSTRAINT auth_user_user_permissions_user_id_a95ead1b_fk_auth_user_id FOREIGN KEY (user_id) REFERENCES public.auth_user(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: authtoken_token authtoken_token_user_id_35299eff_fk_auth_user_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.authtoken_token
+    ADD CONSTRAINT authtoken_token_user_id_35299eff_fk_auth_user_id FOREIGN KEY (user_id) REFERENCES public.auth_user(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: django_admin_log django_admin_log_content_type_id_c4bce8eb_fk_django_co; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.django_admin_log
+    ADD CONSTRAINT django_admin_log_content_type_id_c4bce8eb_fk_django_co FOREIGN KEY (content_type_id) REFERENCES public.django_content_type(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: django_admin_log django_admin_log_user_id_c564eba6_fk_auth_user_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.django_admin_log
+    ADD CONSTRAINT django_admin_log_user_id_c564eba6_fk_auth_user_id FOREIGN KEY (user_id) REFERENCES public.auth_user(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: wines_grape wines_grape_origin_id_d8d1668d_fk_wines_region_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.wines_grape
+    ADD CONSTRAINT wines_grape_origin_id_d8d1668d_fk_wines_region_id FOREIGN KEY (origin_id) REFERENCES public.wines_region(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: wines_grapealias wines_grapealias_grape_id_41ec43f4_fk_wines_grape_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.wines_grapealias
+    ADD CONSTRAINT wines_grapealias_grape_id_41ec43f4_fk_wines_grape_id FOREIGN KEY (grape_id) REFERENCES public.wines_grape(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: wines_producer wines_producer_origin_id_4f326a15_fk_wines_region_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.wines_producer
+    ADD CONSTRAINT wines_producer_origin_id_4f326a15_fk_wines_region_id FOREIGN KEY (origin_id) REFERENCES public.wines_region(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: wines_producerregion wines_producerregion_producer_id_801633c9_fk_wines_producer_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.wines_producerregion
+    ADD CONSTRAINT wines_producerregion_producer_id_801633c9_fk_wines_producer_id FOREIGN KEY (producer_id) REFERENCES public.wines_producer(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: wines_producerregion wines_producerregion_region_id_c4cdf747_fk_wines_region_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.wines_producerregion
+    ADD CONSTRAINT wines_producerregion_region_id_c4cdf747_fk_wines_region_id FOREIGN KEY (region_id) REFERENCES public.wines_region(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: wines_region wines_region_country_id_b208f4fa_fk_wines_country_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.wines_region
+    ADD CONSTRAINT wines_region_country_id_b208f4fa_fk_wines_country_id FOREIGN KEY (country_id) REFERENCES public.wines_country(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: wines_review wines_review_user_id_94699ef9_fk_auth_user_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.wines_review
+    ADD CONSTRAINT wines_review_user_id_94699ef9_fk_auth_user_id FOREIGN KEY (user_id) REFERENCES public.auth_user(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: wines_review wines_review_vintage_id_f8f0b92a_fk_wines_vintage_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.wines_review
+    ADD CONSTRAINT wines_review_vintage_id_f8f0b92a_fk_wines_vintage_id FOREIGN KEY (vintage_id) REFERENCES public.wines_vintage(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: wines_review wines_review_wine_id_6783ce19_fk_wines_wine_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.wines_review
+    ADD CONSTRAINT wines_review_wine_id_6783ce19_fk_wines_wine_id FOREIGN KEY (wine_id) REFERENCES public.wines_wine(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: wines_vintage wines_vintage_wine_id_44186337_fk_wines_wine_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.wines_vintage
+    ADD CONSTRAINT wines_vintage_wine_id_44186337_fk_wines_wine_id FOREIGN KEY (wine_id) REFERENCES public.wines_wine(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: wines_wine wines_wine_origin_id_96652b31_fk_wines_region_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.wines_wine
+    ADD CONSTRAINT wines_wine_origin_id_96652b31_fk_wines_region_id FOREIGN KEY (origin_id) REFERENCES public.wines_region(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: wines_wine wines_wine_producer_id_a39b5e76_fk_wines_producer_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.wines_wine
+    ADD CONSTRAINT wines_wine_producer_id_a39b5e76_fk_wines_producer_id FOREIGN KEY (producer_id) REFERENCES public.wines_producer(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: wines_winegrape wines_winegrape_grape_id_df14d0ab_fk_wines_grape_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.wines_winegrape
+    ADD CONSTRAINT wines_winegrape_grape_id_df14d0ab_fk_wines_grape_id FOREIGN KEY (grape_id) REFERENCES public.wines_grape(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: wines_winegrape wines_winegrape_wine_id_57b2699d_fk_wines_wine_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.wines_winegrape
+    ADD CONSTRAINT wines_winegrape_wine_id_57b2699d_fk_wines_wine_id FOREIGN KEY (wine_id) REFERENCES public.wines_wine(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- PostgreSQL database dump complete
+--
+
