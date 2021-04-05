@@ -211,6 +211,7 @@ ALLOWED_HOSTS = [
 
 Heroku setup
 ------------
+- heroku login
 - Ir para o dir do projecto (root dir, onde está o .git do repo do projecto, 
 assim como o ficheiro requirements.txt - e onde deve estar também o ficheiro manage.py)
 - heroku create vinipedia

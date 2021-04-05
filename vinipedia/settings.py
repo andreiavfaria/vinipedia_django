@@ -222,4 +222,4 @@ DEFAULT_FILE_STORAGE = 'custom_storages.MediaStorage'
 STATIC_URL = 'https://%s.static/' % AWS_S3_CUSTOM_DOMAIN
 
 # Activate Django-Heroku.
-# django_heroku.settings(locals())
+django_heroku.settings(locals())
