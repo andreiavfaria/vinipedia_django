@@ -234,6 +234,7 @@ input[type=submit] {
 #red_wines,
 #white_wines,
 #fortified_wines,
+#other_wines,
 [id*="recently_visited_"] {
     display: flex;
     flex-direction: row;
@@ -319,11 +320,12 @@ input[type=submit] {
 
 .wine_horizontal_card a {
     height: 200px;
-    width: 180px;
-    # display: flex;
+    width: 200px;
+    /*display: flex;
     justify-content: center;
-    flex-basis: 20%;
+    flex-basis: 20%;*/
     color: black;
+    text-align: center;
 }
 
 .wine_horizontal_card a img {

@@ -27,6 +27,13 @@ class CountryList(generics.ListCreateAPIView):
     serializer_class = CountrySerializer
     name = 'country-list'
 
+    search_fields = (
+        '^name',
+    )
+    ordering_fields = (
+        'name',
+    )
+
 
 class CountryDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Country.objects.all()
@@ -99,14 +106,7 @@ class RegionDetail(generics.RetrieveUpdateDestroyAPIView):
     throttle_scope = 'region'
     throttle_classes = (ScopedRateThrottle,)
 
-""" ***BUGGED***
-    
-    Needs to be fixed!
-    
-    Requires adding an origin field to the Wine model, along with a check 
-    constraint that ensures its origin matches one of the regions where the 
-    its producer operates.  
-"""
+
 @api_view(['GET'])
 def region_wines(request, pk):
     region = get_object_or_404(Region, pk=pk)
@@ -164,8 +164,8 @@ class ProducerList(generics.ListCreateAPIView):
         return ProducerSerializer
 
     filter_fields = (
-        'regions',
         'origin',
+        'presence',
     )
 
     search_fields = (
@@ -174,7 +174,6 @@ class ProducerList(generics.ListCreateAPIView):
 
     ordering_fields = (
         'name',
-        'regions',
     )
 
     throttle_scope = 'producer'
@@ -222,9 +221,9 @@ class GrapeList(generics.ListCreateAPIView):
     filter_fields = (
         'origin',
         'type',
-        # 'color',
-        'body',
+        # 'colour',
         'acidity',
+        'body',
     )
 
     search_fields = (
@@ -234,8 +233,8 @@ class GrapeList(generics.ListCreateAPIView):
     ordering_fields = (
         'name',
         'type',
-        'body',
         'acidity',
+        'body',
     )
 
 
@@ -290,27 +289,21 @@ class WineGrapeDetail(generics.RetrieveUpdateDestroyAPIView):
 class WineFilter(FilterSet):
     type = MultipleChoiceFilter(choices=Wine.WINE_TYPE_CHOICES,
                              label='Wine type')
-    # producer = AllValuesFilter(field_name='producer__name',
-    #                            label='Producer')
-    # grape = AllValuesFilter(field_name='grapes__grape__name',
-    #                         label='Grape variety')
-    # origin = AllValuesFilter(field_name='origin__name',
-    #                            label='Origin')
     producer = ModelMultipleChoiceFilter(queryset=Producer.objects.all(),
                                          field_name='producer__name',
                                          to_field_name='name',
                                          label='Producer')
     grape = ModelMultipleChoiceFilter(queryset=Grape.objects.all(),
-                                         field_name='grapes__grape__name',
-                                         to_field_name='name',
-                                         label='Grape varieties')
+                                      field_name='grapes__grape__name',
+                                      to_field_name='name',
+                                      label='Grape varieties')
     origin = ModelMultipleChoiceFilter(queryset=Region.objects.all(),
-                                         field_name='origin__name',
-                                         to_field_name='name',
-                                         label='Origin')
+                                       field_name='origin__name',
+                                       to_field_name='name',
+                                       label='Origin')
     with_reviews = BooleanFilter(field_name='reviews',
-                                method='filter_with_reviews',
-                                label='WIth reviews only')
+                                 method='filter_with_reviews',
+                                 label='WIth reviews only')
     nr_reviews = RangeFilter(method='filter_nr_reviews',
                              label='Number of reviews')
     nr_vintages = RangeFilter(method='filter_nr_vintages',
@@ -330,83 +323,83 @@ class WineFilter(FilterSet):
 
     def filter_with_reviews(self, queryset, name, value):
         if value:
-            return Wine.objects.annotate(review_count=Count('reviews')).filter(review_count__gte=1)
+            return queryset.annotate(review_count=Count('reviews')).filter(review_count__gte=1)
         else:
-            return Wine.objects.annotate(review_count=Count('reviews')).filter(review_count=0)
+            return queryset.annotate(review_count=Count('reviews')).filter(review_count=0)
 
     def filter_average_score(self, queryset, name, value):
         # The value parameter that is passed by RangeFilter is a slice object
         # https://stackoverflow.com/a/36459896
         min, max = get_slice_min_max(value)
         if min is None:
-            return Wine.objects.annotate(avg_score=Avg('reviews__score')).filter(avg_score__lte=max)
+            return queryset.annotate(avg_score=Avg('reviews__score')).filter(avg_score__lte=max)
         elif max is None:
-            return Wine.objects.annotate(avg_score=Avg('reviews__score')).filter(avg_score__gte=min)
+            return queryset.annotate(avg_score=Avg('reviews__score')).filter(avg_score__gte=min)
         else:
-            return Wine.objects.annotate(avg_score=Avg('reviews__score')).filter(avg_score__range=(min, max))
+            return queryset.annotate(avg_score=Avg('reviews__score')).filter(avg_score__range=(min, max))
 
     def filter_nr_reviews(self, queryset, name, value):
         min, max = get_slice_min_max(value)
         if min is None:
-            return Wine.objects.annotate(nr_reviews=Count('reviews')).filter(nr_reviews__lte=max)
+            return queryset.annotate(nr_reviews=Count('reviews')).filter(nr_reviews__lte=max)
         elif max is None:
-            return Wine.objects.annotate(nr_reviews=Count('reviews')).filter(nr_reviews__gte=min)
+            return queryset.annotate(nr_reviews=Count('reviews')).filter(nr_reviews__gte=min)
         else:
-            return Wine.objects.annotate(nr_reviews=Count('reviews')).filter(nr_reviews__range=(min, max))
+            return queryset.annotate(nr_reviews=Count('reviews')).filter(nr_reviews__range=(min, max))
 
     def filter_nr_vintages(self, queryset, name, value):
         min, max = get_slice_min_max(value)
         if min is None:
-            return Wine.objects.annotate(nr_vintages=Count('vintages')).filter(nr_vintages__lte=max)
+            return queryset.annotate(nr_vintages=Count('vintages')).filter(nr_vintages__lte=max)
         elif max is None:
-            return Wine.objects.annotate(nr_vintages=Count('vintages')).filter(nr_vintages__gte=min)
+            return queryset.annotate(nr_vintages=Count('vintages')).filter(nr_vintages__gte=min)
         else:
-            return Wine.objects.annotate(nr_vintages=Count('vintages')).filter(nr_vintages__range=(min, max))
+            return queryset.annotate(nr_vintages=Count('vintages')).filter(nr_vintages__range=(min, max))
 
     def filter_nr_grape_varieties(self, queryset, name, value):
         min, max = get_slice_min_max(value)
         if min is None:
-            return Wine.objects.annotate(nr_grapes=Count('grapes')).filter(nr_grapes__lte=max)
+            return queryset.annotate(nr_grapes=Count('grapes')).filter(nr_grapes__lte=max)
         elif max is None:
-            return Wine.objects.annotate(nr_grapes=Count('grapes')).filter(nr_grapes__gte=min)
+            return queryset.annotate(nr_grapes=Count('grapes')).filter(nr_grapes__gte=min)
         else:
-            return Wine.objects.annotate(nr_grapes=Count('grapes')).filter(nr_grapes__range=(min, max))
+            return queryset.annotate(nr_grapes=Count('grapes')).filter(nr_grapes__range=(min, max))
 
     def filter_average_acidity(self, queryset, name, value):
         min, max = get_slice_min_max(value)
         if min is None:
-            return Wine.objects.annotate(avg_acidity=Avg('reviews__acidity')).filter(avg_acidity__lte=max)
+            return queryset.annotate(avg_acidity=Avg('reviews__acidity')).filter(avg_acidity__lte=max)
         elif max is None:
-            return Wine.objects.annotate(avg_acidity=Avg('reviews__acidity')).filter(avg_acidity__gte=min)
+            return queryset.annotate(avg_acidity=Avg('reviews__acidity')).filter(avg_acidity__gte=min)
         else:
-            return Wine.objects.annotate(avg_acidity=Avg('reviews__acidity')).filter(avg_acidity__range=(min, max))
+            return queryset.annotate(avg_acidity=Avg('reviews__acidity')).filter(avg_acidity__range=(min, max))
 
     def filter_average_body(self, queryset, name, value):
         min, max = get_slice_min_max(value)
         if min is None:
-            return Wine.objects.annotate(avg_body=Avg('reviews__body')).filter(avg_body__lte=max)
+            return queryset.annotate(avg_body=Avg('reviews__body')).filter(avg_body__lte=max)
         elif max is None:
-            return Wine.objects.annotate(avg_body=Avg('reviews__body')).filter(avg_body__gte=min)
+            return queryset.annotate(avg_body=Avg('reviews__body')).filter(avg_body__gte=min)
         else:
-            return Wine.objects.annotate(avg_body=Avg('reviews__body')).filter(avg_body__range=(min, max))
+            return queryset.annotate(avg_body=Avg('reviews__body')).filter(avg_body__range=(min, max))
 
     def filter_average_sweetness(self, queryset, name, value):
         min, max = get_slice_min_max(value)
         if min is None:
-            return Wine.objects.annotate(avg_sweetness=Avg('reviews__sweetness')).filter(avg_sweetness__lte=max)
+            return queryset.annotate(avg_sweetness=Avg('reviews__sweetness')).filter(avg_sweetness__lte=max)
         elif max is None:
-            return Wine.objects.annotate(avg_sweetness=Avg('reviews__sweetness')).filter(avg_sweetness__gte=min)
+            return queryset.annotate(avg_sweetness=Avg('reviews__sweetness')).filter(avg_sweetness__gte=min)
         else:
-            return Wine.objects.annotate(avg_sweetness=Avg('reviews__sweetness')).filter(avg_sweetness__range=(min, max))
+            return queryset.annotate(avg_sweetness=Avg('reviews__sweetness')).filter(avg_sweetness__range=(min, max))
 
     def filter_average_tannin(self, queryset, name, value):
         min, max = get_slice_min_max(value)
         if min is None:
-            return Wine.objects.annotate(avg_tannin=Avg('reviews__tannin')).filter(avg_tannin__lte=max)
+            return queryset.annotate(avg_tannin=Avg('reviews__tannin')).filter(avg_tannin__lte=max)
         elif max is None:
-            return Wine.objects.annotate(avg_tannin=Avg('reviews__tannin')).filter(avg_tannin__gte=min)
+            return queryset.annotate(avg_tannin=Avg('reviews__tannin')).filter(avg_tannin__gte=min)
         else:
-            return Wine.objects.annotate(avg_tannin=Avg('reviews__tannin')).filter(avg_tannin__range=(min, max))
+            return queryset.annotate(avg_tannin=Avg('reviews__tannin')).filter(avg_tannin__range=(min, max))
 
     class Meta:
         model = Wine
@@ -506,84 +499,87 @@ class VintageFilter(FilterSet):
                                  label='Average tannin')
 
     def filter_alcohol_content(self, queryset, name, value):
+        print("filter_alcohol_content", queryset)
         min, max = get_slice_min_max(value)
         if min is None:
-            return Vintage.objects.filter(alcohol_content__lte=max)
+            return queryset.filter(alcohol_content__lte=max)
         elif max is None:
-            return Vintage.objects.filter(alcohol_content__gte=min)
+            return queryset.filter(alcohol_content__gte=min)
         else:
-            return Vintage.objects.filter(alcohol_content__range=(min, max))
+            return queryset.filter(alcohol_content__range=(min, max))
 
     def filter_with_reviews(self, queryset, name, value):
+        print("filter_with_reviews", queryset)
         if value:
-            return Vintage.objects.annotate(review_count=Count('reviews')).filter(review_count__gte=1)
+            return queryset.annotate(review_count=Count('reviews')).filter(review_count__gte=1)
         else:
-            return Vintage.objects.annotate(review_count=Count('reviews')).filter(review_count=0)
+            return queryset.annotate(review_count=Count('reviews')).filter(review_count=0)
 
     def filter_average_score(self, queryset, name, value):
         # The value parameter that is passed by RangeFilter is a slice object
         # https://stackoverflow.com/a/36459896
+        print("filter_average_score", queryset)
         min, max = get_slice_min_max(value)
         if min is None:
-            return Vintage.objects.annotate(avg_score=Avg('reviews__score')).filter(avg_score__lte=max)
+            return queryset.annotate(avg_score=Avg('reviews__score')).filter(avg_score__lte=max)
         elif max is None:
-            return Vintage.objects.annotate(avg_score=Avg('reviews__score')).filter(avg_score__gte=min)
+            return queryset.annotate(avg_score=Avg('reviews__score')).filter(avg_score__gte=min)
         else:
-            return Vintage.objects.annotate(avg_score=Avg('reviews__score')).filter(avg_score__range=(min, max))
+            return queryset.annotate(avg_score=Avg('reviews__score')).filter(avg_score__range=(min, max))
 
     def filter_nr_reviews(self, queryset, name, value):
         min, max = get_slice_min_max(value)
         if min is None:
-            return Vintage.objects.annotate(nr_reviews=Count('reviews')).filter(nr_reviews__lte=max)
+            return queryset.annotate(nr_reviews=Count('reviews')).filter(nr_reviews__lte=max)
         elif max is None:
-            return Vintage.objects.annotate(nr_reviews=Count('reviews')).filter(nr_reviews__gte=min)
+            return queryset.annotate(nr_reviews=Count('reviews')).filter(nr_reviews__gte=min)
         else:
-            return Vintage.objects.annotate(nr_reviews=Count('reviews')).filter(nr_reviews__range=(min, max))
+            return queryset.annotate(nr_reviews=Count('reviews')).filter(nr_reviews__range=(min, max))
 
     def filter_nr_grape_varieties(self, queryset, name, value):
         min, max = get_slice_min_max(value)
         if min is None:
-            return Vintage.objects.annotate(nr_grapes=Count('wine__grapes')).filter(nr_grapes__lte=max)
+            return queryset.annotate(nr_grapes=Count('wine__grapes')).filter(nr_grapes__lte=max)
         elif max is None:
-            return Vintage.objects.annotate(nr_grapes=Count('wine__grapes')).filter(nr_grapes__gte=min)
+            return queryset.annotate(nr_grapes=Count('wine__grapes')).filter(nr_grapes__gte=min)
         else:
-            return Vintage.objects.annotate(nr_grapes=Count('wine__grapes')).filter(nr_grapes__range=(min, max))
+            return queryset.annotate(nr_grapes=Count('wine__grapes')).filter(nr_grapes__range=(min, max))
 
     def filter_average_acidity(self, queryset, name, value):
         min, max = get_slice_min_max(value)
         if min is None:
-            return Vintage.objects.annotate(avg_acidity=Avg('reviews__acidity')).filter(avg_acidity__lte=max)
+            return queryset.annotate(avg_acidity=Avg('reviews__acidity')).filter(avg_acidity__lte=max)
         elif max is None:
-            return Vintage.objects.annotate(avg_acidity=Avg('reviews__acidity')).filter(avg_acidity__gte=min)
+            return queryset.annotate(avg_acidity=Avg('reviews__acidity')).filter(avg_acidity__gte=min)
         else:
-            return Vintage.objects.annotate(avg_acidity=Avg('reviews__acidity')).filter(avg_acidity__range=(min, max))
+            return queryset.annotate(avg_acidity=Avg('reviews__acidity')).filter(avg_acidity__range=(min, max))
 
     def filter_average_body(self, queryset, name, value):
         min, max = get_slice_min_max(value)
         if min is None:
-            return Vintage.objects.annotate(avg_body=Avg('reviews__body')).filter(avg_body__lte=max)
+            return queryset.annotate(avg_body=Avg('reviews__body')).filter(avg_body__lte=max)
         elif max is None:
-            return Vintage.objects.annotate(avg_body=Avg('reviews__body')).filter(avg_body__gte=min)
+            return queryset.annotate(avg_body=Avg('reviews__body')).filter(avg_body__gte=min)
         else:
-            return Vintage.objects.annotate(avg_body=Avg('reviews__body')).filter(avg_body__range=(min, max))
+            return queryset.annotate(avg_body=Avg('reviews__body')).filter(avg_body__range=(min, max))
 
     def filter_average_sweetness(self, queryset, name, value):
         min, max = get_slice_min_max(value)
         if min is None:
-            return Vintage.objects.annotate(avg_sweetness=Avg('reviews__sweetness')).filter(avg_sweetness__lte=max)
+            return queryset.annotate(avg_sweetness=Avg('reviews__sweetness')).filter(avg_sweetness__lte=max)
         elif max is None:
-            return Vintage.objects.annotate(avg_sweetness=Avg('reviews__sweetness')).filter(avg_sweetness__gte=min)
+            return queryset.annotate(avg_sweetness=Avg('reviews__sweetness')).filter(avg_sweetness__gte=min)
         else:
-            return Vintage.objects.annotate(avg_sweetness=Avg('reviews__sweetness')).filter(avg_sweetness__range=(min, max))
+            return queryset.annotate(avg_sweetness=Avg('reviews__sweetness')).filter(avg_sweetness__range=(min, max))
 
     def filter_average_tannin(self, queryset, name, value):
         min, max = get_slice_min_max(value)
         if min is None:
-            return Vintage.objects.annotate(avg_tannin=Avg('reviews__tannin')).filter(avg_tannin__lte=max)
+            return queryset.annotate(avg_tannin=Avg('reviews__tannin')).filter(avg_tannin__lte=max)
         elif max is None:
-            return Vintage.objects.annotate(avg_tannin=Avg('reviews__tannin')).filter(avg_tannin__gte=min)
+            return queryset.annotate(avg_tannin=Avg('reviews__tannin')).filter(avg_tannin__gte=min)
         else:
-            return Vintage.objects.annotate(avg_tannin=Avg('reviews__tannin')).filter(avg_tannin__range=(min, max))
+            return queryset.annotate(avg_tannin=Avg('reviews__tannin')).filter(avg_tannin__range=(min, max))
 
     class Meta:
         model = Vintage
@@ -608,19 +604,15 @@ class VintageList(generics.ListCreateAPIView):
         if self.request.method == 'POST':
             return NewVintageSerializer
         return VintageSerializer
-    filter_fields = (
-        'wine',
-        'year',
-        'alcohol_content',
-        'wine__type'
-    )
 
     search_fields = (
         'wine__name',
+        'wine__type',
     )
 
     ordering_fields = (
-        'name',
+        'wine__name',
+        'wine__type',
         'year',
         'alcohol_content',
     )
@@ -689,7 +681,6 @@ class ReviewList(generics.ListCreateAPIView):
     filter_fields = (
         'user',
         'wine',
-        'vintage',
         'active',
     )
 
@@ -720,59 +711,12 @@ class ReviewDetail(generics.RetrieveUpdateDestroyAPIView):
     )
 
 
-# class WineReviewList(generics.ListCreateAPIView):
-#     queryset = Review.objects.all()
-#     name = 'wine-review-list'
-#
-#     def perform_create(self, serializer_class):
-#         serializer_class.save(user=self.request.user)
-#
-#     def get_serializer_class(self):
-#         if self.request.method == 'POST':
-#             return NewWineReviewSerializer
-#         return WineReviewSerializer
-
-
-# class WineReviewDetail(generics.RetrieveUpdateDestroyAPIView):
-#     queryset = Review.objects.all()
-#     name = 'wine-review-detail'
-#
-#     def get_serializer_class(self):
-#         if self.request.method == 'PUT':
-#             return NewWineReviewSerializer
-#         return WineReviewSerializer
-
-
 @api_view(['GET'])
 def wine_reviews(request, pk):
     wine = get_object_or_404(Wine, pk=pk)
     reviews = Review.objects.filter(wine=wine)
     serializer = WineReviewSerializer(reviews, many=True, context={'request': request})
     return Response(serializer.data)
-
-
-# class VintageReviewList(generics.ListCreateAPIView):
-#     queryset = Review.objects.filter()
-#     name = 'vintage-review-list'
-#
-#     def perform_create(self, serializer_class):
-#         serializer_class.save(user=self.request.user)
-#
-#     def get_serializer_class(self):
-#         if self.request.method == 'POST':
-#             return NewVintageReviewSerializer
-#         return VintageReviewSerializer
-
-
-# class VintageReviewDetail(generics.RetrieveUpdateDestroyAPIView):
-#     queryset = Review.objects.all()
-#     serializer_class = VintageReviewSerializer
-#     name = 'vintage-review-detail'
-#
-#     def get_serializer_class(self):
-#         if self.request.method == 'PUT':
-#             return NewVintageReviewSerializer
-#         return VintageReviewSerializer
 
 
 @api_view(['GET'])

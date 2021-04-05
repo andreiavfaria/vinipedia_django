@@ -51,7 +51,7 @@
 {% if wine.vintages.count > 0 %}
     {% for vintage in wine.vintages.all|slice:":5" %}
     <p>
-        <a href="{% url 'wines:vintage_detail' vintage.id %}">{{ vintage.year }}</a>
+        <a href="{% url 'wines:vintage_detail' vintage.id %}">{{ vintage.year|default_if_none:"N.V." }}</a>
     </p>
     {% endfor %}
     {% if wine.vintages.count > 5 %}
@@ -96,7 +96,7 @@
       </h5>
     </p>
     {% if review.vintage != None %}
-    <h5>Vintage: {{ review.vintage.year }}</h5>
+    <h5>Vintage: {{ review.vintage.year|default_if_none:"N.V." }}</h5>
     {% endif %}
     <p>Date: {{ review.published_on }}</p>
     <p>{{ review.text|linebreaks }}</p>

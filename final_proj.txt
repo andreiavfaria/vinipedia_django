@@ -41,6 +41,7 @@ to do:
 
 notes:
 ------
+- color: #950000
 - alterar debug=TRUE em settings.py, remover debug url_patterns de urls.py
 - alterar urls da api (de localhost para endereço do server heroku)
 - ocultar todas as keys (p.ex., SECRET_KEY) e passwords (com config.json, etc)
@@ -64,19 +65,21 @@ notes:
 
 bugs:
 -----
-- api (vintage): (RESOLVER com |default_if_none:"N/A" nos templates!) retornar N.V. em vez de null? (ver código e notas em baixo)
 - site (list views): list views que herdam de outras list views apresentam quase sempre o header/title errado
-- api (vintage list): ordering=name retorna erro
+- react: filtros "hardcoded" nem sempre funcionam (península de setúbal)
+- logos/imagens nas detail views (ver o da bacalhôa!!)
+----
 - api (image): editing an instance deletes the current image field value
 - review page login link shouldn't redirect to the landing page (how to add something like ?next=/wines/api/producers/3?)
-- grape body scale (current: light<->bold, vivino: light-bodied<->full-bodied)
 - new review bug (wine/vintage detail views): if new review.. "review added" não aparece!
 - api (review form): aparecem todas as vintages, independentemente do wine seleccionado
-- api (wine/reviews, vintage/reviews): mostrar review form/per?
-- duplicates/distinct (hack)
-- api (vintage/wine filters): filtros numéricos "abafam" os restantes filtros
-- react: remover year/average_rating não faz reset ao hasMore e estraga o infinite scroll!
+- react: (loading) remover year/average_rating não faz reset ao hasMore e estraga o infinite scroll!
 - react: reset filters não limpa os campos de texto/numéricos
+- grape body scale (current: light<->bold, vivino: light-bodied<->full-bodied)
+- duplicates/distinct (hack)
+- (fixed) api (vintage list): ordering=name retorna erro
+- (fixed) api (vintage/wine filters): filtros numéricos "abafam" os restantes filtros
+- (fixed) api (vintage): (RESOLVER com |default_if_none:"N/A" nos templates!) retornar N.V. em vez de null? (ver código e notas em baixo)
 - (fixed) WineFilter: tentar fazer average_score com RangeFilter
 - (fixed) WineFilter: with_reviews devia ser boolean
 - (fixed) review detail views (wine e vintage)
@@ -90,6 +93,7 @@ bugs:
 - (fixed) unique constraint nas reviews não é respeitada quando vintage=null
 - (fixed) api: reviews, grape-alias, producer-region, wine-grape
 - (fixed) api: logout related bug (when 'rest_framework.permissions.IsAuthenticated' is in DEFAULT_PERMISSION_CLASSES)
+- (cancelled) api (wine/reviews, vintage/reviews): mostrar review form/per?
 
 
 next:
@@ -97,22 +101,22 @@ next:
 - (done) views + templates
 - (done) accounts
 - (done) reviews
-- adicionar todos os campos em falta às views
+- (done) adicionar todos os campos em falta às views
 - (done) sessions / cookies
-- accounts urls
+- (done) accounts urls
 - (done) pesquisa de vinhos por vários critérios
 - (done) pesquisa integral
-- api rest
+- (done) api rest
     - (done) create app
-    - set all the endpoints
+    - (done) set all the endpoints
     - (done) (models)
     - (done) serializers
-    - views
-    - urls
-    - auth
-    - throttling
-    - cors
-- app react
+    - (done) views
+    - (done) urls
+    - (done) auth
+    - (done) throttling
+    - (done) cors
+- (done) app react
 - ssl/https
 
 accounts setup          10
@@ -240,3 +244,10 @@ bugged search: ...type=white&type=red (Duarte)
 -------------------------------------
 request.GET.getlist('myvar')
 https://stackoverflow.com/a/3910203
+
+
+
+postgres
+--------
+backup: pg_dump -U postgres -f vinipedia.dump vinipedia
+restore: psql -d vinipedia -U postgres -f vinipedia.dump (a db vinipedia já tinha sido criada na )

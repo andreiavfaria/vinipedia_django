@@ -6,11 +6,7 @@
 
 <!-- Name -->
 <div id="wine_details">
-{% if vintage.year != None %}
-    <h1>{{ vintage.wine.name }} ({{ vintage.year }})</h1>
-{% else %}
-    <h1>{{ vintage.wine.name }} (N.V.)</h1>
-{% endif %}
+    <h1>{{ vintage.wine.name }} ({{ vintage.year|default_if_none:"N.V." }})</h1>
 </div>
 
 <!-- Image -->
@@ -32,7 +28,7 @@
 
 <!-- Year -->
 <h4>Year</h4>
-<p>{{ vintage.year }}</p>
+<p>{{ vintage.year|default_if_none:"N.V." }}</p>
 
 <!-- Producer -->
 <h4>Produced by</h4>
@@ -78,7 +74,7 @@
     {% for wine_vintage in vintage.wine.vintages.all %}
         {% if wine_vintage != vintage %}
         <p>
-            <a href="{% url 'wines:vintage_detail' wine_vintage.id %}">{{ wine_vintage.year }}</a>
+            <a href="{% url 'wines:vintage_detail' wine_vintage.id %}">{{ wine_vintage.year|default_if_none:"N.V." }}</a>
         </p>
         {% endif %}
     {% endfor %}
