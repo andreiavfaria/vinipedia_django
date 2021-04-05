@@ -65,6 +65,7 @@ notes:
 
 bugs:
 -----
+- substituir todas as refs a "/media" nos templates
 - site (list views): list views que herdam de outras list views apresentam quase sempre o header/title errado
 - react: filtros "hardcoded" nem sempre funcionam (península de setúbal)
 - logos/imagens nas detail views (ver o da bacalhôa!!)
