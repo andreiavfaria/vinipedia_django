@@ -22,10 +22,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '***REMOVED***'
+# SECRET_KEY = '***REMOVED***'
+SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = [
     'vinipedia.herokuapp.com',
@@ -196,16 +197,15 @@ CORS_ALLOWED_ORIGINS = [
 ]
 
 # CORS_ALLOW_ALL_ORIGINS = True
-# testar o react com a api
 
 AWS_S3_FILE_OVERWRITE = False
 AWS_DEFAULT_ACL = None
 AWS_S3_REGION_NAME = 'eu-central-1'
 AWS_S3_SIGNATURE_VERSION = 's3v4'
 
-AWS_ACCESS_KEY_ID = "***REMOVED***" # "***REMOVED***" #
-AWS_SECRET_ACCESS_KEY = "***REMOVED***" # "***REMOVED***" #
-AWS_STORAGE_BUCKET_NAME = "vinipediabucket" # "caranguejoturbobucket" #
+AWS_ACCESS_KEY_ID = "***REMOVED***"
+AWS_SECRET_ACCESS_KEY = "***REMOVED***"
+AWS_STORAGE_BUCKET_NAME = "vinipediabucket"
 
 # Tell django-storages the domain to use to refer to static files.
 AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
