@@ -95,12 +95,15 @@ DATABASES = {
     #     'NAME': BASE_DIR / 'db.sqlite3',
     # }
     'default': {
-            'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'NAME': 'vinipedia',
-            'USER': 'postgres',
-            'PASSWORD': 'admin',
-            'HOST': 'localhost',
-            'PORT': '5432',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME' : os.environ.get('DJANGO_PROJECT_DB'),
+        'USER' : os.environ.get('DJANGO_PROJECT_DB_USER'),
+        'PASSWORD' : os.environ.get('DJANGO_PROJECT_DB_USER_PASSWORD'),
+        # 'NAME': 'vinipedia',
+        # 'USER': 'postgres',
+        # 'PASSWORD': 'admin',
+        'HOST': 'localhost',
+        'PORT': '5432',
     }
 }
 
