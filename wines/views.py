@@ -285,7 +285,7 @@ def wine_advanced_search(request):
         results = Wine.objects.all()
         for k, v in request.GET.items():
             if k == 'name' and v:
-                results = results.filter(Q(name__contains=v))
+                results = results.filter(Q(name__icontains=v))
             elif k == 'type':
                 results = results.filter(Q(type__in=request.GET.getlist(k)))
             elif k == 'producer':
@@ -313,7 +313,7 @@ def wine_advanced_search(request):
 def wine_search(request):
     search_string = request.GET.get("query")
     if search_string:
-        results = Wine.objects.filter(Q(name__contains=search_string))
+        results = Wine.objects.filter(Q(name__icontains=search_string))
     else:
         results = None
 
@@ -325,7 +325,7 @@ def wine_search(request):
 def grape_search(request):
     search_string = request.GET.get("query")
     if search_string:
-        results = Grape.objects.filter(Q(name__contains=search_string))
+        results = Grape.objects.filter(Q(name__icontains=search_string))
     else:
         results = None
 
@@ -337,7 +337,7 @@ def grape_search(request):
 def producer_search(request):
     search_string = request.GET.get("query")
     if search_string:
-        results = Producer.objects.filter(Q(name__contains=search_string))
+        results = Producer.objects.filter(Q(name__icontains=search_string))
     else:
         results = None
 
@@ -349,9 +349,9 @@ def producer_search(request):
 def sitewide_search(request):
     search_string = request.GET.get("query")
     if search_string:
-        wines = Wine.objects.filter(Q(name__contains=search_string))
-        grapes = Grape.objects.filter(Q(name__contains=search_string))
-        producers = Producer.objects.filter(Q(name__contains=search_string))
+        wines = Wine.objects.filter(Q(name__icontains=search_string))
+        grapes = Grape.objects.filter(Q(name__icontains=search_string))
+        producers = Producer.objects.filter(Q(name__icontains=search_string))
     else:
         wines = None
         grapes = None
