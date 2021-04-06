@@ -206,9 +206,12 @@ AWS_DEFAULT_ACL = None
 AWS_S3_REGION_NAME = 'eu-central-1'
 AWS_S3_SIGNATURE_VERSION = 's3v4'
 
-AWS_ACCESS_KEY_ID = "***REMOVED***"
-AWS_SECRET_ACCESS_KEY = "***REMOVED***"
-AWS_STORAGE_BUCKET_NAME = "vinipediabucket"
+AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
+AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
+AWS_STORAGE_BUCKET_NAME = os.environ.get('AWS_STORAGE_BUCKET_NAME')
+# AWS_ACCESS_KEY_ID = "***REMOVED***"
+# AWS_SECRET_ACCESS_KEY = "***REMOVED***"
+# AWS_STORAGE_BUCKET_NAME = "vinipediabucket"
 
 # Tell django-storages the domain to use to refer to static files.
 AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
