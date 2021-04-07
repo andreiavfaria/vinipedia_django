@@ -1,0 +1,10 @@
+{% for review in latest_reviews %}
+<div>
+    {% if review.vintage %}
+    <a href="{{ review.vintage.get_absolute_url }}">{{ review.vintage }}</a>
+    {% else %}
+    <a href="{{ review.wine.get_absolute_url }}">{{ review.wine }}</a>
+    {% endif %}
+    {{ review.score }}*
+</div>
+{% endfor %}

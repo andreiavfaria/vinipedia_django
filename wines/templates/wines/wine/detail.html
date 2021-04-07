@@ -12,7 +12,7 @@
     {% if wine.image %}
     <img src="{{ wine.image.url }}" alt="{{ wine }}'s image">
     {% else %}
-    <img src="/media/{{ wine.type }}.png" alt="{{ wine }}'s image">
+    <img src="{{ MEDIA_URL }}{{ wine.type }}.png" alt="{{ wine }}'s image">
     {% endif %}
 </div>
 
@@ -102,30 +102,14 @@
     <p>{{ review.text|linebreaks }}</p>
     <!-- Score -->
     <p class="score">Score: {{ review.score }}*</p>
-    <!-- Body -->
-    {% if review.body %}
-    <p class="score">Body: {{ review.body }}*</p>
-    {% else %}
-    <p class="score">Body: N/A</p>
-    {% endif %}
-    <!-- Sweetness -->
-    {% if review.sweetness %}
-    <p class="score">Sweetness: {{ review.sweetness }}*</p>
-    {% else %}
-    <p class="score">Sweetness: N/A</p>
-    {% endif %}
     <!-- Acidity -->
-    {% if review.acidity %}
-    <p class="score">Acidity: {{ review.acidity }}*</p>
-    {% else %}
-    <p class="score">Acidity: N/A</p>
-    {% endif %}
+    <p class="score">Acidity: {{ review.acidity|default_if_none:"N/A" }}</p>
+    <!-- Body -->
+    <p class="score">Body: {{ review.body|default_if_none:"N/A" }}</p>
+    <!-- Sweetness -->
+    <p class="score">Sweetness: {{ review.sweetness|default_if_none:"N/A" }}</p>
     <!-- Tannin -->
-    {% if review.tannin %}
-    <p class="score">Tannin: {{ review.tannin }}*</p>
-    {% else %}
-    <p class="score">Tannin: N/A</p>
-    {% endif %}
+    <p class="score">Tannin: {{ review.tannin|default_if_none:"N/A" }}</p>
   </div>
 {% empty %}
     <p class="info">There are no reviews yet.</p>

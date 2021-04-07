@@ -16,7 +16,7 @@
             {% if wine.image %}
             <img src="{{ wine.image.url }}" alt="{{ wine }}'s image">
             {% else %}
-            <img src="/media/{{ wine.type }}.png" alt="{{ wine }}'s image">
+            <img src="{{ MEDIA_URL }}{{ wine.type }}.png" alt="{{ wine }}'s image">
             {% endif %}
         </a>
         <div class="producer">
@@ -30,7 +30,9 @@
             </a>
         </div>
         <div class="rating">
-            {{ wine.avg_rating|floatformat:1 }}*
+            {% if wine.avg_rating %}
+            <p>{{ wine.avg_rating|floatformat:1 }}*</p>
+            {% endif %}
         </div>
     </div>
 {% endfor %}
@@ -48,7 +50,7 @@
             {% elif vintage.wine.image %}
             <img src="{{ vintage.wine.image.url }}" alt="{{ vintage }}'s image">
             {% else %}
-            <img src="/media/{{ vintage.wine.type }}.png" alt="{{ vintage }}'s image">
+            <img src="{{ MEDIA_URL }}{{ vintage.wine.type }}.png" alt="{{ vintage }}'s image">
             {% endif %}
         </a>
         <div class="producer">
@@ -62,7 +64,9 @@
             </a>
         </div>
         <div class="rating">
-            {{ vintage.avg_rating|floatformat:1 }}*
+            {% if vintage.avg_rating %}
+            <p>{{ vintage.avg_rating|floatformat:1 }}*</p>
+            {% endif %}
         </div>
     </div>
 {% endfor %}
@@ -78,7 +82,7 @@
             {% if wine.image %}
             <img src="{{ wine.image.url }}" alt="{{ wine }}'s image">
             {% else %}
-            <img src="/media/{{ wine.type }}.png" alt="{{ wine }}'s image">
+            <img src="{{ MEDIA_URL }}{{ wine.type }}.png" alt="{{ wine }}'s image">
             {% endif %}
         </a>
         <div class="producer">
@@ -105,7 +109,7 @@
             {% if wine.image %}
             <img src="{{ wine.image.url }}" alt="{{ wine }}'s image">
             {% else %}
-            <img src="/media/{{ wine.type }}.png" alt="{{ wine }}'s image">
+            <img src="{{ MEDIA_URL }}{{ wine.type }}.png" alt="{{ wine }}'s image">
             {% endif %}
         </a>
         <div class="producer">
@@ -132,7 +136,7 @@
             {% if wine.image %}
             <img src="{{ wine.image.url }}" alt="{{ wine }}'s image">
             {% else %}
-            <img src="/media/{{ wine.type }}.png" alt="{{ wine }}'s image">
+            <img src="{{ MEDIA_URL }}{{ wine.type }}.png" alt="{{ wine }}'s image">
             {% endif %}
         </a>
         <div class="producer">
@@ -159,7 +163,7 @@
             {% if wine.image %}
             <img src="{{ wine.image.url }}" alt="{{ wine }}'s image">
             {% else %}
-            <img src="/media/{{ wine.type }}.png" alt="{{ wine }}'s image">
+            <img src="{{ MEDIA_URL }}{{ wine.type }}.png" alt="{{ wine }}'s image">
             {% endif %}
         </a>
         <div class="producer">

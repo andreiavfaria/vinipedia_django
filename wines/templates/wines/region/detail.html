@@ -12,7 +12,7 @@
     {% if region.image %}
     <img src="{{ region.image.url }}" alt="{{ region }}'s image">
     {% else %}
-    <img src="/media/generic_region.png" alt="{{ region }}'s image">
+    <img src="{{ MEDIA_URL }}generic_region.png" alt="{{ region }}'s image">
     {% endif %}
 </div>
 
@@ -67,7 +67,11 @@
     {% endif %}
     <!-- Average rating -->
     <h4>Average rating for wines from this region</h4>
+    {% if region.get_average_rating %}
     <p>{{ region.get_average_rating }}*</p>
+    {% else %}
+    <p>N/A</p>
+    {% endif %}
 {% else %}
 <p>No wines have been registered as being produced in this region.</p>
 {% endif %}

@@ -1,7 +1,7 @@
 from django import template
 
 from ..forms import SearchForm, AdvancedWineSearchForm
-from ..models import Wine, Vintage, Grape, Producer, Region
+from ..models import Wine, Vintage, Grape, Producer, Region, Review
 
 register = template.Library()
 
@@ -65,6 +65,12 @@ def show_grapes_search_form():
 def show_producers_search_form():
     search_form = SearchForm()
     return {"search_form": search_form}
+
+
+@register.inclusion_tag('wines/latest_reviews.html')
+def show_latest_reviews(count=5):
+    latest_reviews = Review.objects.order_by('-published_on')[:count]
+    return {"latest_reviews": latest_reviews}
 
 
 @register.inclusion_tag('wines/last_visited_pages.html')

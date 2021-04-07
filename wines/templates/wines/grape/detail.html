@@ -12,7 +12,7 @@
     {% if grape.image %}
     <img src="{{ grape.image.url }}" alt="{{ grape }}'s image">
     {% else %}
-    <img src="/media/generic_grape.png" alt="{{ grape }}'s image">
+    <img src="{{ MEDIA_URL }}generic_grape.png" alt="{{ grape }}'s image">
     {% endif %}
 </div>
 
@@ -67,7 +67,7 @@
     <!-- Average rating -->
     <h4>Average rating for wines with this grape</h4>
     {% if grape.get_average_rating %}
-    <p>{{ grape.get_average_rating }}</p>
+    <p>{{ grape.get_average_rating|default_if_none:"N/A" }}*</p>
     {% else %}
     <p>N/A</p>
     {% endif %}

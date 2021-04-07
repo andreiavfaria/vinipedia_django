@@ -26,7 +26,7 @@ Etc
 to do:
 ------
 - amazon s3
-- rever o aspecto do site
+- rever o aspecto do site: crispy-forms? bootstrap?
 ----
 - token auth: (react) login -> token auth -> acesso à lista de vinhos
 - novos models: bottle, taste
@@ -41,10 +41,13 @@ to do:
 
 notes:
 ------
+- python manage.py check --deploy (DEBUG=False, 
+                                   SECURE_SSL_REDIRECT=True, 
+                                   SESSION_COOKIE_SECURE=True, 
+                                   CSRF_COOKIE_SECURE=True)
+- mudar password do admin / colocar throttling no login, por causa de bots e tal?
+- adicionar generic_producer.png, generic_region.png, generic_grape.png
 - color: #950000
-- alterar debug=TRUE em settings.py, remover debug url_patterns de urls.py
-- alterar urls da api (de localhost para endereço do server heroku)
-- ocultar todas as keys (p.ex., SECRET_KEY) e passwords (com config.json, etc)
 - adicionar ordering p/critérios não incluídos nos models (avg_rating, nr_reviews, etc)
 ----
 - mover filters para um filters.py?
@@ -53,6 +56,9 @@ notes:
 - @login_required (ou similar) nas views apropriadas
 - tokenauth através de https?
 - substituir if else endif nos templates por |default_if_none:"N/A"
+- (done) react: alterar urls da api (de localhost para endereço do server heroku)
+- (done) alterar debug=TRUE em settings.py, remover debug url_patterns de urls.py
+- (done) ocultar todas as keys (p.ex., SECRET_KEY) e passwords (com config.json, etc)
 - (done) api: adicionar filters/permitir sorting e filtering nos pedidos à API (limit, offset, sort, etc)
 - (done) missing fields (wine: style/type; grape:body,colour,acidity; etc)
 - (done) nav bar missing
@@ -65,9 +71,8 @@ notes:
 
 bugs:
 -----
-- substituir todas as refs a "/media" nos templates
 - site (list views): list views que herdam de outras list views apresentam quase sempre o header/title errado
-- react: filtros "hardcoded" nem sempre funcionam (península de setúbal)
+- react: acrescentar produtores (hardcoded)
 - logos/imagens nas detail views (ver o da bacalhôa!!)
 ----
 - api (image): editing an instance deletes the current image field value
@@ -78,6 +83,14 @@ bugs:
 - react: reset filters não limpa os campos de texto/numéricos
 - grape body scale (current: light<->bold, vivino: light-bodied<->full-bodied)
 - duplicates/distinct (hack)
+- (fixed) falta a secção de latest reviews na sidebar
+- (fixed) Ver onde pode aparecer o valor None nos templates (p.ex. None*) e acrescentar |default_if_none nos templates
+- (fixed) ordem de order_by invertida no postgres face à ordem utilizada com sqlite?
+- (fixed) react: filtros "hardcoded" nem sempre funcionam (península de setúbal)
+- (fixed) substituir todas as refs a "/media" nos templates
+- (fixed) producer list: não tem paginação (erro no template)
+- (fixed) vintage detail: review count repetida
+- (fixed) staticfiles não estão a ser servidas pelo bucket s3 (devido ao django_heroku.settings())
 - (fixed) api (vintage list): ordering=name retorna erro
 - (fixed) api (vintage/wine filters): filtros numéricos "abafam" os restantes filtros
 - (fixed) api (vintage): (RESOLVER com |default_if_none:"N/A" nos templates!) retornar N.V. em vez de null? (ver código e notas em baixo)
@@ -143,24 +156,226 @@ heroku                  5
 amazon s3               4
 
 
-incorporate:
-- crispy-forms
-- bootstrap
-
-
-postgres
-media > amazon bucket
-static? > amazon bucket
 
 
 
+settings.py - development vs production:
+----------------------------------------
+
+production:
+-----------
+
+    -----
+    SECRET_KEY = os.environ.get('SECRET_KEY')
+    -----
+    DEBUG = False
+    -----
+    'NAME' : os.environ.get('DJANGO_PROJECT_DB'),
+    'USER' : os.environ.get('DJANGO_PROJECT_DB_USER'),
+    'PASSWORD' : os.environ.get('DJANGO_PROJECT_DB_USER_PASSWORD'),
+    -----
+    AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
+    AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
+    AWS_STORAGE_BUCKET_NAME = os.environ.get('AWS_STORAGE_BUCKET_NAME')
+    -----
+    SECURE_SSL_REDIRECT = True
+    django_heroku.settings(locals(), staticfiles=False)
+
+
+development:
+------------
+
+    -----
+    SECRET_KEY = 'xxxxxxxxxxxxxxxxx'
+    -----
+    DEBUG = True
+    -----
+    'NAME': 'xxxxxxxxxxxxxxxxx',
+    'USER': 'xxxxxxxxxxxxxxxxx',
+    'PASSWORD': 'xxxxxxxxxxxxxxxxx',
+    -----
+    AWS_ACCESS_KEY_ID = "xxxxxxxxxxxxxxxxx"
+    AWS_SECRET_ACCESS_KEY = "xxxxxxxxxxxxxxxxx"
+    AWS_STORAGE_BUCKET_NAME = "xxxxxxxxxxxxxxxxx"
+    -----
+    # SECURE_SSL_REDIRECT = True                            <------------- comentar
+    # django_heroku.settings(locals(), staticfiles=False)   <------------- comentar
+
+
+
+SSL setup
+---------
+https://devcenter.heroku.com/articles/ssl-endpoint
+(...) All default appname.herokuapp.com domains are already SSL-enabled and can be accessed 
+by using https, for example, https://appname.herokuapp.com.
 
 
 
 
+AWS S3 setup
+------------
+https://www.caktusgroup.com/blog/2014/11/10/Using-Amazon-S3-to-store-your-Django-sites-static-and-media-files/
 
-postgres
+- Criar bucket e utilizador IAM (seguir instruções do pdf do Stefan)
+- S3 > Block public access: Desactivar todos (ou desactivar apenas o último - Block public and cross-account access to buckets and objects through any public bucket or access point policies)
+- S3 > Bucket policy: Acrescentar permissão de leitura/s3:getobject para acessos anónimos:
+        {
+            "Version": "2012-10-17",
+            "Id": "Policy1617635291934",
+            "Statement": [
+                {
+                    "Sid": "PublicReadGetObject",
+                    "Effect": "Allow",
+                    "Principal": "*",
+                    "Action": "s3:GetObject",
+                    "Resource": "arn:aws:s3:::caranguejoturbobucket/*"
+                }
+            ]
+        }
+- S3 > CORS: Acrescentar configurações:
+        [
+            {
+                "AllowedHeaders": [
+                    "*"
+                ],
+                "AllowedMethods": [
+                    "GET",
+                    "HEAD",
+                    "POST",
+                    "PUT"
+                ],
+                "AllowedOrigins": [
+                    "*"
+                ],
+                "ExposeHeaders": []
+            }
+        ]
+
+- Instalar django-storages e boto3
+- (settings.py) INSTALLED_APPS: acrescentar 'storages'
+- Acrescentar ao settings.py:
+
+        AWS_S3_FILE_OVERWRITE = False
+        AWS_DEFAULT_ACL = None
+        AWS_S3_REGION_NAME = 'eu-central-1'
+        AWS_S3_SIGNATURE_VERSION = 's3v4'
+
+        AWS_ACCESS_KEY_ID = "???"
+        AWS_SECRET_ACCESS_KEY = "???"
+        AWS_STORAGE_BUCKET_NAME = "???"
+
+        # Tell django-storages the domain to use to refer to static files.
+        AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
+
+        # Tell the staticfiles app to use S3Boto3 storage when writing the collected static files (when
+        # you run `collectstatic`).
+        STATICFILES_LOCATION = 'static'
+        STATICFILES_STORAGE = 'custom_storages.StaticStorage'
+        # STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+
+        MEDIAFILES_LOCATION = 'media'
+        DEFAULT_FILE_STORAGE = 'custom_storages.MediaStorage'
+
+        STATIC_URL = 'https://%s.static/' % AWS_S3_CUSTOM_DOMAIN
+
+- Criar custom_storages.py:
+
+        from django.conf import settings
+        from storages.backends.s3boto3 import S3Boto3Storage
+
+
+        class MediaStorage(S3Boto3Storage):
+            location = settings.MEDIAFILES_LOCATION
+
+
+        class StaticStorage(S3Boto3Storage):
+            location = settings.STATICFILES_LOCATION
+
+- Executar python manage.py collectstatic
+- (settings.py) Se ainda se estiver num ambiente de desenvolvimento (e não em produção), comentar a linha 
+  django_heroku.settings(locals()), caso esteja no ficheiro (porque esta configura automaticamente algumas 
+  das variáveis, fazendo override a algumas das configurações acima!)
+
+
+
+HEROKU setup (1)
+----------------
+> pip install gunicorn
+
+# STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+> pip install django-heroku
+
+
+- (settings.py) Acrescentar:
+
+    import django_heroku
+
+    # Activate Django-Heroku.
+    django_heroku.settings(locals())
+
+    Para ficheiros static (css, etc) servidos a partir do aws s3:
+    -------------------------------------------------------------
+    O comando django_heroku.settings() trata automaticamente das definições de staticfiles, de 
+    modo a que as mesmas fiquem alojadas no servidor (junto com o resto do backend). No nosso caso,
+    visto que queremos servir os ficheiros static a partir de um bucket aws s3, precisamos 
+    de passar o parâmetro staticfiles=False (sendo que o resto da configuração de staticfiles 
+    fica a depender exclusivamente de nós)
+    --
+
+    django_heroku.settings(locals(), staticfiles=False)
+    
+
+
+- (settings.py) Acrescentar:
+    ALLOWED_HOSTS = [
+        'vinipedia.herokuapp.com'
+    ]
+
+
+HEROKU setup (2)
+----------------
+- heroku login
+- Ir para o dir do projecto (root dir, onde está o .git do repo do projecto, 
+assim como o ficheiro requirements.txt - e onde deve estar também o ficheiro manage.py)
+- heroku create vinipedia
+- heroku open (verificar se abre o site default do heroku)
+- git push heroku master (fazer push do conteúdo do proj para o heroku)
+- heroku logs --tail (verificar se a build não deu erro)
+- refresh ao site (deverá dar erro: faltam as migrações)
+- heroku run python manage.py migrate (executar migrações)
+- refresh ao site (verificar se está tudo ok!)
+
+
+
+POSTGRES db backup and restore
+------------------------------
+backup: pg_dump -U postgres -f vinipedia.dump vinipedia
+restore local: psql -d vinipedia -U postgres -f vinipedia.dump (a db vinipedia já tinha sido criada antes do restore)
+restore no heroku: heroku pg:psql --app vinipedia < vinipedia\vinipedia.dump
+
+
+POSTGRES
 --------
+https://groups.google.com/g/django-users/c/hAD0XfpF3UY/m/238fgt9NBAAJ
+Erro: 
+    IntegrityError
+    Duplicate key value violates unique constraint "django_admin_log_pkey"
+
+Resolver actualizando o valor da sequência auto-incrementável associado ao id field 
+da tabela 'django_admin_log', executando o seguinte query no pgadmin (sendo que last_id 
+é o último id da tabela 'django_admin_log'):
+
+    (last_id)
+        SELECT id from "django_admin_log" order by id desc limit 1;
+
+    (actualizar valor de 'django_admin_log_id_seq')
+        SELECT setval('django_admin_log_id_seq', last_id+1);
+
+
+POSTGRES settings.py
+--------------------
 > pip install psycopg2
 
 DATABASES = {
@@ -177,50 +392,6 @@ DATABASES = {
             'PORT': '5432',
         }
 }
-
-
-
-heroku
-------
-> pip install gunicorn
-
-# STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-
-> pip install django-heroku
-
-import django_heroku
-
-# Activate Django-Heroku.
-django_heroku.settings(locals())
-
-
-Procfile
---------
-Quando o dir .git estava no dir vinipedia (exterior à root do proj, 
-ao mesmo nível do venv), a config seguinte funcionou:
-    web: gunicorn --pythonpath vinipedia vinipedia.wsgi
-
-
-Acrescentar
------------
-ALLOWED_HOSTS = [
-    'vinipedia.herokuapp.com'
-]
-
-
-Heroku setup
-------------
-- heroku login
-- Ir para o dir do projecto (root dir, onde está o .git do repo do projecto, 
-assim como o ficheiro requirements.txt - e onde deve estar também o ficheiro manage.py)
-- heroku create vinipedia
-- heroku open (verificar se abre o site default do heroku)
-- git push heroku master (fazer push do conteúdo do proj para o heroku)
-- heroku logs --tail (verificar se a build não deu erro)
-- refresh ao site (deverá dar erro: faltam as migrações)
-- heroku run python manage.py migrate (executar migrações)
-- refresh ao site (verificar se está tudo ok!)
 
 
 Notas
@@ -246,10 +417,3 @@ bugged search: ...type=white&type=red (Duarte)
 -------------------------------------
 request.GET.getlist('myvar')
 https://stackoverflow.com/a/3910203
-
-
-
-postgres
---------
-backup: pg_dump -U postgres -f vinipedia.dump vinipedia
-restore: psql -d vinipedia -U postgres -f vinipedia.dump (a db vinipedia já tinha sido criada na )

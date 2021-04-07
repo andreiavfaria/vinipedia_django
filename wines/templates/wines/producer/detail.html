@@ -18,7 +18,7 @@
     {% if producer.image %}
     <img src="{{ producer.image.url }}" alt="{{ producer }}'s image">
     {% else %}
-    <img src="/media/generic_producer.png" alt="{{ producer }}'s image">
+    <img src="{{ MEDIA_URL }}generic_producer.png" alt="{{ producer }}'s image">
     {% endif %}
 </div>
 
@@ -59,7 +59,11 @@
     {% endif %}
     <!-- Average rating -->
     <h4>Average rating for wines from this producer</h4>
+    {% if producer.get_producer_average_rating %}
     <p>{{ producer.get_producer_average_rating }}*</p>
+    {% else %}
+    <p>N/A</p>
+    {% endif %}
 {% else %}
     <p class="info">No wines have been registered for this producer.</p>
 {% endif %}

@@ -10,7 +10,7 @@
         {% if wine.image %}
         <img src="{{ wine.image.url }}" alt="{{ wine }}'s image">
         {% else %}
-        <img src="/media/{{ wine.type }}.png" alt="{{ wine }}'s image">
+        <img src="{{ MEDIA_URL }}{{ wine.type }}.png" alt="{{ wine }}'s image">
         {% endif %}
     </a>
     <div class="details">

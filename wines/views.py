@@ -1,5 +1,5 @@
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
-from django.db.models import Q, Avg, Count
+from django.db.models import Q, Avg, Count, F
 from django.shortcuts import render, get_object_or_404, redirect
 
 # Create your views here.
@@ -296,7 +296,7 @@ def wine_advanced_search(request):
                 wines_with_avg_rating = Review.objects.all().select_related('wine') \
                                         .values('wine_id') \
                                         .annotate(avg_score=Avg('score'), nr_reviews=Count('wine_id')) \
-                                        .order_by('-avg_score')\
+                                        .order_by('avg_score')\
                                         .filter(Q(avg_score__gte=v)) \
                                         .values('wine_id')
                 results = results.filter(Q(pk__in=wines_with_avg_rating))
@@ -365,8 +365,8 @@ def sitewide_search(request):
 
 
 def homepage(request):
-    top_rated_wines = Wine.objects.annotate(avg_rating=Avg('reviews__score')).order_by('-avg_rating')[:5]
-    top_rated_vintages = Vintage.objects.annotate(avg_rating=Avg('reviews__score')).order_by('-avg_rating')[:5]
+    top_rated_wines = Wine.objects.annotate(avg_rating=Avg('reviews__score')).order_by(F('avg_rating').desc(nulls_last=True))[:5]
+    top_rated_vintages = Vintage.objects.annotate(avg_rating=Avg('reviews__score')).order_by(F('avg_rating').desc(nulls_last=True))[:5]
     red_wines = Wine.objects.filter(type='red').order_by('?')[:5]
     white_wines = Wine.objects.filter(type='white').order_by('?')[:5]
     fortified_wines = Wine.objects.filter(type__in=('port', 'moscatel', 'madeira')).order_by('?')[:5]
