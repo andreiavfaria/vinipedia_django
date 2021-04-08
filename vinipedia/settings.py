@@ -224,4 +224,6 @@ MEDIA_URL = 'https://%s/media/' % AWS_S3_CUSTOM_DOMAIN
 django_heroku.settings(locals(), staticfiles=False)
 
 SECURE_SSL_REDIRECT = True
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
 
