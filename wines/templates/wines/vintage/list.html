@@ -7,8 +7,10 @@
 {% for vintage in vintages %}
 <div class="wine_horizontal_card">
   <a href="{{ vintage.get_absolute_url }}">
-        {% if vintage.wine.image %}
+        {% if vintage.image %}
         <img src="{{ vintage.image.url }}" alt="{{ vintage }}'s image">
+        {% elif vintage.wine.image %}
+        <img src="{{ vintage.wine.image.url }}" alt="{{ vintage }}'s image">
         {% else %}
         <img src="{{ MEDIA_URL }}{{ vintage.wine.type }}.png" alt="{{ vintage.wine }}'s image">
         {% endif %}
