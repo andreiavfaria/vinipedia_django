@@ -23,7 +23,6 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ.get('SECRET_KEY')
-# SECRET_KEY = '***REMOVED***'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
@@ -100,9 +99,6 @@ DATABASES = {
         'NAME' : os.environ.get('DJANGO_PROJECT_DB'),
         'USER' : os.environ.get('DJANGO_PROJECT_DB_USER'),
         'PASSWORD' : os.environ.get('DJANGO_PROJECT_DB_USER_PASSWORD'),
-        # 'NAME': 'vinipedia',
-        # 'USER': 'postgres',
-        # 'PASSWORD': 'admin',
         'HOST': 'localhost',
         'PORT': '5432',
     }
@@ -208,8 +204,6 @@ AWS_S3_SIGNATURE_VERSION = 's3v4'
 AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
 AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
 AWS_STORAGE_BUCKET_NAME = os.environ.get('AWS_STORAGE_BUCKET_NAME')
-# AWS_ACCESS_KEY_ID = "***REMOVED***"
-# AWS_SECRET_ACCESS_KEY = "***REMOVED***"
 # AWS_STORAGE_BUCKET_NAME = "vinipediabucket"
 
 # Tell django-storages the domain to use to refer to static files.
