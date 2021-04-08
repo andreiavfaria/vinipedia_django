@@ -4,17 +4,16 @@
 
 {% block content %}
 
+
 <!-- Name -->
 {% if producer.short_name %}
 <div id="wine_details"><h1>{{ producer.short_name }}</h1></div>
-<h4>Full name</h4>
-<p>{{ producer.name }}</p>
 {% else %}
 <div id="wine_details"><h1>{{ producer.name }}</h1></div>
 {% endif %}
 
 <!-- Image -->
-<div>
+<div class="producer_logo">
     {% if producer.image %}
     <img src="{{ producer.image.url }}" alt="{{ producer }}'s image">
     {% else %}
@@ -23,6 +22,8 @@
 </div>
 
 <!-- Description -->
+<h4>Full name</h4>
+<p>{{ producer.name }}</p>
 <h4>Description</h4>
 {% if producer.description %}
 <p>{{ producer.description }}</p>

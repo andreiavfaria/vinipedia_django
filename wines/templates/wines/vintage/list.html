@@ -5,10 +5,50 @@
 {% block content %}
 <h1>Vintage list</h1>
 {% for vintage in vintages %}
-<div>
+<div class="wine_horizontal_card">
   <a href="{{ vintage.get_absolute_url }}">
-      {{ vintage.wine.name }} ({{ vintage.year|default_if_none:"N.V." }})
+        {% if vintage.wine.image %}
+        <img src="{{ vintage.image.url }}" alt="{{ vintage }}'s image">
+        {% else %}
+        <img src="{{ MEDIA_URL }}{{ vintage.wine.type }}.png" alt="{{ vintage.wine }}'s image">
+        {% endif %}
   </a>
+  <div class="details">
+        <div class="producer">
+          <a href="{{ vintage.wine.producer.get_absolute_url }}">
+            {{ vintage.wine.producer }}
+          </a>
+        </div>
+        <div class="wine">
+          <a href="{{ vintage.wine.get_absolute_url }}">
+            {{ vintage.wine.name }}
+          </a>
+        </div>
+        <div class="type">{{vintage.wine.type}}</div>
+        <div class="region">
+          <a href="{{ vintage.wine.origin.get_absolute_url }}">
+            {{ vintage.wine.origin.name }}
+          </a>
+        </div>
+        {% if vintage.reviews.all|length > 0 %}
+            <div class="reviews">
+                <div class="rating">{{vintage.get_average_rating}}</div>
+                <div class="info">
+                    <div class="stars">
+                        *****
+                        <div class="mantinha"></div>
+                    </div>
+                    {% with vintage.reviews.count as total_reviews %}
+                    <div class="nr_reviews">
+                      {{ total_reviews }} review{{ total_reviews|pluralize }}
+                    </div>
+                    {% endwith %}
+                </div>
+            </div>
+        {% else %}
+            <div class="reviews">Be the first to review this vintage</div>
+        {% endif %}
+        </div>
 </div>
 {% empty %}
 <p>
@@ -19,3 +59,6 @@
     {% include "pagination.html" with page=vintages %}
 {% endif %}
 {% endblock %}
+
+
+{{ vintage.wine.name }} ({{ vintage.year|default_if_none:"N.V." }})

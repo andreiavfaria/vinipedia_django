@@ -8,11 +8,11 @@
 <div id="wine_details"><h1>{{ grape.name }}</h1></div>
 
 <!-- Image -->
-<div>
+<div id="grape_img">
     {% if grape.image %}
     <img src="{{ grape.image.url }}" alt="{{ grape }}'s image">
     {% else %}
-    <img src="{{ MEDIA_URL }}generic_grape.png" alt="{{ grape }}'s image">
+    <img src="{{ MEDIA_URL }}{{ grape.type }}.jpg" alt="{{ grape }}'s image">
     {% endif %}
 </div>
 
