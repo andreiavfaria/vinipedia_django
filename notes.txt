@@ -1,0 +1,458 @@
+
+---------------------------------------------------------------------------
+Plataforma/site
+---------------------------------------------------------------------------
+- Permite a visualização de info sobre vinhos, produtores e castas
+- Permite a pesquisa de vinhos por diversos critérios
+- Permite o registo e autenticação de utilizadores
+- Permite a avaliação dos vinhos por utilizadores autenticados
+---------------------------------------------------------------------------
+API RESTful
+---------------------------------------------------------------------------
+- Permite a consulta da informação (vinhos, produtores, castas)
+- Permite a criação e edição da informação (apenas a users com permissão de admin)
+---------------------------------------------------------------------------
+Client app
+---------------------------------------------------------------------------
+- Permite listar os vinhos existentes na plataforma
+---------------------------------------------------------------------------
+Etc
+---------------------------------------------------------------------------
+- Database    : Postgresql
+- Storage     : Amazon s3
+- Deployment  : Heroku
+
+
+to do:
+------
+----
+- colocar throttling no login, por causa de bots e tal?
+- search lists com melhor aspecto
+- modificar valores de throttling
+- rever o aspecto do site: crispy-forms? bootstrap?
+- token auth: (react) login -> token auth -> acesso à lista de vinhos
+- novos models: bottle, taste
+- (done) mudar password do admin
+- (done) remover debug=True
+- (done) adicionar generic_producer.png, generic_region.png, generic_grape.png
+- (done) inserir reviews
+- (done) inserir mais vintages
+- (done) amazon s3
+- (done) django-filters: filter + sort
+- (done) throttling
+- (done) add class integerchoice fields
+- (done) add class methods (avg_rating, avg_acidity, etc)
+- (done) session: last pages visited
+- (done) pesquisa site: vinhos por múltiplos critérios
+- (done) reviews (api): acrescentar lógica de permissões user vs review
+- (cancelled) mudar bucket S3
+
+
+notes:
+------
+- adicionar ordering p/critérios não incluídos nos models (avg_rating, nr_reviews, etc)
+- mover filters para um filters.py?
+- usar crispy-forms e/ou bootstrap?
+- bread crumbs
+- @login_required (ou similar) nas views apropriadas
+- tokenauth através de https?
+- substituir if else endif nos templates por |default_if_none:"N/A"
+- (done) color: #950000
+- (done) python manage.py check --deploy (DEBUG=False, SECURE_SSL_REDIRECT=True, SESSION_COOKIE_SECURE=True, CSRF_COOKIE_SECURE=True)
+- (done) react: alterar urls da api (de localhost para endereço do server heroku)
+- (done) alterar debug=TRUE em settings.py, remover debug url_patterns de urls.py
+- (done) ocultar todas as keys (p.ex., SECRET_KEY) e passwords (com config.json, etc)
+- (done) api: adicionar filters/permitir sorting e filtering nos pedidos à API (limit, offset, sort, etc)
+- (done) missing fields (wine: style/type; grape:body,colour,acidity; etc)
+- (done) nav bar missing
+- (done) add class integer choice fields (to review, grape, vintage/wine?)
+- (done) verificar se a "constraint" para wine origin não pode ser mesmo impelementada sem recurso a override do save()
+- (done) confirmar on delete/update cascade/restrict
+- (done) abstrair lógica de paginação (numa função?)
+- (done) requirements.txt
+
+
+bugs:
+-----
+- review page login link shouldn't redirect to the landing page (how to add something like ?next=/wines/api/producers/3?)
+- new review bug (wine/vintage detail views): if new review.. "review added" não aparece!
+- api (image): editing an instance deletes the current image field value
+- api (review form): aparecem todas as vintages, independentemente do wine seleccionado
+- duplicates/distinct (hack)
+- react: reset filters não limpa os campos de texto/numéricos
+- react: (loading) remover year/average_rating não faz reset ao hasMore e estraga o infinite scroll!
+- grape body scale (current: light<->bold, vivino: light-bodied<->full-bodied)
+- (fixed) monte da ravasqueira (short_name "" em vez de null): corrigir e ver se há outros assim também
+- (fixed) site (list views): list views que herdam de outras list views apresentam quase sempre o header/title errado
+- (fixed) vintage list: falta o ano (acrescentar if_default_none para N.V.!)
+- (fixed) vintage list: o link com o nome aponta para o wine em vez de para o vintage
+- (fixed) homepage (top rated vintages): o link com o nome aponta para o wine em vez de para o vintage
+- (fixed) wine list: "be the first to review this wine" (em vez de vintage)
+- (fixed) react no firefox (botão de reset desaparece)
+- (fixed) react: acrescentar produtores (hardcoded)
+- (fixed) logos/imagens nas detail views (ver o da bacalhôa!!)
+- (fixed) css (.wine_card): acrescentar overflow-x: hidden;
+- (fixed) falta a secção de latest reviews na sidebar
+- (fixed) Ver onde pode aparecer o valor None nos templates (p.ex. None*) e acrescentar |default_if_none nos templates
+- (fixed) ordem de order_by invertida no postgres face à ordem utilizada com sqlite?
+- (fixed) react: filtros "hardcoded" nem sempre funcionam (península de setúbal)
+- (fixed) substituir todas as refs a "/media" nos templates
+- (fixed) producer list: não tem paginação (erro no template)
+- (fixed) vintage detail: review count repetida
+- (fixed) staticfiles não estão a ser servidas pelo bucket s3 (devido ao django_heroku.settings())
+- (fixed) api (vintage list): ordering=name retorna erro
+- (fixed) api (vintage/wine filters): filtros numéricos "abafam" os restantes filtros
+- (fixed) api (vintage): (RESOLVER com |default_if_none:"N/A" nos templates!) retornar N.V. em vez de null? (ver código e notas em baixo)
+- (fixed) WineFilter: tentar fazer average_score com RangeFilter
+- (fixed) WineFilter: with_reviews devia ser boolean
+- (fixed) review detail views (wine e vintage)
+- (fixed) api (wine_reviews / vintage_reviews): mostra as reviews todas (em vez de mostrar apenas a do vinho seleccionado - ver views wine_reviews e vintage_reviews comentadas)
+- (fixed) wine/vintage detail view when no user is logged in (TypeError: 'AnonymousUser' object is not iterable)
+- (fixed) advanced search (vintages): os nomes não aparecem!
+- (fixed) advanced wine search (hiding empty fields from the sent GET parameters)
+- (fixed) region_detail: remover "local producers" dos "other producers"
+- (fixed) region wines: adicionar field:origin em wine (com check constraint, deve estar incluído nas regiões do seu produtor)
+- (fixed) review constraint: vintage.wine === wine
+- (fixed) unique constraint nas reviews não é respeitada quando vintage=null
+- (fixed) api: reviews, grape-alias, producer-region, wine-grape
+- (fixed) api: logout related bug (when 'rest_framework.permissions.IsAuthenticated' is in DEFAULT_PERMISSION_CLASSES)
+- (cancelled) api (wine/reviews, vintage/reviews): mostrar review form/per?
+
+
+next:
+-----
+- (done) views + templates
+- (done) accounts
+- (done) reviews
+- (done) adicionar todos os campos em falta às views
+- (done) sessions / cookies
+- (done) accounts urls
+- (done) pesquisa de vinhos por vários critérios
+- (done) pesquisa integral
+- (done) api rest
+    - (done) create app
+    - (done) set all the endpoints
+    - (done) (models)
+    - (done) serializers
+    - (done) views
+    - (done) urls
+    - (done) auth
+    - (done) throttling
+    - (done) cors
+- (done) app react
+- ssl/https
+
+accounts setup          10
+context processors      15
+model methods           21   (e.g., get_rating() for a wine vintage)
+cookies / session       15
+global static files     18
+img src issues          19
+templatetags            9
+taggit                  8
+rest api:                
+setup                   6
+class views             7
+viewset classes         7
+pagination              7
+filters                 7
+authentication          8
+throttling              9
+cors                    10
+deployment:
+postgres                2 / 5                
+heroku                  5
+amazon s3               4
+
+
+
+
+
+settings.py - development vs production:
+----------------------------------------
+
+production:
+-----------
+
+    -----
+    SECRET_KEY = os.environ.get('SECRET_KEY')
+    -----
+    DEBUG = False
+    -----
+    'NAME' : os.environ.get('DJANGO_PROJECT_DB'),
+    'USER' : os.environ.get('DJANGO_PROJECT_DB_USER'),
+    'PASSWORD' : os.environ.get('DJANGO_PROJECT_DB_USER_PASSWORD'),
+    -----
+    AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
+    AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
+    AWS_STORAGE_BUCKET_NAME = os.environ.get('AWS_STORAGE_BUCKET_NAME')
+    -----
+    SECURE_SSL_REDIRECT = True
+    django_heroku.settings(locals(), staticfiles=False)
+
+
+development:
+------------
+
+    -----
+    SECRET_KEY = 'xxxxxxxxxxxxxxxxx'
+    -----
+    DEBUG = True
+    -----
+    'NAME': 'xxxxxxxxxxxxxxxxx',
+    'USER': 'xxxxxxxxxxxxxxxxx',
+    'PASSWORD': 'xxxxxxxxxxxxxxxxx',
+    -----
+    AWS_ACCESS_KEY_ID = "xxxxxxxxxxxxxxxxx"
+    AWS_SECRET_ACCESS_KEY = "xxxxxxxxxxxxxxxxx"
+    AWS_STORAGE_BUCKET_NAME = "xxxxxxxxxxxxxxxxx"
+    -----
+    # SECURE_SSL_REDIRECT = True                            <------------- comentar
+    # django_heroku.settings(locals(), staticfiles=False)   <------------- comentar
+
+
+
+Passwords accidentally committed and exposed:
+---------------------------------------------
+fix w/ git-filter-repo: https://stackoverflow.com/a/59853332
+-----------------------
+
+(on windows)
+1: copy git-filter-repo from the repository (file with no extension) into git's path installation (git --exec-path)
+2: edit git-filter-repo's first line to include the location of the python executable:
+    #!/usr/bin/env d:\WinPython385\WPy64-3850\python-3.8.5.amd64\python.exe
+3: run 'git filter-repo --replace-text ..\file_with_expressions_to_be_modified.txt'
+
+references: 
+https://github.com/newren/git-filter-repo
+https://github.com/newren/git-filter-repo/blob/main/INSTALL.md
+https://github.com/newren/git-filter-repo/issues/124 (raplemie's comment)
+
+
+
+
+SSL setup
+---------
+https://devcenter.heroku.com/articles/ssl-endpoint
+(...) All default appname.herokuapp.com domains are already SSL-enabled and can be accessed 
+by using https, for example, https://appname.herokuapp.com.
+
+
+
+
+AWS S3 setup
+------------
+https://www.caktusgroup.com/blog/2014/11/10/Using-Amazon-S3-to-store-your-Django-sites-static-and-media-files/
+
+- Criar bucket e utilizador IAM (seguir instruções do pdf do Stefan)
+- S3 > Block public access: Desactivar todos (ou desactivar apenas o último - Block public and cross-account access to buckets and objects through any public bucket or access point policies)
+- S3 > Bucket policy: Acrescentar permissão de leitura/s3:getobject para acessos anónimos:
+        {
+            "Version": "2012-10-17",
+            "Id": "Policy1617635291934",
+            "Statement": [
+                {
+                    "Sid": "PublicReadGetObject",
+                    "Effect": "Allow",
+                    "Principal": "*",
+                    "Action": "s3:GetObject",
+                    "Resource": "arn:aws:s3:::caranguejoturbobucket/*"
+                }
+            ]
+        }
+- S3 > CORS: Acrescentar configurações:
+        [
+            {
+                "AllowedHeaders": [
+                    "*"
+                ],
+                "AllowedMethods": [
+                    "GET",
+                    "HEAD",
+                    "POST",
+                    "PUT"
+                ],
+                "AllowedOrigins": [
+                    "*"
+                ],
+                "ExposeHeaders": []
+            }
+        ]
+
+- Instalar django-storages e boto3
+- (settings.py) INSTALLED_APPS: acrescentar 'storages'
+- Acrescentar ao settings.py:
+
+        AWS_S3_FILE_OVERWRITE = False
+        AWS_DEFAULT_ACL = None
+        AWS_S3_REGION_NAME = 'eu-central-1'
+        AWS_S3_SIGNATURE_VERSION = 's3v4'
+
+        AWS_ACCESS_KEY_ID = "???"
+        AWS_SECRET_ACCESS_KEY = "???"
+        AWS_STORAGE_BUCKET_NAME = "???"
+
+        # Tell django-storages the domain to use to refer to static files.
+        AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
+
+        # Tell the staticfiles app to use S3Boto3 storage when writing the collected static files (when
+        # you run `collectstatic`).
+        STATICFILES_LOCATION = 'static'
+        STATICFILES_STORAGE = 'custom_storages.StaticStorage'
+        # STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+
+        MEDIAFILES_LOCATION = 'media'
+        DEFAULT_FILE_STORAGE = 'custom_storages.MediaStorage'
+
+        STATIC_URL = 'https://%s.static/' % AWS_S3_CUSTOM_DOMAIN
+
+- Criar custom_storages.py:
+
+        from django.conf import settings
+        from storages.backends.s3boto3 import S3Boto3Storage
+
+
+        class MediaStorage(S3Boto3Storage):
+            location = settings.MEDIAFILES_LOCATION
+
+
+        class StaticStorage(S3Boto3Storage):
+            location = settings.STATICFILES_LOCATION
+
+- Executar python manage.py collectstatic
+- (settings.py) Se ainda se estiver num ambiente de desenvolvimento (e não em produção), comentar a linha 
+  django_heroku.settings(locals()), caso esteja no ficheiro (porque esta configura automaticamente algumas 
+  das variáveis, fazendo override a algumas das configurações acima!)
+
+
+
+HEROKU setup (1)
+----------------
+> pip install gunicorn
+
+# STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+> pip install django-heroku
+
+
+- (settings.py) Acrescentar:
+
+    import django_heroku
+
+    # Activate Django-Heroku.
+    django_heroku.settings(locals())
+
+    Para ficheiros static (css, etc) servidos a partir do aws s3:
+    -------------------------------------------------------------
+    O comando django_heroku.settings() trata automaticamente das definições de staticfiles, de 
+    modo a que as mesmas fiquem alojadas no servidor (junto com o resto do backend). No nosso caso,
+    visto que queremos servir os ficheiros static a partir de um bucket aws s3, precisamos 
+    de passar o parâmetro staticfiles=False (sendo que o resto da configuração de staticfiles 
+    fica a depender exclusivamente de nós)
+    --
+
+    django_heroku.settings(locals(), staticfiles=False)
+    
+
+
+- (settings.py) Acrescentar:
+    ALLOWED_HOSTS = [
+        'vinipedia.herokuapp.com'
+    ]
+
+
+HEROKU setup (2)
+----------------
+- heroku login
+- Ir para o dir do projecto (root dir, onde está o .git do repo do projecto, 
+assim como o ficheiro requirements.txt - e onde deve estar também o ficheiro manage.py)
+- heroku create vinipedia
+- heroku open (verificar se abre o site default do heroku)
+- git push heroku master (fazer push do conteúdo do proj para o heroku)
+- heroku logs --tail (verificar se a build não deu erro)
+- refresh ao site (deverá dar erro: faltam as migrações)
+- heroku run python manage.py migrate (executar migrações)
+- refresh ao site (deverá estar tudo ok, mas sem aparecerem quaisquer dados)
+- fazer restore da db (apenas depois de fazer migrate? ou não? executar 'heroku pg:reset' antes de fazer restore?)
+- refresh ao site (verificar se está tudo ok!)
+
+
+
+POSTGRES db backup and restore
+------------------------------
+backup local: 
+> pg_dump -U postgres -f vinipedia.dump vinipedia
+restore local: 
+> psql -d vinipedia -U postgres -f vinipedia.dump (a db vinipedia já tinha sido criada antes do restore)
+restore no heroku a partir de um restore local: 
+> heroku pg:psql --app heroku_app_name < vinipedia\vinipedia.dump
+
+https://devcenter.heroku.com/articles/heroku-postgres-import-export
+backup no heroku:
+> heroku pg:backups:capture
+> heroku pg:backups:download
+restore local de uma db exportada do heroku: 
+> pg_restore --verbose --clean --no-acl --no-owner -h localhost -U myuser -d mydb latest.dump
+
+POSTGRES
+--------
+https://groups.google.com/g/django-users/c/hAD0XfpF3UY/m/238fgt9NBAAJ
+Erro: 
+    IntegrityError
+    Duplicate key value violates unique constraint "django_admin_log_pkey"
+
+Resolver actualizando o valor da sequência auto-incrementável associado ao id field 
+da tabela 'django_admin_log', executando o seguinte query no pgadmin (sendo que last_id 
+é o último id da tabela 'django_admin_log'):
+
+    (last_id)
+        SELECT id from "django_admin_log" order by id desc limit 1;
+
+    (actualizar valor de 'django_admin_log_id_seq')
+        SELECT setval('django_admin_log_id_seq', last_id+1);
+
+
+POSTGRES settings.py
+--------------------
+> pip install psycopg2
+
+DATABASES = {
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.sqlite3',
+    #     'NAME': BASE_DIR / 'db.sqlite3',
+    # }
+    'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': 'vinipedia',
+            'USER': 'postgres',
+            'PASSWORD': 'admin',
+            'HOST': 'localhost',
+            'PORT': '5432',
+        }
+}
+
+
+Notas
+-----
+
+- api (vintage): retornar N.V. em vez de null?
+
+def __getattribute__(self, name):
+    attr = models.Model.__getattribute__(self, name)
+    if name == 'year' and not attr:
+        return 'N.V.'
+    return attr
+
+ValueError at /wines/api/vintages/
+invalid literal for int() with base 10: 'N.V.'
+
+
+pip install -r requirements.txt
+
+
+
+bugged search: ...type=white&type=red (Duarte)
+-------------------------------------
+request.GET.getlist('myvar')
+https://stackoverflow.com/a/3910203
