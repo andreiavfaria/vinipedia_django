@@ -5,11 +5,32 @@
 {% block content %}
 <h1>Producer list</h1>
 {% for producer in producers %}
-<div>
-  <a href="{{ producer.get_absolute_url }}">
-    {{ producer.name }}
-  </a>
+<div class="producer_horizontal_card">
+
+    <a href="{{ producer.get_absolute_url }}">
+        <img src="{{ producer.image.url }}" alt="{{ producer }}'s image">
+    </a>
+
+    <div class="details">
+        <div class="region">
+          <a href="{{ producer.origin.get_absolute_url }}">
+            {{ producer.origin.name }}
+          </a>
+        </div>
+        <div class="wine">
+          <a href="{{ producer.get_absolute_url }}">
+            {{ producer.name }}
+          </a>
+        </div>
+        <div class="region">
+            <br>
+            <br>
+            <div>{{ producer.website }}</div>
+            <div>{{ producer.email }}</div>
+        </div>
+    </div>
 </div>
+
 {% empty %}
 <p>
   There are no producers in the DB yet.
