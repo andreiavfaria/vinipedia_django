@@ -80,7 +80,7 @@
 
     <!-- Database status -->
     <br><br>
-    <h4>Database status</h4>
+    <h3>Database status</h3>
     <p>Producers: {% total_producers_registered %}</p>
     <p>Wines: {% total_wines_registered %}</p>
     <p>Vintages: {% total_vintages_registered %}</p>
@@ -89,9 +89,11 @@
 
 
     <!-- Info regarding the latest DB activity on the website -->
+    {% if request.session.last_visited|length > 0 %}
     <br><br>
     <h3>Recently visited</h3>
     {% show_last_visited_pages request %}
+    {% endif %}
 
     <!-- Info regarding the latest reviews the website -->
     <br><br>

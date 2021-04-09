@@ -19,8 +19,6 @@ urlpatterns = [
     path('regions/<int:pk>/wines', views.region_wines, name='region-wine-list'),
     path('regions/<int:pk>/producers', views.region_producers, name='region-producer-list'),
     path('regions/<int:pk>/grapes', views.region_grapes, name='region-grape-list'),
-    # /native_producers?
-    # /native_grapes?
 
     path('producer-regions/', views.ProducerRegionList.as_view(), name=views.ProducerRegionList.name),
     path('producer-regions/<int:pk>', views.ProducerRegionDetail.as_view(), name=views.ProducerRegionDetail.name),
@@ -41,7 +39,6 @@ urlpatterns = [
     path('grapes/', views.GrapeList.as_view(), name=views.GrapeList.name),
     path('grapes/<int:pk>', views.GrapeDetail.as_view(), name=views.GrapeDetail.name),
     path('grapes/<int:pk>/wines', views.grape_wines, name='grape-wine-list'),
-    # aliases?
 
     path('wine-grapes/', views.WineGrapeList.as_view(), name=views.WineGrapeList.name),
     path('wine-grapes/<int:pk>', views.WineGrapeDetail.as_view(), name=views.WineGrapeDetail.name),

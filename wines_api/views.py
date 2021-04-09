@@ -667,9 +667,18 @@ class GrapeAliasDetail(generics.RetrieveUpdateDestroyAPIView):
 
 
 class ReviewList(generics.ListCreateAPIView):
-    queryset = Review.objects.all()
     serializer_class = ReviewSerializer
     name = 'review-list'
+
+    def get_queryset(self):
+        user = self.request.user
+        print(user, user.is_staff)
+        if not user.is_authenticated:
+            return Review.objects.none()
+        if user.is_staff:
+            return Review.objects.all()
+        else:
+            return Review.objects.filter(user=user, active=True)
 
     def perform_create(self, serializer_class):
         serializer_class.save(user=self.request.user)

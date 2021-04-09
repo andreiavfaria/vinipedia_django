@@ -25,14 +25,14 @@ Etc
 
 to do:
 ------
-- inserir reviews
-- inserir mais vintages
 - search lists com melhor aspecto
 - mudar password do admin / colocar throttling no login, por causa de bots e tal?
-- adicionar generic_producer.png, generic_region.png, generic_grape.png
 - modificar valores de throttling
-- rever o aspecto do site: crispy-forms? bootstrap?
 ----
+- rever o aspecto do site: crispy-forms? bootstrap?
+- (done) adicionar generic_producer.png, generic_region.png, generic_grape.png
+- (done) inserir reviews
+- (done) inserir mais vintages
 - token auth: (react) login -> token auth -> acesso à lista de vinhos
 - novos models: bottle, taste
 - (done) amazon s3
@@ -78,8 +78,6 @@ bugs:
 - homepage (top rated vintages): o link com o nome aponta para o wine em vez de para o vintage
 - wine list: "be the first to review this wine" (em vez de vintage)
 - monte da ravasqueira (short_name "" em vez de null): corrigir e ver se há outros assim também
-- react no firefox (botão de reset desaparece)
-- react: acrescentar produtores (hardcoded)
 - react: (loading) remover year/average_rating não faz reset ao hasMore e estraga o infinite scroll!
 ----
 - api (image): editing an instance deletes the current image field value
@@ -89,6 +87,8 @@ bugs:
 - react: reset filters não limpa os campos de texto/numéricos
 - grape body scale (current: light<->bold, vivino: light-bodied<->full-bodied)
 - duplicates/distinct (hack)
+- (fixed) react no firefox (botão de reset desaparece)
+- (fixed) react: acrescentar produtores (hardcoded)
 - (fixed) logos/imagens nas detail views (ver o da bacalhôa!!)
 - (fixed) css (.wine_card): acrescentar overflow-x: hidden;
 - (fixed) falta a secção de latest reviews na sidebar
