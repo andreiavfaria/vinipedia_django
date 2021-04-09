@@ -59,7 +59,7 @@
             </a>
         </div>
         <div class="wine">
-            <a href="{{ vintage.wine.get_absolute_url }}">
+            <a href="{{ vintage.get_absolute_url }}">
                 {{ vintage.wine.name }} {{ vintage.year|default_if_none:"N.V." }}
             </a>
         </div>

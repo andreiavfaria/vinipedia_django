@@ -54,7 +54,7 @@ urlpatterns = [
     path('regions/<int:id>/vintages', views.vintages_per_region, name='vintages_per_region'),
     # wines/vintages per year
     path('year/<int:year>', views.vintages_per_year, name='vintages_per_year'),
-    # search
+    # global search
     path('search/', views.sitewide_search, name='sitewide_search'),
 
 ]

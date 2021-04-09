@@ -547,31 +547,3 @@ class Review(models.Model):
         return reverse('wines:review_list',
                        args=[self.wine])
 
-
-""" 
-#####################################
-
-Check this out before anything else:
-    https://www.winesofportugal.com/en/travel-wine/wine-regions/
-
-######################################
-
-Nomenclatura comunitária de classificação dos vinhos VQPRD 
-(Vinho de Qualidade Produzido em Região Determinada)
-
-    https://pt.wikipedia.org/wiki/Denomina%C3%A7%C3%B5es_de_origem_portuguesas
-    https://en.wikipedia.org/wiki/List_of_Portuguese_wine_regions
-
-DOC: Denominação de Origem Controlada
-IPR: Indicação de Proveniência Regulamentada
-VR: Vinho regional
---: Vinho de mesa
-
-class WineRegion(models.Model):
-    name = models.CharField(max_length=100)
-"""
-
-
-
-
-

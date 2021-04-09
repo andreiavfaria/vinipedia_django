@@ -25,11 +25,17 @@ Etc
 
 to do:
 ------
-- amazon s3
+- inserir reviews
+- inserir mais vintages
+- search lists com melhor aspecto
+- mudar password do admin / colocar throttling no login, por causa de bots e tal?
+- adicionar generic_producer.png, generic_region.png, generic_grape.png
+- modificar valores de throttling
 - rever o aspecto do site: crispy-forms? bootstrap?
 ----
 - token auth: (react) login -> token auth -> acesso à lista de vinhos
 - novos models: bottle, taste
+- (done) amazon s3
 - (done) django-filters: filter + sort
 - (done) throttling
 - (done) add class integerchoice fields
@@ -41,13 +47,6 @@ to do:
 
 notes:
 ------
-- python manage.py check --deploy (DEBUG=False, 
-                                   SECURE_SSL_REDIRECT=True, 
-                                   SESSION_COOKIE_SECURE=True, 
-                                   CSRF_COOKIE_SECURE=True)
-- mudar password do admin / colocar throttling no login, por causa de bots e tal?
-- adicionar generic_producer.png, generic_region.png, generic_grape.png
-- color: #950000
 - adicionar ordering p/critérios não incluídos nos models (avg_rating, nr_reviews, etc)
 ----
 - mover filters para um filters.py?
@@ -56,6 +55,8 @@ notes:
 - @login_required (ou similar) nas views apropriadas
 - tokenauth através de https?
 - substituir if else endif nos templates por |default_if_none:"N/A"
+- (done) color: #950000
+- (done) python manage.py check --deploy (DEBUG=False, SECURE_SSL_REDIRECT=True, SESSION_COOKIE_SECURE=True, CSRF_COOKIE_SECURE=True)
 - (done) react: alterar urls da api (de localhost para endereço do server heroku)
 - (done) alterar debug=TRUE em settings.py, remover debug url_patterns de urls.py
 - (done) ocultar todas as keys (p.ex., SECRET_KEY) e passwords (com config.json, etc)
@@ -72,17 +73,24 @@ notes:
 bugs:
 -----
 - site (list views): list views que herdam de outras list views apresentam quase sempre o header/title errado
+- vintage list: falta o ano (acrescentar if_default_none para N.V.!)
+- vintage list: o link com o nome aponta para o wine em vez de para o vintage
+- homepage (top rated vintages): o link com o nome aponta para o wine em vez de para o vintage
+- wine list: "be the first to review this wine" (em vez de vintage)
+- monte da ravasqueira (short_name "" em vez de null): corrigir e ver se há outros assim também
+- react no firefox (botão de reset desaparece)
 - react: acrescentar produtores (hardcoded)
-- logos/imagens nas detail views (ver o da bacalhôa!!)
+- react: (loading) remover year/average_rating não faz reset ao hasMore e estraga o infinite scroll!
 ----
 - api (image): editing an instance deletes the current image field value
 - review page login link shouldn't redirect to the landing page (how to add something like ?next=/wines/api/producers/3?)
 - new review bug (wine/vintage detail views): if new review.. "review added" não aparece!
 - api (review form): aparecem todas as vintages, independentemente do wine seleccionado
-- react: (loading) remover year/average_rating não faz reset ao hasMore e estraga o infinite scroll!
 - react: reset filters não limpa os campos de texto/numéricos
 - grape body scale (current: light<->bold, vivino: light-bodied<->full-bodied)
 - duplicates/distinct (hack)
+- (fixed) logos/imagens nas detail views (ver o da bacalhôa!!)
+- (fixed) css (.wine_card): acrescentar overflow-x: hidden;
 - (fixed) falta a secção de latest reviews na sidebar
 - (fixed) Ver onde pode aparecer o valor None nos templates (p.ex. None*) e acrescentar |default_if_none nos templates
 - (fixed) ordem de order_by invertida no postgres face à ordem utilizada com sqlite?
@@ -200,6 +208,25 @@ development:
     -----
     # SECURE_SSL_REDIRECT = True                            <------------- comentar
     # django_heroku.settings(locals(), staticfiles=False)   <------------- comentar
+
+
+
+Passwords accidentally committed and exposed:
+---------------------------------------------
+fix w/ git-filter-repo: https://stackoverflow.com/a/59853332
+-----------------------
+
+(on windows)
+1: copy git-filter-repo from the repository (file with no extension) into git's path installation (git --exec-path)
+2: edit git-filter-repo's first line to include the location of the python executable:
+    #!/usr/bin/env d:\WinPython385\WPy64-3850\python-3.8.5.amd64\python.exe
+3: run 'git filter-repo --replace-text ..\file_with_expressions_to_be_modified.txt'
+
+references: 
+https://github.com/newren/git-filter-repo
+https://github.com/newren/git-filter-repo/blob/main/INSTALL.md
+https://github.com/newren/git-filter-repo/issues/124 (raplemie's comment)
+
 
 
 
@@ -345,16 +372,27 @@ assim como o ficheiro requirements.txt - e onde deve estar também o ficheiro ma
 - heroku logs --tail (verificar se a build não deu erro)
 - refresh ao site (deverá dar erro: faltam as migrações)
 - heroku run python manage.py migrate (executar migrações)
+- refresh ao site (deverá estar tudo ok, mas sem aparecerem quaisquer dados)
+- fazer restore da db (apenas depois de fazer migrate? ou não? executar 'heroku pg:reset' antes de fazer restore?)
 - refresh ao site (verificar se está tudo ok!)
 
 
 
 POSTGRES db backup and restore
 ------------------------------
-backup: pg_dump -U postgres -f vinipedia.dump vinipedia
-restore local: psql -d vinipedia -U postgres -f vinipedia.dump (a db vinipedia já tinha sido criada antes do restore)
-restore no heroku: heroku pg:psql --app vinipedia < vinipedia\vinipedia.dump
+backup local: 
+> pg_dump -U postgres -f vinipedia.dump vinipedia
+restore local: 
+> psql -d vinipedia -U postgres -f vinipedia.dump (a db vinipedia já tinha sido criada antes do restore)
+restore no heroku a partir de um restore local: 
+> heroku pg:psql --app heroku_app_name < vinipedia\vinipedia.dump
 
+https://devcenter.heroku.com/articles/heroku-postgres-import-export
+backup no heroku:
+> heroku pg:backups:capture
+> heroku pg:backups:download
+restore local de uma db exportada do heroku: 
+> pg_restore --verbose --clean --no-acl --no-owner -h localhost -U myuser -d mydb latest.dump
 
 POSTGRES
 --------

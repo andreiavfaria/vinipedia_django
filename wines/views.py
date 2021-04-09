@@ -248,7 +248,7 @@ def producers_per_region(request, id):
     region = get_object_or_404(Region, id=id)
     # hack using distinct() to remove duplicates, since the following query is
     # returning duplicate entries somehow:
-    # Producer.objects.filter(Q(origin=region) | Q(presence=region))
+    #   Producer.objects.filter(Q(origin=region) | Q(presence=region))
     object_list = Producer.objects.filter(Q(presence=region) | Q(origin=region)).distinct()
     paginator = Paginator(object_list, 10)
     producers = paginator_helper(request, paginator)

@@ -29,7 +29,7 @@
     </div>
   </div>
 
-  <!-- site info -->
+  <!-- Site info -->
   <div id="content">
     {% block content %}
     {% endblock %}
@@ -78,13 +78,14 @@
     <h3>Find producers:</h3>
     <div class="container adjust_margin">{% show_producers_search_form %}</div>
 
-
+    <!-- Database status -->
     <br><br>
     <h4>Database status</h4>
     <p>Producers: {% total_producers_registered %}</p>
     <p>Wines: {% total_wines_registered %}</p>
     <p>Vintages: {% total_vintages_registered %}</p>
     <p>Grape varieties: {% total_grapes_registered %}</p>
+    <p>Reviews written: {% total_reviews_written %}</p>
 
 
     <!-- Info regarding the latest DB activity on the website -->

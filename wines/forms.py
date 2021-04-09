@@ -38,8 +38,4 @@ class AdvancedWineSearchForm(forms.Form):
     vintage_year = forms.IntegerField(required=False,
                                       validators=[MinValueValidator(1700),
                                                   MaxValueValidator(2050)])
-    # year / vintage
-    # alcohol content
-    # with grape / without grape
-    # from producer / not from producer
 

@@ -29,9 +29,9 @@ def total_producers_registered():
     return Producer.objects.count()
 
 
-# @register.simple_tag
-# def total_reviews_written():
-#     return Review.objects.count()
+@register.simple_tag
+def total_reviews_written():
+    return Review.objects.count()
 
 
 """ Search bar inclusion tags """
@@ -98,10 +98,4 @@ def show_last_visited_pages(request):
     return {"last_visited_pages": last_visited}
 
 
-
-""" Other tags """
-
-# @register.simple_tag
-# def other_wine_vintages(wine, vintage):
-#     return wine.vintages.all.exclude(vintage=vintage)
 
