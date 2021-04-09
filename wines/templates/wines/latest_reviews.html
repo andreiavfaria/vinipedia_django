@@ -1,9 +1,11 @@
 {% for review in latest_reviews %}
 <div>
     {% if review.vintage %}
-    <a href="{{ review.vintage.get_absolute_url }}">{{ review.vintage }}</a>
+    <a href="{{ review.vintage.get_absolute_url }}">{{ review.vintage.wine.name }}
+        {{ review.vintage.year|default_if_none:"N.V." }} -
+        {{ review.vintage.wine.type }}</a>
     {% else %}
-    <a href="{{ review.wine.get_absolute_url }}">{{ review.wine }}</a>
+    <a href="{{ review.wine.get_absolute_url }}">{{ review.wine.name }} - {{ review.wine.type }}</a>
     {% endif %}
     {{ review.score }}*
 </div>

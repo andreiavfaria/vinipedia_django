@@ -5,10 +5,28 @@
 {% block content %}
 <h1>Region list</h1>
 {% for region in regions %}
-<div>
-  <a href="{{ region.get_absolute_url }}">
-    {{ region.name }}
-  </a>
+<div class="region_horizontal_card">
+    <a href="{{ region.get_absolute_url }}">
+        <img src="{{ region.image.url }}" alt="{{ region }}'s image">
+    </a>
+    <div class="details">
+        <div class="wine">
+          <a href="{{ region.get_absolute_url }}">
+            {{ region.name }}
+          </a>
+        </div>
+        <div class="region">
+            <p>Local producers</p>
+            {% for producer in region.local_producers.all %}
+            <a>
+                <a href="{{ producer.get_absolute_url }}">{{ producer }}</a>
+            </a>
+            {% empty %}
+            <h5 class="info">No local producers have been registered for this region.</h5>
+            {% endfor %}
+          </a>
+        </div>
+    </div>
 </div>
 {% empty %}
 <p>
@@ -19,3 +37,4 @@
     {% include "pagination.html" with page=regions %}
 {% endif %}
 {% endblock %}
+

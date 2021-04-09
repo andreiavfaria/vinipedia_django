@@ -603,3 +603,82 @@ input[type=submit] {
         font-weight: normal;
     }
 
+/* region info */
+
+.region_horizontal_card {
+    display: flex;
+    /* flex-direction: column; */
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    flex-basis: 100%;
+    max-width: 100%;
+    height: 150pt;
+    padding: 0.5rem;
+    margin: 0.5rem 1rem;
+    background-color: #fff;
+    border-radius: 0.5rem;
+    box-shadow: 0px 2px 15px 2px #ccc;
+}
+
+.region_horizontal_card img {
+    height: 145pt;
+}
+
+.region_horizontal_card a {
+    width: 200px;
+    color: black;
+    text-align: center;
+    position: relative;
+}
+
+.region_horizontal_card a img {
+    position: absolute;
+    left:111%;
+    transform: translateX(-30%) translateY(-50%);
+    top:50%;
+}
+
+.region_horizontal_card .details {
+    height: 100%;
+    width: 100%;
+    flex-basis: 40%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    padding-top: 2rem;
+    padding-left: 23rem;
+}
+
+.region_horizontal_card .details .reviews .rating {
+            font-family: "Roboto", sans-serif;
+            font-size: 34pt;
+            margin-right: 0.5rem;
+        }
+
+.region_horizontal_card .details .wine {
+        font-family: "Roboto", sans-serif;
+        font-size: 14pt;
+        font-weight: normal;
+        text-transform: capitalize;
+        font-weight: bold;
+    }
+
+.region_horizontal_card .details .type {
+        font-family: "Roboto", sans-serif;
+        font-size: 14pt;
+        font-weight: normal;
+        text-transform: capitalize;
+    }
+
+.region_horizontal_card .details .region {
+        padding-top: 0pt;
+        font-family: "Roboto", sans-serif;
+        font-size: 10pt;
+        font-weight: normal;
+    }
+
+.region_horizontal_card .details .region a {
+        color: #950000;
+    }
