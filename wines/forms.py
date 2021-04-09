@@ -33,6 +33,7 @@ class AdvancedWineSearchForm(forms.Form):
                                                      # empty_label="--------",
                                                      required=False)
     average_score = forms.FloatField(required=False,
+                                     label='Minimum avg score',
                                      validators=[MinValueValidator(0),
                                                  MaxValueValidator(5)])
     vintage_year = forms.IntegerField(required=False,

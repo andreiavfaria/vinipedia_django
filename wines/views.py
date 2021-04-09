@@ -62,9 +62,11 @@ def wines_per_type(request, type):
     object_list = Wine.objects.filter(type=type)
     paginator = Paginator(object_list, 10)
     wines = paginator_helper(request, paginator)
+    print(request.GET)
     return render(request,
-                  'wines/wine/list.html',
-                  {'wines': wines})
+                  'wines/wine/list_per_type.html',
+                  {'wines': wines,
+                   'type': type})
 
 
 def wines_per_region(request, id):
@@ -74,8 +76,9 @@ def wines_per_region(request, id):
     paginator = Paginator(object_list, 10)
     wines = paginator_helper(request, paginator)
     return render(request,
-                  'wines/wine/list.html',
-                  {'wines': wines})
+                  'wines/wine/list_per_region.html',
+                  {'wines': wines,
+                   'name': region.name})
 
 
 def wines_per_grape(request, id):
@@ -84,8 +87,9 @@ def wines_per_grape(request, id):
     paginator = Paginator(object_list, 10)
     wines = paginator_helper(request, paginator)
     return render(request,
-                  'wines/wine/list.html',
-                  {'wines': wines})
+                  'wines/wine/list_per_grape.html',
+                  {'wines': wines,
+                   'name': grape.name})
 
 
 def wines_per_producer(request, id):
@@ -94,8 +98,9 @@ def wines_per_producer(request, id):
     paginator = Paginator(object_list, 10)
     wines = paginator_helper(request, paginator)
     return render(request,
-                  'wines/wine/list.html',
-                  {'wines': wines})
+                  'wines/wine/list_per_producer.html',
+                  {'wines': wines,
+                   'producer': producer})
 
 
 def vintage_list(request):
@@ -150,8 +155,9 @@ def vintages_per_wine(request, id):
     paginator = Paginator(object_list, 10)
     vintages = paginator_helper(request, paginator)
     return render(request,
-                  'wines/vintage/list.html',
-                  {'vintages': vintages})
+                  'wines/vintage/list_per_wine.html',
+                  {'vintages': vintages,
+                   'name': wine.name})
 
 
 def vintages_per_grape(request, id):
@@ -160,8 +166,9 @@ def vintages_per_grape(request, id):
     paginator = Paginator(object_list, 10)
     vintages = paginator_helper(request, paginator)
     return render(request,
-                  'wines/vintage/list.html',
-                  {'vintages': vintages})
+                  'wines/vintage/list_per_grape.html',
+                  {'vintages': vintages,
+                   'name': grape.name})
 
 
 def vintages_per_producer(request, id):
@@ -170,8 +177,9 @@ def vintages_per_producer(request, id):
     paginator = Paginator(object_list, 10)
     vintages = paginator_helper(request, paginator)
     return render(request,
-                  'wines/vintage/list.html',
-                  {'vintages': vintages})
+                  'wines/vintage/list_per_producer.html',
+                  {'vintages': vintages,
+                   'producer': producer})
 
 
 def vintages_per_region(request, id):
@@ -180,8 +188,9 @@ def vintages_per_region(request, id):
     paginator = Paginator(object_list, 10)
     vintages = paginator_helper(request, paginator)
     return render(request,
-                  'wines/vintage/list.html',
-                  {'vintages': vintages})
+                  'wines/vintage/list_per_region.html',
+                  {'vintages': vintages,
+                   'name': region.name})
 
 
 def vintages_per_year(request, year):
@@ -189,8 +198,9 @@ def vintages_per_year(request, year):
     paginator = Paginator(object_list, 10)
     vintages = paginator_helper(request, paginator)
     return render(request,
-                  'wines/vintage/list.html',
-                  {'vintages': vintages})
+                  'wines/vintage/list_per_year.html',
+                  {'vintages': vintages,
+                   'year': year})
 
 
 def grape_list(request):
@@ -219,8 +229,9 @@ def grapes_per_type(request, type):
     paginator = Paginator(object_list, 10)
     grapes = paginator_helper(request, paginator)
     return render(request,
-                  'wines/grape/list.html',
-                  {'grapes': grapes})
+                  'wines/grape/list_per_type.html',
+                  {'grapes': grapes,
+                   'type': type})
 
 
 def producer_list(request):
@@ -253,8 +264,9 @@ def producers_per_region(request, id):
     paginator = Paginator(object_list, 10)
     producers = paginator_helper(request, paginator)
     return render(request,
-                  'wines/producer/list.html',
-                  {'producers': producers})
+                  'wines/producer/list_per_region.html',
+                  {'producers': producers,
+                   'name': region.name})
 
 
 def region_list(request):

@@ -14,8 +14,16 @@
   <img src="{% static profile_data.photo.url %}"
        alt="user profile image" />
   <p>Last login: {{user.last_login}}</p>
+  {% if user.first_name %}
   <p>Name: {{user.first_name}} {{user.last_name}}</p>
+  {% else %}
+  <p>Name: N/A</p>
+  {% endif %}
+  {% if user.email %}
   <p>Email: {{user.email}}</p>
+  {% else %}
+  <p>Email: N/A</p>
+  {% endif %}
   {% if user.is_staff %}
     <p>{{user.username}} is currently part of the website's staff.</p>
   {% endif %}

@@ -3,13 +3,13 @@
 {% block title %}Search results for grapes{% endblock %}
 
 {% block content %}
-  <h2>Search results:</h2>
+  <h2>Search results</h2>
   {% for grape in results %}
-    <h2>
+    <div>
       <a href="{{ grape.get_absolute_url }}">
         {{ grape.name }}
       </a>
-    </h2>
+    </div>
   {% empty %}
     <p>
       No matching grapes were found.

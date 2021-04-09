@@ -3,13 +3,13 @@
 {% block title %}Search results for producers{% endblock %}
 
 {% block content %}
-  <h2>Search results:</h2>
+  <h2>Search results</h2>
   {% for producer in results %}
-    <h2>
+    <div>
       <a href="{{ producer.get_absolute_url }}">
         {{ producer.name }}
       </a>
-    </h2>
+    </div>
   {% empty %}
     <p>
       No matching producers were found.

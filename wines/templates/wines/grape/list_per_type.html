@@ -1,0 +1,41 @@
+{% extends "wines/base.html" %}
+
+{% block title %}Vinipedia - Grapes{% endblock %}
+
+{% block content %}
+<h1>{{ type|title }} grapes</h1>
+{% for grape in grapes %}
+<div class="grape_horizontal_card">
+    <a href="{{ grape.get_absolute_url }}">
+        {% if grape.image %}
+        <img src="{{ grape.image.url }}" alt="{{ grape }}'s image">
+        {% else %}
+        <img src="{{ MEDIA_URL }}{{ grape.type }}.jpg" alt="{{ grape }}'s image">
+        {% endif %}
+    </a>
+    <div class="details">
+        <div class="region">
+          <a href="{{ grape.origin.get_absolute_url }}">
+            {{ grape.origin.name }}
+          </a>
+        </div>
+        <div class="wine">
+          <a href="{{ grape.get_absolute_url }}">
+            {{ grape.name }}
+          </a>
+        </div>
+        <div class="type">{{grape.type}}</div>
+
+        <h5><br><br>Acidity: {{ grape.get_acidity_display|default_if_none:"N/A" }}<br>
+        Body: {{ grape.get_body_display|default_if_none:"N/A" }}</h5>
+        </div>
+</div>
+{% empty %}
+<p>
+  There are no grapes in the DB yet.
+</p>
+{% endfor %}
+{% if grapes %}
+    {% include "pagination.html" with page=grapes %}
+{% endif %}
+{% endblock %}

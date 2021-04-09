@@ -48,7 +48,6 @@ to do:
 notes:
 ------
 - adicionar ordering p/critérios não incluídos nos models (avg_rating, nr_reviews, etc)
-----
 - mover filters para um filters.py?
 - usar crispy-forms e/ou bootstrap?
 - bread crumbs
@@ -73,13 +72,9 @@ notes:
 bugs:
 -----
 - site (list views): list views que herdam de outras list views apresentam quase sempre o header/title errado
-- vintage list: falta o ano (acrescentar if_default_none para N.V.!)
-- vintage list: o link com o nome aponta para o wine em vez de para o vintage
-- homepage (top rated vintages): o link com o nome aponta para o wine em vez de para o vintage
-- wine list: "be the first to review this wine" (em vez de vintage)
 - monte da ravasqueira (short_name "" em vez de null): corrigir e ver se há outros assim também
-- react: (loading) remover year/average_rating não faz reset ao hasMore e estraga o infinite scroll!
 ----
+- react: (loading) remover year/average_rating não faz reset ao hasMore e estraga o infinite scroll!
 - api (image): editing an instance deletes the current image field value
 - review page login link shouldn't redirect to the landing page (how to add something like ?next=/wines/api/producers/3?)
 - new review bug (wine/vintage detail views): if new review.. "review added" não aparece!
@@ -87,6 +82,10 @@ bugs:
 - react: reset filters não limpa os campos de texto/numéricos
 - grape body scale (current: light<->bold, vivino: light-bodied<->full-bodied)
 - duplicates/distinct (hack)
+- (fixed) vintage list: falta o ano (acrescentar if_default_none para N.V.!)
+- (fixed) vintage list: o link com o nome aponta para o wine em vez de para o vintage
+- (fixed) homepage (top rated vintages): o link com o nome aponta para o wine em vez de para o vintage
+- (fixed) wine list: "be the first to review this wine" (em vez de vintage)
 - (fixed) react no firefox (botão de reset desaparece)
 - (fixed) react: acrescentar produtores (hardcoded)
 - (fixed) logos/imagens nas detail views (ver o da bacalhôa!!)

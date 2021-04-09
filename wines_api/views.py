@@ -673,12 +673,17 @@ class ReviewList(generics.ListCreateAPIView):
     def get_queryset(self):
         user = self.request.user
         print(user, user.is_staff)
-        if not user.is_authenticated:
-            return Review.objects.none()
+        # Admins: provide access to the full list of reviews (both active and
+        # inactive)
         if user.is_staff:
             return Review.objects.all()
-        else:
+        # Authenticated user: provide access to a list of that user's active
+        # reviews
+        elif user.is_authenticated:
             return Review.objects.filter(user=user, active=True)
+        # Anonymous users: no access to any list of reviews
+        else:
+            return Review.objects.none()
 
     def perform_create(self, serializer_class):
         serializer_class.save(user=self.request.user)
